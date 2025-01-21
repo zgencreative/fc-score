@@ -1,0 +1,744 @@
+body {
+  font-family: "Inter";
+  background-color: #121212;
+}
+.navbar-dark {
+  background-color: #121212; /* Warna latar hitam */
+}
+.navbar-brand img {
+  height: 40px;
+}
+.nav-link {
+  color: #fff;
+  margin-right: 15px;
+}
+.nav-link:hover {
+  color: #ff9800; /* Warna hover */
+}
+.btn-signin {
+  background-color: #9a9a9a;
+  color: #fff;
+  border: none;
+}
+.btn-signin:hover {
+  color: #fff;
+  background-color: #5b5b5b;
+}
+.btn-signup {
+  background-color: #ff5500;
+  color: #fff;
+  border: none;
+}
+.btn-signup:hover {
+  color: #fff;
+  background-color: #b53c00;
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 20px;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+
+.button-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.button-container::-webkit-scrollbar-thumb {
+  background: #ff5500;
+  border-radius: 10px;
+}
+
+.button-container::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.circle-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(
+    255,
+    69,
+    0,
+    0.1
+  ); /* Warna oranye dengan transparansi 50% */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  border: none;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  /* position: relative; */
+  flex-shrink: 0;
+  color: white;
+  cursor: pointer;
+}
+
+.icon img {
+  height: 40px;
+  width: 40px;
+  font-size: 25px;
+  line-height: 60px;
+  object-fit: cover; /* Menjaga proporsi gambar */
+  border-radius: 50%; /* Membuat gambar berbentuk lingkaran */
+  transition: all 0.3s ease;
+}
+
+.circle-button span {
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: normal; /* Membolehkan teks membungkus */
+  word-wrap: break-word; /* Memastikan teks panjang dapat pecah */
+  text-align: left; /* Sesuaikan dengan tampilan */
+}
+
+.circle-button:hover,
+.circle-button.active {
+  width: 220px;
+  border-radius: 30px;
+  background: radial-gradient(circle, #ff6e25, #ff5500, #d5020d);
+}
+
+.circle-button:hover span,
+.circle-button.active span {
+  opacity: 1;
+  margin-left: 10px;
+}
+
+.scrollable-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem;
+  scroll-behavior: smooth;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* Jarak antar kartu */
+  padding: 1rem;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: #ff5500;
+  border-radius: 10px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: #222;
+}
+
+.card {
+  width: 220px; /* Control the card width */
+  flex: 0 0 auto;
+}
+
+.card-header {
+  background-color: #414141; /* Live badge color */
+  color: white;
+}
+
+.card-body {
+  background-color: #414141;
+  color: white;
+  border-bottom-right-radius: 0.375rem;
+  border-bottom-left-radius: 0.375rem;
+}
+
+.team-logos img {
+  height: 50px;
+  margin: 0 10px;
+}
+
+.team-name {
+  word-wrap: break-word; /* Untuk browser lama */
+  overflow-wrap: break-word; /* Standar modern */
+  white-space: normal; /* Izinkan teks untuk membungkus */
+  text-align: left;
+}
+
+.team-score img {
+  filter: brightness(0) invert(1);
+  cursor: pointer;
+}
+
+.star-container {
+  display: inline-block;
+  cursor: pointer;
+  width: 25px; /* Sesuaikan ukuran bintang */
+  height: 25px;
+  position: relative;
+}
+
+.star {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Agar sesuai dengan kontainer */
+  transition: opacity 0.3s ease; /* Animasi transisi */
+}
+
+.star-container .default {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.star-container .filled {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.star-container.active .default {
+  opacity: 0;
+}
+
+.star-container.active .filled {
+  opacity: 1;
+}
+
+.divider {
+  height: 2px;
+  background: #f90;
+  margin: 10px 0;
+}
+
+.match-info {
+  font-size: 0.9rem;
+  color: white;
+}
+
+.score {
+  font-weight: bold;
+  text-align: center;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #212529; /* Dark background */
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.calendar-card {
+  background-color: #ff5500; /* Orange background */
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px 0;
+  font-weight: bold;
+  width: 100px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.calendar-card:hover {
+  transform: scale(1.05);
+}
+
+.calendar-card.active {
+  background-color: white; /* Highlight selected day */
+  color: #ff5500;
+}
+
+.calendar-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center; /* Center the grid */
+}
+.calendar-icon {
+  width: 40px;
+  height: 40px;
+  background: url("https://img.icons8.com/ios-filled/50/000000/calendar--v1.png")
+    no-repeat center center;
+  background-size: cover;
+  cursor: pointer;
+}
+#calendar-input {
+  display: none; /* Hide the input field */
+}
+#leftCard:hover {
+  background: #070707;
+  border-radius: 0.375rem;
+  cursor: pointer;
+}
+.progress-bar-orange {
+  width: 50px;
+  height: 5px;
+  background-color: #ff5500; /* Warna titik */
+}
+.progress-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.dot {
+  width: 15px;
+  height: 5px;
+  background-color: white; /* Warna titik */
+  border-radius: 50%;
+}
+.show-all {
+  color: gray;
+  margin-left: auto;
+  font-size: 14px; /* Ukuran teks */
+  cursor: pointer;
+}
+
+.match-header {
+  background: url("/static/img/match_header.png") no-repeat center center; /* Masukkan URL gambar */
+  background-size: cover; /* Gambar akan memenuhi seluruh elemen */
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around; /* Spasi di antara logo kiri, tengah, dan kanan */
+  align-items: center; /* Sejajarkan logo dan teks secara vertikal */
+  color: white; /* Warna teks */
+  padding: 10px 50px;
+}
+
+.team {
+  display: flex;
+  flex-direction: column; /* Membuat gambar dan nama tim vertikal */
+  align-items: center; /* Memusatkan elemen (gambar & teks) */
+}
+
+/* Gambar logo */
+.team-logo {
+  width: 55px; /* Ukuran logo */
+  height: auto; /* Menjaga rasio gambar */
+  margin-bottom: 5px; /* Spasi antara logo dan teks */
+}
+
+.detail-name {
+  text-align: center; /* Teks berada di tengah */
+  font-size: 14px; /* Ukuran font */
+  font-weight: 500;
+}
+
+.detail-info {
+  text-align: center;
+}
+
+.detail-time {
+  font-size: 15px;
+}
+
+.detail-status {
+  font-size: 15px; /* Ukuran font status */
+  font-style: italic; /* Italic untuk status */
+}
+
+/* Container utama untuk menu */
+.menu-bar {
+  display: flex;
+  justify-content: space-between; /* Spasi antara menu kiri dan ikon kanan */
+  align-items: center; /* Agar item sejajar secara vertikal */
+  padding: 10px 20px; /* Ruang di dalam menu */
+  color: white; /* Warna teks */
+  border-bottom: 1px solid #444; /* Garis bawah */
+}
+
+/* Container untuk menu item */
+.menu-items {
+  display: flex;
+  gap: 20px; /* Jarak antar item menu */
+}
+
+/* Gaya untuk tautan menu */
+.menu-link {
+  text-decoration: none; /* Hilangkan garis bawah */
+  color: white; /* Warna teks */
+  font-size: 14px; /* Ukuran font */
+  font-weight: bold; /* Teks tebal */
+  text-transform: uppercase; /* Semua huruf besar */
+  padding: 5px 0; /* Spasi atas dan bawah untuk klik */
+  cursor: pointer;
+}
+
+/* Tautan aktif */
+.menu-link.active {
+  color: #ff5500; /* Garis bawah untuk tautan aktif */
+}
+
+/* Ikon di sebelah kanan */
+.menu-icons {
+  display: flex;
+  align-items: center; /* Pusatkan ikon secara vertikal */
+  font-size: 20px; /* Ukuran ikon */
+}
+
+.icon-placeholder {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot-white {
+  height: 10px;
+  background-color: #929292; /* Warna titik */
+}
+
+.dot-orange {
+  height: 10px;
+  background-color: #ff5500; /* Warna titik */
+}
+
+.field-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.field-image {
+  width: 100%;
+  height: 700px;
+}
+
+.player {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow ditambahkan */
+}
+
+.team1 {
+  background-color: #ff7733;
+}
+
+.team2 {
+  background-color: #070707;
+}
+
+.name-team {
+  position: absolute;
+  font-size: 12px;
+}
+
+.player-name {
+  position: absolute;
+  top: 30px;
+  font-size: 12px;
+  color: white;
+  text-align: center;
+  white-space: nowrap; /* Nama tetap dalam satu baris */
+  max-width: 70px; /* Maksimal lebar nama pemain */
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow teks nama pemain */
+}
+
+.substitution {
+  color: white; /* Teks putih */
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+.subs {
+  width: 45%; /* Lebar untuk masing-masing tim */
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.subs-time {
+  display: flex; /* Aktifkan Flexbox */
+  justify-content: center; /* Pusatkan teks secara horizontal */
+  align-items: center; /* Pusatkan teks secara vertikal */
+  text-align: center; /* Pastikan teks terpusat dalam elemen */
+  width: 50px;
+  height: 100%;
+  font-weight: bold;
+  color: white; /* Tambahkan agar teks terlihat lebih jelas */
+}
+
+table {
+  width: 100%;
+  /* border: 1px solid #929292;
+  border-radius: 10px; */
+  outline: 2px solid #929292; /* Gunakan outline untuk border luar */
+  border-radius: 10px;
+}
+table thead th {
+  color: #929292;
+  padding: 10px;
+  text-align: left;
+  border-bottom-width: 1px;
+  font-size: 16px;
+  font-weight: 200;
+}
+table tbody td {
+  color: #929292;
+  padding: 10px;
+  text-align: left;
+  border-bottom-width: 1px;
+  font-size: 16px;
+  font-weight: 200;
+}
+
+.custom-padding {
+  padding: 0 20px;
+}
+
+.btn-matches {
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.btn-group.active {
+  background-color: white;
+}
+
+.title-detail {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.background-container {
+  width: 100%;
+  height: 100%;
+  background-image: url("/static/img/match_header.png");
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  justify-content: center;
+}
+
+.match-details {
+  flex-direction: column;
+  line-height: normal;
+  justify-content: center;
+  padding: 12px;
+  align-items: center;
+}
+
+.match-info-detail {
+  font-family: Inter, sans-serif;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.match-date {
+  color: var(--Foundation-White-white-50, #fff);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.teams-container {
+  align-items: center;
+  font-size: 10px;
+  line-height: 24px;
+  justify-content: center;
+  flex-direction: row;
+}
+.team-info {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 30%;
+}
+.team-nameMatch {
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+}
+.match-time {
+  font-size: 24px;
+  font-weight: bold;
+}
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+.status-match {
+  font-size: 14px;
+  color: white;
+  font-weight: lighter;
+}
+.name-team-detail {
+  font-size: 14px;
+  color: white;
+  font-weight: 200;
+}
+.score-form {
+  font-size: 14px;
+  color: white;
+  font-weight: 200;
+}
+.card-form {
+  background-color: #414141;
+  border-radius: 6px;
+  padding: 12px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+.info-form {
+  align-items: center;
+  display: flex;
+  gap: 19px;
+  height: 100%;
+}
+.info-teamForm {
+  justify-content: space-between;
+}
+.info-teamForm .team1-detail {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.info-teamForm .team2-detail {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+}
+.team-penalti {
+  background-color: #b5b5b5;
+  color: white;
+  border-radius: 4px;
+  padding: 2px;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 300;
+}
+.seeAll-button {
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  background: var(--Foundation-Primary-primary-500, #f50);
+  background-color: var(--Foundation-Primary-primary-500, #f50);
+  display: flex;
+  margin-top: 8px;
+  width: 100%;
+  gap: 7px;
+  font-size: 16px;
+  color: var(--Foundation-White-white-50, #fff);
+  line-height: 40px;
+  padding: 0 10px;
+  cursor: pointer;
+  border: none;
+}
+.seeAll-button:hover {
+  color: #fff;
+  background-color: #b53c00;
+}
+
+.dots {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: red; /* Ganti warna sesuai kebutuhan */
+  display: inline-block;
+  margin-right: 5px;
+}
+
+/* Styling for the dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-btn {
+  background-color: #212529;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  border-radius: 10px;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #ddd;
+  border-radius: 10px;
+}
+
+/* Show the dropdown menu */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Styling for the modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding-top: 60px;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close-btn {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}

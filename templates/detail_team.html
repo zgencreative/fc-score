@@ -1,0 +1,706 @@
+{% extends "template.html" %} {% block content %}
+<div class="container my-5">
+  <div class="row">
+    <!-- Sidebar Kiri -->
+    <div class="col-md-3">
+      <div
+        class="text-light p-3 bg-dark rounded"
+        style="overflow-y: auto"
+        id="leftSide"
+      ></div>
+    </div>
+
+    <!-- Main Content Tengah -->
+    <div class="col-md-9" id="main-div">
+      <div class="p-3 rounded shadow-sm bg-dark text-light">
+        <p>
+          <a href="/" style="text-decoration: none">
+            <i class="fas fa-arrow-left" style="color: white"></i>
+          </a>
+        </p>
+        <div class="d-flex align-items-center custom-padding">
+          <!-- Logo -->
+          <div class="me-3">
+            <img
+              src="{{data.data.IMGTeam}}"
+              alt="{{data.data.NMTeam}}"
+              style="width: 30px; height: 30px"
+            />
+          </div>
+          <!-- Text Content -->
+          <div>
+            <h5 class="m-0">{{data.data.NMTeam}}</h5>
+            <p class="m-0">{{data.data.CoNm}}</p>
+          </div>
+        </div>
+        <div class="menu-bar">
+          <div class="menu-items">
+            <p class="menu-link active" id="matches-link">MATCHES</p>
+            <p class="menu-link" id="table-link">TABLES</p>
+            <p class="menu-link" id="squad-link">SQUAD</p>
+            <p class="menu-link" id="player-link">PLAYER STAT</p>
+            <p class="menu-link" id="team-link">TEAM STAT</p>
+          </div>
+        </div>
+        <div id="dinamic-content"></div>
+      </div>
+    </div>
+  </div>
+  {% block extra_js%}
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const data = {{ data|tojson }};
+      matches(data);
+      const currentPath = window.location.pathname; // Contoh: "/match/1251295"
+      const segments = currentPath.split("/"); // ["", "match", "1251295"]
+      const idTable = `${segments[2]}.${segments[3]}`;
+      const id = segments[segments.length - 2]; // Ambil elemen terakhir sebagai ID ("1251295")
+      const links = [
+        {
+          id: "matches-link",
+          endpoint: (id) => `/api/football/detailTeam/${id}/`,
+        },
+        {
+          id: "table-link",
+          endpoint: (id) => `/api/football/detailTeam/table/${id}/`,
+        },
+        {
+          id: "squad-link",
+          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+        },
+        {
+          id: "player-link",
+          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+        },
+        {
+          id: "team-link",
+          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+        }
+      ];
+
+      // Iterasi setiap link dan tambahkan event listener
+      links.forEach((link) => {
+        const element = document.getElementById(link.id);
+
+        // Pastikan elemen dengan ID tersebut ada
+        if (!element) {
+          console.warn(`Element with ID "${link.id}" not found.`);
+          return;
+        }
+
+        // Tambahkan event listener ke elemen
+        element.addEventListener("click", function (event) {
+          event.preventDefault(); // Cegah tindakan default (misalnya, navigasi <a>)
+
+          // Hapus class active dari semua elemen lainnya
+          element.classList.remove("active");
+          links.forEach((otherLink) => {
+            const otherElement = document.getElementById(otherLink.id);
+            if (otherElement && otherElement.classList.contains("active")) {
+              otherElement.classList.remove("active");
+            }
+          });
+
+          // Tambahkan class active ke elemen yang diklik
+          element.classList.add("active");
+
+          // Kirim fetch request ke endpoint
+          fetch(link.endpoint(id), {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              const container = document.getElementById("dinamic-content");
+              container.innerHTML = "";
+              if (link.id == "matches-link") {
+                matches(data);
+              } else {
+                console.error("Container element not found!");
+              }
+            })
+            .catch((error) => {
+              console.error(`Error fetching ${link.endpoint(id)}:`, error);
+            });
+        });
+      });
+    })
+
+    function matches(data) {
+      const container = document.getElementById("dinamic-content");
+      container.innerHTML = "";  // Reset kontainer sebelum menambah konten baru
+
+      // Format tanggal dan waktu
+      let date = formatTimestamp(data.data.NextEvent.time_start);
+      let words = date.split("-");
+
+      // Membuat elemen untuk match berikutnya
+      const nextMatch = document.createElement("div");
+      nextMatch.classList.add("next-match");
+      nextMatch.innerHTML = `
+        <div class="title-detail">NEXT MATCH</div>
+        <div class="background-container">
+          <div class="match-details">
+            <div class="match-info-detail">
+              <div class="match-date">${words[0]}</div>
+              <div class="match-time-wrapper">
+                <div class="teams-container">
+                  <div style="display: flex; align-items: center; justify-content: center;">
+                    <div class="team-info" id="team1-info">
+                      <img
+                        loading="lazy"
+                        src="${data.data.NextEvent.team1.teamIMG}"
+                        alt="${data.data.NextEvent.team1.teamNM}"
+                        class="team-badge"
+                        style="width: 50px; height: 50px"
+                      />
+                      <div class="team-nameMatch">${data.data.NextEvent.team1.teamNM}</div>
+                    </div>
+                    <div class="match-time">${words[1]}</div>
+                    <div class="team-info" id="team2-info">
+                      <img
+                        loading="lazy"
+                        src="${data.data.NextEvent.team2.teamIMG}"
+                        alt="${data.data.NextEvent.team2.teamNM}"
+                        class="team-badge"
+                      />
+                      <div class="team-nameMatch">${data.data.NextEvent.team2.teamNM}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Menambahkan elemen nextMatch ke dalam container
+      container.appendChild(nextMatch);
+
+      // Mengambil elemen untuk team 1
+      const team1 = document.getElementById("team1-info");
+      const team2 = document.getElementById("team2-info")
+      const info1 = document.createElement("div");
+      const info2 = document.createElement("div");
+
+      // Looping melalui lastMt untuk menambahkan status
+      for (let i = data.data.NextEvent.team1.lastMt.length - 1; i >= 0; i--) {
+        const matchResult = data.data.NextEvent.team1.lastMt[i];
+        let dotColor = "#929292";  // Default warna abu-abu
+
+        if (matchResult == 1) {
+          dotColor = "#01c246";  // Hijau untuk kemenangan
+        } else if (matchResult == 2) {
+          dotColor = "#d5020d";  // Merah untuk kekalahan
+        }
+
+        info1.innerHTML += `<span class="dots" style="background-color: ${dotColor}"></span>`;
+      }
+
+      // Menambahkan info1 ke dalam team1
+      team1.appendChild(info1);
+
+      // Looping melalui lastMt untuk menambahkan status
+      for (let i = data.data.NextEvent.team2.lastMt.length - 1; i >= 0; i--) {
+        const matchResult = data.data.NextEvent.team2.lastMt[i];
+        let dotColor = "#929292";  // Default warna abu-abu
+
+        if (matchResult == 1) {
+          dotColor = "#01c246";  // Hijau untuk kemenangan
+        } else if (matchResult == 2) {
+          dotColor = "#d5020d";  // Merah untuk kekalahan
+        }
+
+        info2.innerHTML += `<span class="dots" style="background-color: ${dotColor}"></span>`;
+      }
+
+      // Menambahkan info1 ke dalam team1
+      team2.appendChild(info2);
+
+      // Menambahkan tombol "FIXTURES" dan "RESULTS"
+      const buttonSection = document.createElement("div");
+      buttonSection.classList.add("py-3");
+      buttonSection.innerHTML = `
+        <button class="btn btn-outline-light btn-matches active">
+          FIXTURES
+        </button>
+        <button class="btn btn-outline-light btn-matches">RESULTS</button>
+      `;
+      container.appendChild(buttonSection);
+
+      // Menambahkan dropdown untuk "All Competition"
+      const dropdownSection = document.createElement("div");
+      dropdownSection.classList.add("dropdown");
+      dropdownSection.innerHTML = `
+        <button class="dropdown-btn" id="dropdownBtn">
+          All Competition <span>&#9662;</span>
+        </button>
+        <div class="dropdown-content" id="dropdownContent">
+          ${data.data.Stages.map((stage, index) => {
+            return `
+              <a href="#">
+                ${stage.Snm}
+              </a>
+            `;
+          }).join("")}
+        </div>
+      `;
+      container.appendChild(dropdownSection);
+
+      // Menambahkan form untuk setiap stage dan event
+      const formSection = document.createElement("div");
+      formSection.classList.add("form");
+      formSection.style.margin = "12px 0 12px";
+
+      data.data.Stages.forEach((comp) => {
+        const stageDiv = document.createElement("div");
+
+        // Judul untuk setiap Stage
+        const titleDetail = document.createElement("div");
+        titleDetail.classList.add("title-detail", "d-flex", "justify-content-between");
+        titleDetail.innerHTML = `
+          <span>${comp.Snm}</span><i class="fas fa-angle-right"></i>
+        `;
+        stageDiv.appendChild(titleDetail);
+
+        // Daftar pertandingan untuk setiap Stage
+        const listForm = document.createElement("div");
+        listForm.classList.add("list-form");
+
+        comp.events.forEach((match) => {
+          const cardForm = document.createElement("div");
+          cardForm.classList.add("card-form", "mt-2", "mb-2");
+
+          const infoForm = document.createElement("div");
+          infoForm.classList.add("info-form");
+
+          // Detail pertandingan
+          infoForm.innerHTML = `
+            <div class="status-match">${match.Status_Match}</div>
+            <div class="info-teamForm">
+              <div class="team1-detail">
+                <img
+                  loading="lazy"
+                  src="${match.Team1.IMGTeam}"
+                  class="icon"
+                  style="height: 30px; width: 30px"
+                />
+                <div class="name-team-detail">${match.Team1.NMTeam}</div>
+              </div>
+              <div class="team2-detail">
+                <img
+                  loading="lazy"
+                  src="${match.Team2.IMGTeam}"
+                  class="icon"
+                  style="height: 30px; width: 30px"
+                />
+                <div class="name-team-detail">${match.Team2.NMTeam}</div>
+              </div>
+            </div>
+          `;
+          cardForm.appendChild(infoForm);
+
+          // Jika status match "FT", tampilkan skor
+          if (match.Status_Match === "FT") {
+            const scoreForm = document.createElement("div");
+            scoreForm.classList.add("info-teamForm");
+            scoreForm.innerHTML = `
+              <div class="score-form" style="margin-bottom: 20px">${match.Score1}</div>
+              <div class="score-form">${match.Score2}</div>
+            `;
+            cardForm.appendChild(scoreForm);
+          }
+
+          // Menambahkan status favorit
+          const statusFavorite = document.createElement("div");
+          statusFavorite.classList.add("status-favorite");
+          statusFavorite.innerHTML = `
+            <img
+              loading="lazy"
+              src="/static/img/star_border.png"
+              class="icon"
+              style="height: 36px; width: 36px"
+            />
+          `;
+          cardForm.appendChild(statusFavorite);
+
+          listForm.appendChild(cardForm);
+        });
+
+        stageDiv.appendChild(listForm);
+        formSection.appendChild(stageDiv);
+      });
+
+      // Menambahkan formSection ke dalam container
+      container.appendChild(formSection);
+    }
+  </script>
+  <script>
+    // Function to change competition and display modal
+    function changeCompetition(idComp, title) {
+      // Update the button text with the selected competition title
+      document.getElementById(
+        "dropdownBtn"
+      ).innerHTML = `${title} <span>&#9662;</span>`;
+
+      // Show the alert with the competition title
+      alert(title);
+    }
+  </script>
+
+  <script>
+    function formatTimestamp(timestamp) {
+      // Memastikan bahwa timestamp adalah string
+      let ts = timestamp.toString();
+
+      // Mengambil bagian-bagian dari timestamp
+      let year = ts.substring(0, 4); // Ambil tahun
+      let month = ts.substring(4, 6); // Ambil bulan
+      let day = ts.substring(6, 8); // Ambil hari
+      let hour = ts.substring(8, 10); // Ambil jam
+      let minute = ts.substring(10, 12); // Ambil menit
+
+      // Array untuk nama bulan
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      // Menyusun string hasil format
+      let formattedDate = `${day} ${
+        months[parseInt(month) - 1]
+      } ${year} - ${hour}.${minute}`;
+
+      return formattedDate;
+    }
+    async function reloadInitialView() {
+      try {
+        // Melakukan permintaan ke API untuk data awal
+        const response = await fetch("/api/search/", {
+          method: "GET", // Atur metode (GET/POST, dsb.)
+          headers: {
+            "Content-Type": "application/json", // Tipe konten permintaan
+          },
+        });
+        const data = await response.json();
+
+        const leftBar = document.getElementById("leftSide");
+        leftBar.innerHTML = ""; // Kosongkan konten sebelumnya
+
+        // Membuat Search Bar
+        const searchDiv = document.createElement("div");
+        searchDiv.classList.add("mb-4");
+        searchDiv.innerHTML = `
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search..."
+                id="searchInput"
+              />
+            `;
+        leftBar.appendChild(searchDiv);
+
+        // Membuat Region Section
+        const regionDiv = document.createElement("div");
+        regionDiv.classList.add("mb-4");
+        regionDiv.innerHTML = `<h6 class="text-uppercase">Region</h6>`;
+        const regionList = document.createElement("ul");
+        regionList.classList.add("list-unstyled");
+        regionList.id = "region";
+
+        data.data.categories.forEach((region) => {
+          const li = document.createElement("li");
+          li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+          li.id = "leftCard";
+          li.setAttribute(
+            "onclick",
+            `detailCountry('${region.Ccd}', '${region.Cnm}')`
+          );
+          li.innerHTML = `
+                <img
+                  src="${region.badgeUrl || "default-region.png"}"
+                  alt="${region.Ccd}"
+                  class="me-3"
+                  style="width: 20px; object-fit: cover"
+                />
+                <div class="d-flex flex-column">
+                  <span class="text-truncate">${region.Cnm}</span>
+                  <small class="text-light text-truncate"></small>
+                </div>
+              `;
+          regionList.appendChild(li);
+        });
+        regionDiv.appendChild(regionList);
+        leftBar.appendChild(regionDiv);
+
+        // Membuat Teams Section
+        const teamsDiv = document.createElement("div");
+        teamsDiv.innerHTML = `<h6 class="text-uppercase">Teams</h6>`;
+        const teamsList = document.createElement("ul");
+        teamsList.classList.add("list-unstyled");
+        teamsList.id = "teams";
+
+        data.data.teams.forEach((team) => {
+          const li = document.createElement("li");
+          li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+          li.id = "leftCard";
+          li.innerHTML = `
+                <img
+                  src="${team.IMGTeam || "default-team.png"}"
+                  alt="${team.NMTeam}"
+                  class="me-3"
+                  style="width: 20px; object-fit: cover"
+                />
+                <div class="d-flex flex-column">
+                  <span class="text-truncate">${team.NMTeam}</span>
+                  <small class="text-light text-truncate">${team.CoNm}</small>
+                </div>
+              `;
+          teamsList.appendChild(li);
+        });
+        teamsDiv.appendChild(teamsList);
+        leftBar.appendChild(teamsDiv);
+
+        // Membuat Competition Section
+        const competitionDiv = document.createElement("div");
+        competitionDiv.classList.add("mb-4");
+        competitionDiv.innerHTML = `<h6 class="text-uppercase">Competition</h6>`;
+        const competitionList = document.createElement("ul");
+        competitionList.classList.add("list-unstyled");
+        competitionList.id = "competition";
+
+        data.data.stages.forEach((competition) => {
+          const li = document.createElement("li");
+          li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+          li.id = "leftCard";
+          li.innerHTML = `
+                <img
+                  src="${competition.badgeUrl || "default-competition.png"}"
+                  alt="${competition.Scd}"
+                  class="me-3"
+                  style="width: 20px; object-fit: cover"
+                />
+                <div class="d-flex flex-column">
+                  <span class="text-truncate">${competition.Snm}</span>
+                  <small class="text-light text-truncate">${
+                    competition.Cnm
+                  }</small>
+                </div>
+              `;
+          li.addEventListener("click", () => {
+            var modifiedString = competition.urlComp.replace(".", "/");
+            window.location.href = `/comp/${modifiedString}/`; // Gunakan data.url sebagai target URL
+          });
+          competitionList.appendChild(li);
+        });
+        competitionDiv.appendChild(competitionList);
+        leftBar.appendChild(competitionDiv);
+
+        // Tambahkan event listener ke searchInput untuk live search
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener(
+          "input",
+          debounce(async (e) => {
+            const query = e.target.value.trim(); // Dapatkan teks pencarian
+            if (query) {
+              await performSearch(query); // Panggil fungsi pencarian
+            } else {
+              reloadInitialView(); // Reset ke tampilan awal jika input kosong
+            }
+          }, 300) // Debounce selama 300ms
+        );
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    // Fungsi debounce
+    const debounce = (func, delay) => {
+      let timeout;
+      return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func(...args), delay);
+      };
+    };
+
+    // Fungsi performSearch
+    const performSearch = async (query) => {
+      try {
+        const response = await fetch(`/api/search/${query}/`);
+        const data = await response.json();
+
+        const regionList = document.getElementById("region");
+        const teamList = document.getElementById("teams");
+        const compList = document.getElementById("competition");
+
+        // Kosongkan daftar sebelumnya
+        regionList.innerHTML = "";
+        teamList.innerHTML = "";
+        compList.innerHTML = "";
+
+        // Tambahkan hasil pencarian
+        populateList(regionList, data.data.categories, createRegionItem);
+        populateList(teamList, data.data.teams, createTeamItem);
+        populateList(compList, data.data.stages, createCompetitionItem);
+      } catch (error) {
+        console.error("Error in performSearch:", error);
+      }
+    };
+
+    // Fungsi untuk mengisi daftar
+    const populateList = (list, data, createItem) => {
+      if (data && data.length) {
+        data.forEach((item) => list.appendChild(createItem(item)));
+      } else {
+        list.innerHTML = "<li class='text-muted'>No results found</li>";
+      }
+    };
+
+    // Fungsi pembuat item untuk region, team, dan competition
+    const createRegionItem = (region) => {
+      const li = document.createElement("li");
+      li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+      li.id = "leftCard";
+      li.setAttribute(
+        "onclick",
+        `detailCountry('${region.Ccd}', '${region.Cnm}')`
+      );
+      li.innerHTML = `
+            <img
+              src="${region.badgeUrl || "default-region.png"}"
+              alt="${region.Ccd}"
+              class="me-3"
+              style="width: 20px; object-fit: cover"
+            />
+            <div class="d-flex flex-column">
+              <span class="text-truncate">${region.Cnm}</span>
+            </div>
+          `;
+      return li;
+    };
+
+    const createTeamItem = (team) => {
+      const li = document.createElement("li");
+      li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+      li.id = "leftCard";
+      li.innerHTML = `
+            <img
+              src="${team.IMGTeam || "default-team.png"}"
+              alt="${team.NMTeam}"
+              class="me-3"
+              style="width: 20px; object-fit: cover"
+            />
+            <div class="d-flex flex-column">
+              <span class="text-truncate">${team.NMTeam}</span>
+              <small class="text-light text-truncate">${team.CoNm}</small>
+            </div>
+          `;
+      return li;
+    };
+
+    const createCompetitionItem = (competition) => {
+      const li = document.createElement("li");
+      li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+      li.id = "leftCard";
+      li.innerHTML = `
+            <img
+              src="${competition.badgeUrl || "default-competition.png"}"
+              alt="${competition.Scd}"
+              class="me-3"
+              style="width: 20px; object-fit: cover"
+            />
+            <div class="d-flex flex-column">
+              <span class="text-truncate">${competition.Snm}</span>
+              <small class="text-light text-truncate">${competition.Cnm}</small>
+            </div>
+          `;
+      li.addEventListener("click", () => {
+        var modifiedString = competition.urlComp.replace(".", "/");
+        window.location.href = `/comp/${modifiedString}/`; // Gunakan data.url sebagai target URL
+      });
+      return li;
+    };
+
+    // Panggil fungsi utama saat halaman dimuat
+    document.addEventListener("DOMContentLoaded", reloadInitialView);
+  </script>
+  <script>
+    async function detailCountry(country, title) {
+      try {
+        // Melakukan permintaan ke API
+        const response = await fetch(`/api/football/detailCountry/${country}`);
+        const data = await response.json();
+
+        const leftBar = document.getElementById("leftSide");
+        leftBar.innerHTML = ""; // Kosongkan konten sebelumnya
+
+        const countryData = data["data"];
+        if (countryData && countryData.length > 0) {
+          // Membuat elemen tombol kembali
+          const div = document.createElement("div");
+          div.classList.add("mb-4");
+          div.innerHTML = `
+                <button
+                  id="back-button"
+                  class="btn text-white d-flex align-items-center"
+                  onclick="reloadInitialView()"
+                >
+                  <i class="fas fa-arrow-left"></i>
+                  <span id="header-title" class="ms-2">${title}</span>
+                </button>`;
+          leftBar.appendChild(div);
+
+          // Membuat daftar kompetisi
+          const ul = document.createElement("ul");
+          ul.classList.add("list-unstyled");
+
+          // Looping data kompetisi dan membuat elemen <li>
+          countryData.forEach((datas) => {
+            const li = document.createElement("li");
+            li.classList.add("d-flex", "align-items-center", "mb-3", "p-2");
+            li.id = "leftCard";
+
+            li.innerHTML = `
+                  <img
+                    src="${datas.badgeUrl || "default-badge.png"}"
+                    alt="${datas.Scd}"
+                    class="me-3"
+                    style="width: 20px; object-fit: cover"
+                  />
+                  <div class="d-flex flex-column">
+                    <span>${datas.Snm}</span>
+                    <small class="text-light"></small>
+                  </div>
+                `;
+            li.addEventListener("click", () => {
+              var modifiedString = datas.urlComp.replace(".", "/");
+              window.location.href = `/comp/${modifiedString}/`; // Gunakan data.url sebagai target URL
+            });
+            ul.appendChild(li);
+          });
+
+          // Menambahkan daftar ke dalam `leftBar`
+          leftBar.appendChild(ul);
+        }
+      } catch (error) {
+        console.error("Error fetching country details:", error);
+      }
+    }
+  </script>
+  {% endblock %} {% endblock %}
+</div>

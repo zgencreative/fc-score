@@ -1,0 +1,422 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #121212;
+  color: #fff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1c1c1c;
+  border-bottom: 2px solid #333;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 40px;
+  margin-right: 20px;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-links li {
+  margin: 0 15px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.nav-links a:hover {
+  color: #ff5500;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.language {
+  margin-right: 15px;
+  font-size: 14px;
+  color: #ccc;
+}
+
+.btn {
+  border: none;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.btn.signin {
+  background-color: #9a9a9a;
+  color: #fff;
+}
+
+.btn.signin:hover {
+  background-color: #5b5b5b;
+  color: #fff;
+}
+
+.btn.signup {
+  background-color: #ff5500;
+  color: #fff;
+}
+
+.btn.signup:hover {
+  background-color: #b53c00;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  flex: 1;
+  margin: 20px;
+  gap: 20px;
+}
+
+/* Sidebar Kiri dan Kanan */
+.sidebar {
+  width: 20%;
+  background-color: #1c1c1c;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.left-sidebar {
+  width: 300px;
+  background-color: #1c1c1c;
+  color: #fff;
+  padding: 15px;
+  height: 100vh;
+  overflow-y: auto;
+  border-right: 2px solid #333;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 90%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #333;
+  color: #fff;
+}
+
+.sidebar-section {
+  margin-bottom: 20px;
+}
+
+.sidebar-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-item {
+  display: flex;
+  align-items: center;
+  background-color: #202020; /* Warna background */
+  padding: 10px;
+  border-radius: 8px; /* Sudut melengkung */
+  margin-bottom: 10px; /* Jarak antar item */
+  color: white; /* Warna teks */
+}
+
+.team-logo {
+  width: 20px; /* Sesuaikan ukuran logo */
+  margin-right: 10px; /* Jarak antara logo dan teks */
+}
+
+.team-info {
+  display: flex;
+  flex-direction: column; /* Teks ditumpuk vertikal */
+}
+
+.team-name {
+  font-size: 1em; /* Ukuran teks nama utama */
+}
+
+.team-country {
+  font-size: 0.85em; /* Ukuran teks subteks */
+  color: #aaa; /* Warna subteks */
+}
+
+.sidebar-section img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+.sidebar-section h3 {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #ccc;
+  text-transform: uppercase;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-section ul li {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.sidebar-section ul li i {
+  margin-right: 10px;
+  color: #fff;
+}
+
+.subtext {
+  font-size: 12px;
+  color: #888;
+  margin-left: 5px;
+}
+
+.sidebar-section ul li:hover {
+  color: #ff6600;
+  cursor: pointer;
+}
+
+.sidebar-section ul li:hover i {
+  color: #ff6600;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #ccc;
+  font-size: 14px;
+}
+
+.sidebar a:hover {
+  color: #fff;
+}
+
+/* Konten Utama */
+.main-content {
+  flex: 1;
+  background-color: #232323;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+/* Footer */
+.footer {
+  background-color: #1c1c1c;
+  color: #ccc;
+  text-align: center;
+  padding: 10px 0;
+  border-top: 2px solid #333;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+.header {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 102, 0, 1) 0%,
+    rgba(255, 63, 0, 1) 100%
+  );
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+.header h1 {
+  margin: 0;
+}
+.download-section {
+  text-align: center;
+  padding: 20px;
+  background-color: #ff6600;
+  color: white;
+}
+.download-section button {
+  background-color: white;
+  color: #ff6600;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.download-section button:hover {
+  background-color: #ffd1b3;
+}
+.circle-list .circle-item {
+  display: inline-block;
+  height: 60px;
+  width: 60px;
+  float: left;
+  margin: 0 5px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  background-color: #1c1c1c;
+  border-radius: 50px;
+  transition: all 0.3s ease-out;
+}
+.circle-list .circle-item:hover {
+  width: 200px;
+}
+.circle-list .circle-item .icon {
+  display: inline-block;
+  text-align: center;
+  height: 60px;
+  width: 60px;
+  border-radius: 50px;
+  box-sizing: border-box;
+  line-height: 60px;
+}
+.circle-list .circle-item .icon i {
+  font-size: 25px;
+  line-height: 60px;
+}
+.circle-list .circle-item span {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 60px;
+  margin-left: 10px;
+}
+
+.league-button {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 102, 0, 1) 0%,
+    rgba(255, 63, 0, 1) 100%
+  );
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.league-button:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+.league-button img {
+  height: 24px;
+  margin-right: 10px;
+}
+
+.card-slider-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  overflow: hidden;
+  background: #202020;
+  display: flex;
+  align-items: center;
+}
+
+.card-slider {
+  display: flex;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card {
+  background: #333;
+  border-radius: 10px;
+  color: #fff;
+  width: 300px;
+  margin: 0 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.card img {
+  width: 50px;
+  height: 50px;
+}
+
+.live {
+  background: #ff4500;
+  color: white;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  width: fit-content;
+  margin: 0 auto 10px auto;
+}
+
+.teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.round-info {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.score p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.details {
+  font-size: 12px;
+  color: #bbb;
+  margin-top: auto;
+}
+
+button.prev {
+  left: 10px;
+}
+
+button.next {
+  right: 10px;
+}
