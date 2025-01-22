@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, url_for
+from flask import Flask, render_template, jsonify, url_for, request
 import requests
 import datetime
 from flask_cors import CORS
@@ -1101,13 +1101,15 @@ def teamTable(id):
 
 @app.route('/', methods=["GET"])
 def home():
-    return render_template('home.html')
+    host = request.host
+    return render_template('home.html', host=host)
 
 @app.route('/match/<string:country>/<string:comp>/<string:idMatch>/', methods=['GET'])
 def detailMatch(idMatch, country, comp):
     data = get_detail_match(idMatch)
     data['data']['time_start'] = convert_time(data['data']['time_start'])
-    return render_template('detail_match.html', data=data)
+    host = request.host
+    return render_template('detail_match.html', data=data, host=host)
 
 def convert_time(timestamp):
     # Ensure the timestamp is converted to a string
@@ -1123,13 +1125,15 @@ def convert_time(timestamp):
 @app.route('/comp/<string:country>/<string:comp>/', methods=['GET'])
 def detComp(country, comp):
     data = detailComp(f'{country}.{comp}')
-    return render_template('detail_comp.html', data=data)
+    host = request.host
+    return render_template('detail_comp.html', data=data, host=host)
 
 # @app.route('/team/<string:idTeam>/', methods=['GET'])
 # def detTeam(idTeam):
 #     data = detailTeam(idTeam)
 #     data['data']['NextEvent']['time_start'] = convert_time(data['data']['NextEvent']['time_start'])
-#     return render_template('detail_team.html', data=data)
+#     host = request.host
+#     return render_template('detail_team.html', data=data, host=host)
 
 if __name__ == '__main__':
     app.run()

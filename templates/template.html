@@ -1,13 +1,17 @@
+{% set title = 'YUKSCORE' %} {% set logo = 'img/logo.png' %} {% if
+'mansionsportsfc' in host %} {% set title = 'MansionsportsFC' %} {% set logo =
+'img/logo-mansiionsportsfc.png' %} {% endif %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>YUKSCORE.</title>
+    <title>{{title}}</title>
     <!-- Bootstrap CSS -->
     <link
       rel="icon"
-      href="{{ url_for('static', filename='img/logo.png') }}"
+      href="{{ url_for('static', filename=logo) }}"
       type="image/x-icon"
       style="filter: brightness(1) invert(1)"
     />
@@ -36,10 +40,7 @@
       <div class="container">
         <!-- Logo -->
         <a class="navbar-brand" href="#">
-          <img
-            src="{{ url_for('static', filename='img/logo.png') }}"
-            alt="Logo"
-          />
+          <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
         </a>
         <!-- Navbar Toggler -->
         <button
