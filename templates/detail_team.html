@@ -29,7 +29,7 @@
           </div>
           <!-- Text Content -->
           <div>
-            <h5 class="m-0">{{data.data.NMTeam}}</h5>
+            <h5 class="m-0" id="team-name">{{data.data.NMTeam}}</h5>
             <p class="m-0">{{data.data.CoNm}}</p>
           </div>
         </div>
@@ -66,11 +66,11 @@
         },
         {
           id: "squad-link",
-          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+          endpoint: (id) => `/api/football/detailTeam/squad/${id}/`,
         },
         {
           id: "player-link",
-          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+          endpoint: (id) => `/api/football/detailTeam/table/${idTable}`,
         },
         {
           id: "team-link",
@@ -120,7 +120,9 @@
               container.innerHTML = "";
               if (link.id == "matches-link") {
                 matches(data);
-              } else {
+              } else if (link.id == "table-link"){
+                rank(data);
+              }else {
                 console.error("Container element not found!");
               }
             })
@@ -134,6 +136,9 @@
     function matches(data) {
       const container = document.getElementById("dinamic-content");
       container.innerHTML = "";  // Reset kontainer sebelum menambah konten baru
+
+      let currentCompetitionFilter = "all";  // Variabel untuk menyimpan kompetisi yang aktif
+      let currentMatchType = "fixtures";  // Variabel untuk menyimpan jenis pertandingan yang ditampilkan (fixtures atau results)
 
       // Format tanggal dan waktu
       let date = formatTimestamp(data.data.NextEvent.time_start);
@@ -178,8 +183,6 @@
           </div>
         </div>
       `;
-
-      // Menambahkan elemen nextMatch ke dalam container
       container.appendChild(nextMatch);
 
       // Mengambil elemen untuk team 1
@@ -226,10 +229,10 @@
       const buttonSection = document.createElement("div");
       buttonSection.classList.add("py-3");
       buttonSection.innerHTML = `
-        <button class="btn btn-outline-light btn-matches active">
+        <button class="btn btn-outline-light btn-matches active" id="btnFixtures">
           FIXTURES
         </button>
-        <button class="btn btn-outline-light btn-matches">RESULTS</button>
+        <button class="btn btn-outline-light btn-matches" id="btnResults">RESULTS</button>
       `;
       container.appendChild(buttonSection);
 
@@ -252,8 +255,22 @@
       `;
       container.appendChild(dropdownSection);
 
-      // Menambahkan event listener untuk menangani klik pada elemen <a> setelah dropdown di-render
+      // Event listener untuk tombol Fixtures dan Results
+      document.getElementById("btnFixtures").addEventListener("click", () => {
+        currentMatchType = "fixtures";
+        setActiveButton("fixtures");
+        renderMatches();
+      });
+
+      document.getElementById("btnResults").addEventListener("click", () => {
+        currentMatchType = "results";
+        setActiveButton("results");
+        renderMatches();
+      });
+
+      // Event listener untuk filter kompetisi
       const dropdownContent = document.getElementById('dropdownContent');
+      const dropdownBtn = document.getElementById('dropdownBtn');
 
       dropdownContent.addEventListener('click', function(event) {
         if (event.target && event.target.tagName === 'A') {
@@ -262,137 +279,277 @@
           // Mengambil data dari atribut data-*
           const index = event.target.dataset.index;
           const snm = event.target.dataset.snm;
-          const stages = JSON.parse(decodeURIComponent(event.target.dataset.stages));
-
-          // Memanggil fungsi dengan data yang diperlukan
-          changeCompetition(index, snm, stages);
+          currentCompetitionFilter = snm; // Mengubah filter kompetisi
+          setActiveCompetitionFilter(snm); // Menandai kompetisi yang aktif
+          dropdownBtn.innerHTML = `${snm} <span>&#9662;</span>`; // Update teks tombol dropdown
+          renderMatches();  // Render ulang setelah filter kompetisi berubah
         }
       });
 
-      // Menambahkan form untuk setiap stage dan event
-      const formSection = document.createElement("div");
-      formSection.classList.add("form");
-      formSection.style.margin = "12px 0 12px";
-      formSection.id = "dinamic-comp";
+      // Fungsi untuk merender ulang pertandingan berdasarkan jenis dan filter yang dipilih
+      function renderMatches() {
+        // Hapus konten pertandingan sebelumnya
+        const formSection = document.getElementById("dinamic-comp");
+        if (formSection) formSection.remove();
 
-      data.data.Stages.forEach((comp) => {
-        const stageDiv = document.createElement("div");
+        const formSectionUpdated = document.createElement("div");
+        formSectionUpdated.classList.add("form");
+        formSectionUpdated.style.margin = "12px 0 12px";
+        formSectionUpdated.id = "dinamic-comp";
 
-        // Judul untuk setiap Stage
-        const titleDetail = document.createElement("div");
-        titleDetail.classList.add("title-detail", "d-flex", "justify-content-between");
-        titleDetail.innerHTML = `
-          <span>${comp.Snm}</span><i class="fas fa-angle-right"></i>
-        `;
-        stageDiv.appendChild(titleDetail);
+        // Filter berdasarkan kompetisi yang aktif
+        const filteredStages = currentCompetitionFilter === "all"
+          ? data.data.Stages
+          : data.data.Stages.filter(stage => stage.Snm === currentCompetitionFilter);
 
-        // Daftar pertandingan untuk setiap Stage
-        const listForm = document.createElement("div");
-        listForm.classList.add("list-form");
+        // Looping untuk setiap Stage
+        filteredStages.forEach((comp) => {
+          const stageDiv = document.createElement("div");
 
-        comp.events.forEach((match) => {
-          const cardForm = document.createElement("div");
-          cardForm.classList.add("card-form", "mt-2", "mb-2");
-
-          const infoForm = document.createElement("div");
-          infoForm.classList.add("info-form");
-
-          // Detail pertandingan
-          infoForm.innerHTML = `
-            <div class="status-match">${match.Status_Match}</div>
-            <div class="info-teamForm">
-              <div class="team1-detail">
-                <img
-                  loading="lazy"
-                  src="${match.Team1.IMGTeam}"
-                  class="icon"
-                  style="height: 30px; width: 30px"
-                />
-                <div class="name-team-detail">${match.Team1.NMTeam}</div>
-              </div>
-              <div class="team2-detail">
-                <img
-                  loading="lazy"
-                  src="${match.Team2.IMGTeam}"
-                  class="icon"
-                  style="height: 30px; width: 30px"
-                />
-                <div class="name-team-detail">${match.Team2.NMTeam}</div>
-              </div>
-            </div>
+          // Judul untuk setiap Stage
+          const titleDetail = document.createElement("div");
+          titleDetail.classList.add("title-detail", "d-flex", "justify-content-between");
+          titleDetail.innerHTML = `
+            <span>${comp.Snm}</span><i class="fas fa-angle-right"></i>
           `;
-          cardForm.appendChild(infoForm);
+          stageDiv.appendChild(titleDetail);
 
-          const infoForm2 = document.createElement("div");
-          infoForm2.classList.add("info-form");
+          // Daftar pertandingan untuk setiap Stage
+          const listForm = document.createElement("div");
+          listForm.classList.add("list-form");
 
-          // Jika status match "FT", tampilkan skor
-          if (match && match.Status_Match === "FT") {
-            const scoreForm = document.createElement("div");
-            scoreForm.classList.add("info-teamForm");
-            scoreForm.innerHTML = `
-            <div class="score-form" style="margin-bottom: 20px">${match.Score1}</div>
-            <div class="score-form">${match.Score2}</div>
+          // Filter berdasarkan jenis pertandingan (Fixtures atau Results)
+          const matchesToDisplay = comp.events.filter((match) => {
+            if (currentMatchType === "fixtures") {
+              return match.Status_Match !== "FT";  // Tampilkan hanya pertandingan yang belum selesai
+            } else {
+              return match.Status_Match === "FT";  // Tampilkan hanya pertandingan yang sudah selesai
+            }
+          });
+
+          // Jika tidak ada pertandingan yang sesuai, jangan tampilkan kompetisi ini
+          if (matchesToDisplay.length === 0) return;
+
+          matchesToDisplay.forEach((match) => {
+            const cardForm = document.createElement("div");
+            cardForm.classList.add("card-form", "mt-2", "mb-2");
+
+            const infoForm = document.createElement("div");
+            infoForm.classList.add("info-form");
+
+            // Detail pertandingan
+            infoForm.innerHTML = `
+              <div class="status-match">${match.Status_Match}</div>
+              <div class="info-teamForm">
+                <div class="team1-detail">
+                  <img
+                    loading="lazy"
+                    src="${match.Team1.IMGTeam}"
+                    class="icon"
+                    style="height: 30px; width: 30px"
+                  />
+                  <div class="name-team-detail">${match.Team1.NMTeam}</div>
+                </div>
+                <div class="team2-detail">
+                  <img
+                    loading="lazy"
+                    src="${match.Team2.IMGTeam}"
+                    class="icon"
+                    style="height: 30px; width: 30px"
+                  />
+                  <div class="name-team-detail">${match.Team2.NMTeam}</div>
+                </div>
+              </div>
             `;
-            infoForm2.appendChild(scoreForm);
-           }
+            cardForm.appendChild(infoForm);
 
-          // Menambahkan status favorit
-          const statusFavorite = document.createElement("div");
-          statusFavorite.classList.add("status-favorite");
-          statusFavorite.innerHTML = `
-            <img
-              loading="lazy"
-              src="/static/img/star_border.png"
-              class="icon"
-              style="height: 36px; width: 36px"
-            />
-          `;
-          infoForm2.appendChild(statusFavorite);
-          cardForm.appendChild(infoForm2);
+            const infoForm2 = document.createElement("div");
+            infoForm2.classList.add("info-form");
 
-          listForm.appendChild(cardForm);
+            // Jika status match "FT", tampilkan skor
+            if (match && match.Status_Match === "FT") {
+              const scoreForm = document.createElement("div");
+              scoreForm.classList.add("info-teamForm");
+              scoreForm.innerHTML = `
+                <div class="score-form" style="margin-bottom: 20px">${match.Score1}</div>
+                <div class="score-form">${match.Score2}</div>
+              `;
+              infoForm2.appendChild(scoreForm);
+            }
+
+            // Menambahkan status favorit
+            const statusFavorite = document.createElement("div");
+            statusFavorite.classList.add("status-favorite");
+            statusFavorite.innerHTML = `
+              <img
+                loading="lazy"
+                src="/static/img/star_border.png"
+                class="icon"
+                style="height: 36px; width: 36px"
+              />
+            `;
+            infoForm2.appendChild(statusFavorite);
+            cardForm.appendChild(infoForm2);
+
+            listForm.appendChild(cardForm);
+          });
+
+          stageDiv.appendChild(listForm);
+          formSectionUpdated.appendChild(stageDiv);
         });
 
-        stageDiv.appendChild(listForm);
-        formSection.appendChild(stageDiv);
-      });
+        container.appendChild(formSectionUpdated);
+      }
 
-      // Menambahkan formSection ke dalam container
-      container.appendChild(formSection);
+      // Fungsi untuk menandai tombol aktif (Fixtures/Results)
+      function setActiveButton(type) {
+        const fixturesButton = document.getElementById("btnFixtures");
+        const resultsButton = document.getElementById("btnResults");
+
+        if (type === "fixtures") {
+          fixturesButton.classList.add("active");
+          resultsButton.classList.remove("active");
+        } else {
+          fixturesButton.classList.remove("active");
+          resultsButton.classList.add("active");
+        }
+      }
+
+      // Fungsi untuk menandai filter kompetisi aktif
+      function setActiveCompetitionFilter(snm) {
+        const dropdownLinks = document.querySelectorAll('#dropdownContent a');
+        dropdownLinks.forEach(link => {
+          if (link.dataset.snm === snm) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+
+      // Memulai render pertama kali
+      renderMatches();
+    }
+
+    function rank(data){
+      const container = document.getElementById("dinamic-content");
+      container.innerHTML = "";  // Reset kontainer sebelum menambah konten baru
+      const name_team = document.getElementById("team-name").innerText;
+      const tableRank = data.data.LeagueTable;
+      const tableContainer = document.createElement("div");
+      tableContainer.style.margin = "12px 0 12px";
+
+      // Menambahkan tabel dengan struktur HTML
+      tableContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th style="font-weight: 500; width: 5%">#</th>
+              <th style="width: 40%">TEAM</th>
+              <th style="width: 7.5%">P</th>
+              <th style="width: 7.5%">W</th>
+              <th style="width: 7.5%">D</th>
+              <th style="width: 7.5%">L</th>
+              <th style="width: 7.5%">F</th>
+              <th style="width: 7.5%">A</th>
+              <th style="width: 7.5%">GD</th>
+              <th style="width: 7.5%">PTS</th>
+            </tr>
+          </thead>
+          <tbody id="rankTable"></tbody>
+        </table>
+      `;
+
+      // Menambahkan tableContainer ke dalam container utama
+      container.appendChild(tableContainer);
+
+      // Menyiapkan tbody untuk menambahkan data tim
+      const rankTable = document.getElementById("rankTable");
+
+      // Menggunakan loop untuk menambahkan data ke dalam table
+      tableRank.forEach((team) => {
+        // Membuat baris baru (tr) untuk setiap tim
+        const row = document.createElement("tr");
+        row.classList.add("bg-black");
+        if (team.teamNM != name_team) {
+          row.classList.remove("bg-black");
+        }
+
+        row.style.fontSize = "14px";
+
+        // Menambahkan data ke dalam setiap sel (td)
+        row.innerHTML = `
+          <td style="font-weight: 500; width: 5%; color: white">${team.rank}</td>
+          <td style="width: 40%; color: white">
+            <img
+              loading="lazy"
+              src="${team.teamIMG}"
+              class="icon"
+              style="height: 30px; width: 30px"
+            />
+            ${team.teamNM}
+          </td>
+          <td style="width: 7.5%; color: white">${team.p}</td>
+          <td style="width: 7.5%; color: white">${team.w}</td>
+          <td style="width: 7.5%; color: white">${team.d}</td>
+          <td style="width: 7.5%; color: white">${team.l}</td>
+          <td style="width: 7.5%; color: white">${team.f}</td>
+          <td style="width: 7.5%; color: white">${team.a}</td>
+          <td style="width: 7.5%; color: white">${team.gd}</td>
+          <td style="width: 7.5%; color: white">${team.pts}</td>
+        `;
+
+        // Menambahkan baris baru ke dalam tbody
+        rankTable.appendChild(row);
+      });
+    }
+
+    function squad(data){
+
     }
   </script>
   <script>
-    // Function to change competition and display modal
-    function changeCompetition(index, filter, stages) {
-      const button1 = document.getElementByTagName("button")[0];
-      const button2 = document.getElementByTagName("button")[1];
+    // Variabel untuk melacak status aktif dan filter kompetisi
+    let activeView = "fixtures"; // Variabel untuk menandakan apakah kita sedang melihat "Fixtures" atau "Results"
+    let selectedComp = "all"; // Variabel untuk menandakan kompetisi yang dipilih (default 'all')
 
-      let SM = "FT";
-      if (filter == "FIXTURES") {
-        SM = "NS";
+    // Fungsi untuk mengubah tampilan antara "Fixtures" dan "Results"
+    function changeCompetition(index, filter, stages) {
+      const button1 = document.getElementById("btnFixtures");
+      const button2 = document.getElementById("btnResults");
+
+      // Update tombol yang aktif
+      let SM = "FT"; // Default tampilkan hasil (FT)
+      if (filter === "FIXTURES") {
+        SM = "NS"; // Tampilkan jadwal (NS)
         button1.classList.add("active");
         button2.classList.remove("active");
+      } else {
+        button1.classList.remove("active");
+        button2.classList.add("active");
       }
-      container.appendChild(button1);
+
+      // Menangani klik tombol Fixtures atau Results
       button1.addEventListener("click", () => {
-        matches(data, "FIXTURES"); // Calls the 'tables' function with the LeagueTable data
+        activeView = "fixtures"; // Set activeView ke "fixtures"
+        updateMatches(); // Memperbarui data yang ditampilkan
+      });
+      button2.addEventListener("click", () => {
+        activeView = "results"; // Set activeView ke "results"
+        updateMatches(); // Memperbarui data yang ditampilkan
       });
 
-      container.appendChild(button2);
-      button2.addEventListener("click", () => {
-        matches(data, "RESULTS"); // Calls the 'tables' function with the LeagueTable data
-      });
-      // Update the button text with the selected competition title
+      // Update judul dropdown dengan kompetisi yang dipilih
       document.getElementById(
         "dropdownBtn"
       ).innerHTML = `${stages[index].Snm} <span>&#9662;</span>`;
 
+      // Mengubah konten berdasarkan kompetisi yang dipilih
       const formSection = document.getElementById("dinamic-comp");
-      formSection.innerHTML = "";
+      formSection.innerHTML = ""; // Kosongkan konten sebelumnya
       const stageDiv = document.createElement("div");
 
-      // Judul untuk setiap Stage
+      // Menambahkan judul untuk setiap stage
       const titleDetail = document.createElement("div");
       titleDetail.classList.add(
         "title-detail",
@@ -400,15 +557,25 @@
         "justify-content-between"
       );
       titleDetail.innerHTML = `
-          <span>${stages[index].Snm}</span><i class="fas fa-angle-right"></i>
+            <span>${stages[index].Snm}</span><i class="fas fa-angle-right"></i>
         `;
       stageDiv.appendChild(titleDetail);
 
-      // Daftar pertandingan untuk setiap Stage
+      // Daftar pertandingan untuk setiap stage
       const listForm = document.createElement("div");
       listForm.classList.add("list-form");
 
+      // Menambahkan pertandingan ke dalam daftar
       stages[index].events.forEach((match) => {
+        // Tentukan apakah pertandingan sesuai dengan tampilan aktif
+        const isFixture =
+          activeView === "fixtures" && match.Status_Match === "NS"; // Hanya tampilkan pertandingan belum ada skor
+        const isResult =
+          activeView === "results" && match.Status_Match === "FT"; // Hanya tampilkan pertandingan yang sudah ada skor
+
+        // Jika pertandingan tidak sesuai dengan status aktif, lanjutkan ke iterasi berikutnya
+        if (!(isFixture || isResult)) return;
+
         const cardForm = document.createElement("div");
         cardForm.classList.add("card-form", "mt-2", "mb-2");
 
@@ -417,41 +584,31 @@
 
         // Detail pertandingan
         infoForm.innerHTML = `
-            <div class="status-match">${match.Status_Match}</div>
-            <div class="info-teamForm">
-              <div class="team1-detail">
-                <img
-                  loading="lazy"
-                  src="${match.Team1.IMGTeam}"
-                  class="icon"
-                  style="height: 30px; width: 30px"
-                />
-                <div class="name-team-detail">${match.Team1.NMTeam}</div>
-              </div>
-              <div class="team2-detail">
-                <img
-                  loading="lazy"
-                  src="${match.Team2.IMGTeam}"
-                  class="icon"
-                  style="height: 30px; width: 30px"
-                />
-                <div class="name-team-detail">${match.Team2.NMTeam}</div>
-              </div>
-            </div>
-          `;
+                <div class="status-match">${match.Status_Match}</div>
+                <div class="info-teamForm">
+                    <div class="team1-detail">
+                        <img loading="lazy" src="${match.Team1.IMGTeam}" class="icon" style="height: 30px; width: 30px" />
+                        <div class="name-team-detail">${match.Team1.NMTeam}</div>
+                    </div>
+                    <div class="team2-detail">
+                        <img loading="lazy" src="${match.Team2.IMGTeam}" class="icon" style="height: 30px; width: 30px" />
+                        <div class="name-team-detail">${match.Team2.NMTeam}</div>
+                    </div>
+                </div>
+            `;
         cardForm.appendChild(infoForm);
 
         const infoForm2 = document.createElement("div");
         infoForm2.classList.add("info-form");
 
-        // Jika status match "FT", tampilkan skor
-        if (match && match.Status_Match === "FT") {
+        // Jika pertandingan sudah selesai (FT), tampilkan skor
+        if (match.Status_Match === "FT") {
           const scoreForm = document.createElement("div");
           scoreForm.classList.add("info-teamForm");
           scoreForm.innerHTML = `
-            <div class="score-form" style="margin-bottom: 20px">${match.Score1}</div>
-            <div class="score-form">${match.Score2}</div>
-            `;
+                    <div class="score-form" style="margin-bottom: 20px">${match.Score1}</div>
+                    <div class="score-form">${match.Score2}</div>
+                `;
           infoForm2.appendChild(scoreForm);
         }
 
@@ -459,13 +616,8 @@
         const statusFavorite = document.createElement("div");
         statusFavorite.classList.add("status-favorite");
         statusFavorite.innerHTML = `
-            <img
-              loading="lazy"
-              src="/static/img/star_border.png"
-              class="icon"
-              style="height: 36px; width: 36px"
-            />
-          `;
+                <img loading="lazy" src="/static/img/star_border.png" class="icon" style="height: 36px; width: 36px" />
+            `;
         infoForm2.appendChild(statusFavorite);
         cardForm.appendChild(infoForm2);
 
@@ -475,6 +627,25 @@
       stageDiv.appendChild(listForm);
       formSection.appendChild(stageDiv);
     }
+
+    // Fungsi untuk memperbarui tampilan pertandingan berdasarkan tombol yang aktif dan filter kompetisi
+    function updateMatches() {
+      // Mengambil data pertandingan dari backend (contoh: API atau data statis)
+      const stages = []; // Data stages yang berisi pertandingan-pertandingan untuk setiap kompetisi
+      const index = 0; // Indeks kompetisi yang sedang dipilih
+      changeCompetition(index, activeView, stages);
+    }
+
+    // Event listener untuk menangani perubahan filter kompetisi
+    document
+      .getElementById("competitionFilter")
+      .addEventListener("change", function (event) {
+        selectedComp = event.target.value; // Mengubah kompetisi yang dipilih
+        updateMatches(); // Memperbarui data berdasarkan kompetisi yang dipilih
+      });
+
+    // Inisialisasi tampilan awal dengan menampilkan pertandingan
+    updateMatches();
   </script>
 
   <script>
@@ -595,6 +766,9 @@
                   <small class="text-light text-truncate">${team.CoNm}</small>
                 </div>
               `;
+          li.addEventListener("click", () => {
+            window.location.href = `/team/${team.IDTeam}/`; // Gunakan data.url sebagai target URL
+          });
           teamsList.appendChild(li);
         });
         teamsDiv.appendChild(teamsList);
@@ -734,6 +908,9 @@
               <small class="text-light text-truncate">${team.CoNm}</small>
             </div>
           `;
+      li.addEventListener("click", () => {
+        window.location.href = `/team/${team.IDTeam}/`; // Gunakan data.url sebagai target URL
+      });
       return li;
     };
 

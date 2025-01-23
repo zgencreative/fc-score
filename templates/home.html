@@ -186,6 +186,9 @@
             <small class="text-light text-truncate">${team.CoNm}</small>
           </div>
         `;
+        li.addEventListener("click", () => {
+          window.location.href = `/team/${team.IDTeam}/`; // Gunakan data.url sebagai target URL
+        });
         teamsList.appendChild(li);
       });
       teamsDiv.appendChild(teamsList);
@@ -323,6 +326,9 @@
         <small class="text-light text-truncate">${team.CoNm}</small>
       </div>
     `;
+    li.addEventListener("click", () => {
+      window.location.href = `/team/${team.IDTeam}/`; // Gunakan data.url sebagai target URL
+    });
     return li;
   };
 

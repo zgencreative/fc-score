@@ -8,7 +8,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 #BACKEND
 
-@app.route('/api/football/detailCountry/<country>')
+@app.route('/api/football/detailCountry/<country>/')
 def detailCountry(country, methods=["GET"]):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
@@ -60,7 +60,7 @@ def detailCountry(country, methods=["GET"]):
             'error': str(e),
         })
 
-@app.route('/api/football/<date>', methods=["GET"])
+@app.route('/api/football/<date>/', methods=["GET"])
 def index(date):
     # Define the URL for the external API request
     url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/date/soccer/{date}/7?countryCode=ID&locale=en&MD=1"
@@ -307,7 +307,7 @@ def search(keyword=''):
             'data': []
         })
 
-@app.route('/api/football/detailMatch/<string:idMatch>', methods=['GET'])
+@app.route('/api/football/detailMatch/<string:idMatch>/', methods=['GET'])
 def get_detail_match(idMatch):
     response = {
         'code': 200,
@@ -477,7 +477,7 @@ def stat(idMatch):
 
     return jsonify(response)
 
-@app.route('/api/football/detailMatch/lineup/<string:idMatch>')
+@app.route('/api/football/detailMatch/lineup/<string:idMatch>/')
 def get_detail_match_lineup(idMatch):
     url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/lineups/soccer/{idMatch}"
 
@@ -582,7 +582,7 @@ def process_substitutions(subs, team1, team2):
         else:
             team2['Subs'].append(player_data)
 
-@app.route('/api/football/detailMatch/table/<string:urlComp>', methods=['GET'])
+@app.route('/api/football/detailMatch/table/<string:urlComp>/', methods=['GET'])
 def rank(urlComp):
     # URL API yang akan diakses
     modified_url = urlComp.replace('.', '/')
@@ -866,8 +866,8 @@ def detailTeam(idTeam):
             'message': f'Error fetching data: {str(e)}'
         }
 
-@app.route('/api/football/detailTeam/playerstat/<string:teamId>', defaults={'eventId': None})
-@app.route('/api/football/detailTeam/playerstat/<string:teamId>/<eventId>')
+@app.route('/api/football/detailTeam/playerstat/<string:teamId>/', defaults={'eventId': None})
+@app.route('/api/football/detailTeam/playerstat/<string:teamId>/<eventId>/')
 def detailPlayerStat(teamId, eventId):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     
@@ -938,7 +938,7 @@ def detailPlayerStat(teamId, eventId):
         'data': datas
     }
 
-@app.route('/api/football/detailTeam/squad/<string:id>', methods=['GET'])
+@app.route('/api/football/detailTeam/squad/<string:id>/', methods=['GET'])
 def detailSquad(id):
     # Define the URL
     url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{id}/squad"
@@ -992,7 +992,7 @@ def detailSquad(id):
     return result
 
 
-@app.route('/api/football/detailTeam/stat/<string:teamId>', defaults={'eventId': None})
+@app.route('/api/football/detailTeam/stat/<string:teamId>/', defaults={'eventId': None})
 @app.route('/api/football/detailTeam/stat/<string:teamId>/<eventId>')
 def teamStat(teamId, eventId):
     # Define the URL for team details
@@ -1128,12 +1128,11 @@ def detComp(country, comp):
     host = request.host
     return render_template('detail_comp.html', data=data, host=host)
 
-# @app.route('/team/<string:idTeam>/', methods=['GET'])
-# def detTeam(idTeam):
-#     data = detailTeam(idTeam)
-#     data['data']['NextEvent']['time_start'] = convert_time(data['data']['NextEvent']['time_start'])
-#     host = request.host
-#     return render_template('detail_team.html', data=data, host=host)
+@app.route('/team/<string:idTeam>/', methods=['GET'])
+def detTeam(idTeam):
+    data = detailTeam(idTeam)
+    host = request.host
+    return render_template('detail_team.html', data=data, host=host)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="192.168.200.22", port=5000, debug=True)
