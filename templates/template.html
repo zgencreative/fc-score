@@ -1,4 +1,4 @@
-{% set title = 'YUKSCORE' %} {% set logo = 'img/logo.png' %} {% if
+{% set title = 'YUKSCORE' %} {% set logo = 'img/logo.png' %} {% set ico = 'img/favicon.ico' %} {% if
 'mansionsportsfc' in host %} {% set title = 'MansionsportsFC' %} {% set logo =
 'img/logo-mansiionsportsfc.png' %} {% endif %}
 
@@ -11,7 +11,7 @@
     <!-- Bootstrap CSS -->
     <link
       rel="icon"
-      href="{{ url_for('static', filename=logo) }}"
+      href="{{ url_for('static', filename=ico) }}"
       type="image/x-icon"
       style="filter: brightness(1) invert(1)"
     />
