@@ -742,3 +742,70 @@ table tbody td {
   text-decoration: none;
   cursor: pointer;
 }
+
+.title-league-detailTeamMatch {
+  color: white;
+  font-size: 14px;
+  font-weight: 200;
+}
+.section-league-detailTeamMatch {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+}
+.namePlayer-statsDetailTeam {
+  color: white;
+  font-weight: bold;
+}
+.cardListStat {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #929292;
+  justify-content: space-between;
+  padding: 6px 16px 6px 12px;
+  font-size: 12px;
+}
+.containerListStat {
+  width: 100%;
+  /* border: 1px solid #929292;
+  border-radius: 10px; */
+  outline: 1px solid #929292; /* Gunakan outline untuk border luar */
+  border-radius: 10px;
+  margin-top: 12px;
+}
+.button-matchesDetailTeam {
+  align-self: stretch;
+  border-radius: 61px;
+  background: var(--Foundation-Primary-primary-500, rgb(255, 255, 255));
+  background-color: var(--Foundation-Primary-primary-500, rgb(255, 255, 255));
+  color: var(--Foundation-White-white-50, rgb(0, 0, 0));
+  white-space: nowrap;
+  font: 500 16px/40px Inter, sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+  height: 46px;
+}
+.button-matchesDetailTeam.active {
+  align-self: stretch;
+  border-radius: 61px;
+  background: var(--Foundation-Primary-primary-500, #f50);
+  background-color: var(--Foundation-Primary-primary-500, #f50);
+  color: var(--Foundation-White-white-50, #fff);
+  white-space: nowrap;
+  font: 500 16px/40px Inter, sans-serif;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+  height: 46px;
+}
+
+.button-matchesDetailTeam:hover {
+  background-color: var(--Foundation-Primary-primary-600, #ec5200);
+}
+
+.result-button-matchesDetailTeam:hover {
+  background-color: var(--Foundation-Primary-primary-600, #b4b4b4);
+}

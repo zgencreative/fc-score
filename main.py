@@ -924,7 +924,7 @@ def detailPlayerStat(teamId, eventId):
                 'Fn': player.get('Fn', ''),
                 'Ln': player.get('Ln', ''),
                 'Pnm': player.get('Pnm'),
-                'Scr': player.get('Scrs', {}).get(stat['Typ'], ''),
+                'Scr': player['Scrs'].get(str(stat['Typ']), ''),
                 'Tnm': player.get('Tnm'),
                 'Tid': player.get('Tid')
             })
@@ -1135,4 +1135,4 @@ def detTeam(idTeam):
     return render_template('detail_team.html', data=data, host=host)
 
 if __name__ == '__main__':
-    app.run(host="192.168.200.22", port=5000, debug=True)
+    app.run()
