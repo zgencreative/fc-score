@@ -14,7 +14,7 @@
     <!-- Sidebar Kiri -->
     <div class="col-md-3">
       <div
-        class="text-light p-3 bg-dark rounded"
+        class="text-light p-3 rounded"
         style="overflow-y: auto"
         id="leftSide"
       ></div>
@@ -22,12 +22,12 @@
 
     <!-- Main Content Tengah -->
     <div class="col-md-6" id="main-div">
-      <div class="p-3 rounded shadow-sm bg-dark text-light">
+      <div class="p-3 rounded shadow-sm text-light">
         <!-- Calendar Header -->
         <div class="d-flex justify-content-between">
-          <p class="mt-3" id="calendar-month"></p>
+          <p class="mt-3 fw-bold" id="calendar-month"></p>
           <button class="btn text-light flatpickr" id="kt_datepicker_1">
-            <i class="fas fa-calendar"></i>
+            <img src="{{ url_for('static', filename='img/calendar.png') }}" />
           </button>
         </div>
 
@@ -40,10 +40,18 @@
         <div class="scrollable-container"></div>
         <div class="d-flex justify-content-between">
           <div class="progress-dots">
-            <div class="progress-bar-orange rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
+            <button class="rounded-btn" id="prevBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_left.png') }}"
+                alt="Previous"
+              />
+            </button>
+            <button class="rounded-btn" id="nextBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_right.png') }}"
+                alt="Previous"
+              />
+            </button>
           </div>
           <!-- Show All -->
           <p class="show-all" id="show-all-live">Show All</p>
@@ -55,10 +63,18 @@
         <div class="scrollable-container"></div>
         <div class="d-flex justify-content-between">
           <div class="progress-dots">
-            <div class="progress-bar-orange rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
+            <button class="rounded-btn" id="prevBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_left.png') }}"
+                alt="Previous"
+              />
+            </button>
+            <button class="rounded-btn" id="nextBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_right.png') }}"
+                alt="Previous"
+              />
+            </button>
           </div>
           <!-- Show All -->
           <p class="show-all" id="show-all-upcoming">Show All</p>
@@ -70,10 +86,18 @@
         <div class="scrollable-container"></div>
         <div class="d-flex justify-content-between">
           <div class="progress-dots">
-            <div class="progress-bar-orange rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
-            <div class="dot rounded"></div>
+            <button class="rounded-btn" id="prevBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_left.png') }}"
+                alt="Previous"
+              />
+            </button>
+            <button class="rounded-btn" id="nextBtn">
+              <img
+                src="{{ url_for('static', filename='img/arrow_right.png') }}"
+                alt="Previous"
+              />
+            </button>
           </div>
           <!-- Show All -->
           <p class="show-all" id="show-all-previous">Show All</p>
@@ -83,7 +107,7 @@
 
     <!-- Sidebar Kanan -->
     <div class="col-md-3" id="right-content">
-      <div class="p-3 rounded text-light bg-dark">
+      <div class="p-3 rounded text-light">
         <h5>Sidebar Kanan</h5>
         <ul class="list-unstyled">
           <li><a href="#" class="text-decoration-none">Link A</a></li>
@@ -634,6 +658,51 @@
           buttonContainerPrevious.appendChild(button);
         });
       }
+      const buttonsNext = document.querySelectorAll(".button-container");
+
+      buttonsNext.forEach((buttonNext) => {
+        let isDragging = false;
+        let startX, scrollLeft;
+
+        buttonNext.addEventListener("mousedown", (e) => {
+          e.preventDefault(); // Mencegah blok teks
+          isDragging = true;
+          startX = e.pageX;
+          scrollLeft = buttonNext.scrollLeft;
+          document.body.style.cursor = "grabbing";
+        });
+
+        buttonNext.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          e.preventDefault(); // Mencegah blok teks saat drag
+
+          const moveX = e.pageX - startX;
+          const newScrollLeft = scrollLeft - moveX;
+
+          // Batasi gerakan scroll agar tidak overscroll
+          if (newScrollLeft <= 0) {
+            buttonNext.scrollLeft = 0; // Jangan geser lebih ke kiri dari 0
+          } else if (
+            newScrollLeft >=
+            buttonNext.scrollWidth - buttonNext.clientWidth
+          ) {
+            buttonNext.scrollLeft =
+              buttonNext.scrollWidth - buttonNext.clientWidth; // Jangan geser lebih ke kanan dari batas maksimum
+          } else {
+            buttonNext.scrollLeft = newScrollLeft;
+          }
+        });
+
+        buttonNext.addEventListener("mouseup", () => {
+          isDragging = false;
+          document.body.style.cursor = "default";
+        });
+
+        buttonNext.addEventListener("mouseleave", () => {
+          isDragging = false;
+          document.body.style.cursor = "default";
+        });
+      });
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -722,6 +791,51 @@
       // Tampilkan pesan jika data kosong
       buttonContainerLive.innerHTML = `<p class="text-center text-muted">No matches available.</p>`;
     }
+    const buttonsNext = document.querySelectorAll(".button-container");
+
+    buttonsNext.forEach((buttonNext) => {
+      let isDragging = false;
+      let startX, scrollLeft;
+
+      buttonNext.addEventListener("mousedown", (e) => {
+        e.preventDefault(); // Mencegah blok teks
+        isDragging = true;
+        startX = e.pageX;
+        scrollLeft = buttonNext.scrollLeft;
+        document.body.style.cursor = "grabbing";
+      });
+
+      buttonNext.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        e.preventDefault(); // Mencegah blok teks saat drag
+
+        const moveX = e.pageX - startX;
+        const newScrollLeft = scrollLeft - moveX;
+
+        // Batasi gerakan scroll agar tidak overscroll
+        if (newScrollLeft <= 0) {
+          buttonNext.scrollLeft = 0; // Jangan geser lebih ke kiri dari 0
+        } else if (
+          newScrollLeft >=
+          buttonNext.scrollWidth - buttonNext.clientWidth
+        ) {
+          buttonNext.scrollLeft =
+            buttonNext.scrollWidth - buttonNext.clientWidth; // Jangan geser lebih ke kanan dari batas maksimum
+        } else {
+          buttonNext.scrollLeft = newScrollLeft;
+        }
+      });
+
+      buttonNext.addEventListener("mouseup", () => {
+        isDragging = false;
+        document.body.style.cursor = "default";
+      });
+
+      buttonNext.addEventListener("mouseleave", () => {
+        isDragging = false;
+        document.body.style.cursor = "default";
+      });
+    });
   }
 
   function displayAll(category, index, urlComp) {
@@ -973,6 +1087,64 @@
     } else {
       console.log("No events data available.");
     }
+    const buttonNext = scrollableContainer; // Kontainer yang bisa di-scroll
+    const prevBtn = document.querySelectorAll("#prevBtn")[index]; // Tombol geser kiri
+    const nextBtn = document.querySelectorAll("#nextBtn")[index]; // Tombol geser kanan
+    const scrollAmount = 100; // Jarak scroll setiap klik tombol
+
+    let isDragging = false;
+    let startX, scrollLeft;
+
+    // Event saat mouse ditekan (mulai drag)
+    buttonNext.addEventListener("mousedown", (e) => {
+      e.preventDefault(); // Mencegah blok teks
+      isDragging = true;
+      startX = e.pageX;
+      scrollLeft = buttonNext.scrollLeft;
+      document.body.style.cursor = "grabbing"; // Mengubah kursor saat dragging
+    });
+
+    // Event saat mouse digerakkan (drag)
+    buttonNext.addEventListener("mousemove", (e) => {
+      if (!isDragging) return;
+      e.preventDefault(); // Mencegah blok teks
+      const moveX = e.pageX - startX; // Menghitung pergerakan horizontal mouse
+      const newScrollLeft = scrollLeft - moveX;
+
+      // Mencegah overscroll
+      if (newScrollLeft <= 0) {
+        buttonNext.scrollLeft = 0;
+      } else if (
+        newScrollLeft >=
+        buttonNext.scrollWidth - buttonNext.clientWidth
+      ) {
+        buttonNext.scrollLeft = buttonNext.scrollWidth - buttonNext.clientWidth;
+      } else {
+        buttonNext.scrollLeft = newScrollLeft;
+      }
+    });
+
+    // Event saat mouse dilepas (drag selesai)
+    buttonNext.addEventListener("mouseup", () => {
+      isDragging = false;
+      document.body.style.cursor = "default"; // Kembalikan kursor
+    });
+
+    // Event saat mouse keluar dari area scroll
+    buttonNext.addEventListener("mouseleave", () => {
+      isDragging = false;
+      document.body.style.cursor = "default";
+    });
+
+    // Tombol geser kiri
+    prevBtn.addEventListener("click", () => {
+      buttonNext.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+
+    // Tombol geser kanan
+    nextBtn.addEventListener("click", () => {
+      buttonNext.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
   }
 
   function formatTimestamp(timestamp) {
@@ -1036,7 +1208,7 @@
 
     // Calculate dates
     const days = [];
-    for (let i = -2; i <= 2; i++) {
+    for (let i = -3; i <= 3; i++) {
       const date = new Date();
       date.setDate(today.getDate() + i); // Shift the date by i days
       days.push(date);
@@ -1053,7 +1225,7 @@
       const formattedDate = `${year}${month}${day}`; // Format YYYYMMDD
 
       // Highlight the "today" card (3rd card, index 2)
-      if (index === 2) {
+      if (index === 3) {
         card.classList.add("active");
       }
 
@@ -1065,7 +1237,7 @@
 
       card.innerHTML = `
         <span>${dayName}</span>
-        <span>${dayNumber}</span>
+        <span class="fw-normal">${dayNumber}</span>
       `;
 
       // Add click event listener to make it selectable

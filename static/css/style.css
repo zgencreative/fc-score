@@ -40,20 +40,10 @@ body {
   overflow-x: auto;
   padding: 20px;
   white-space: nowrap;
-  scroll-behavior: smooth;
 }
 
 .button-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.button-container::-webkit-scrollbar-thumb {
-  background: #ff5500;
-  border-radius: 10px;
-}
-
-.button-container::-webkit-scrollbar-track {
-  background: #222;
+  display: none;
 }
 
 .circle-button {
@@ -104,7 +94,7 @@ body {
 .circle-button.active {
   width: 220px;
   border-radius: 30px;
-  background: radial-gradient(circle, #ff6e25, #ff5500, #d5020d);
+  background: radial-gradient(circle, #fc5000, #e42008, #e42008);
 }
 
 .circle-button:hover span,
@@ -118,7 +108,6 @@ body {
   overflow-x: auto;
   gap: 1rem;
   padding: 1rem;
-  scroll-behavior: smooth;
 }
 
 .grid-container {
@@ -129,16 +118,7 @@ body {
 }
 
 .scrollable-container::-webkit-scrollbar {
-  height: 8px;
-}
-
-.scrollable-container::-webkit-scrollbar-thumb {
-  background: #ff5500;
-  border-radius: 10px;
-}
-
-.scrollable-container::-webkit-scrollbar-track {
-  background: #222;
+  display: none;
 }
 
 .card {
@@ -241,7 +221,11 @@ body {
   background-color: #ff5500; /* Orange background */
   color: white;
   border-radius: 5px;
-  text-align: center;
+  display: flex;
+  flex-direction: column; /* Menyusun konten secara vertikal */
+  justify-content: center; /* Menyelaraskan konten secara vertikal di tengah */
+  align-items: center; /* Menyelaraskan konten secara horizontal di tengah */
+  text-align: center; /* Membuat teks tetap rata tengah */
   padding: 10px 0;
   font-weight: bold;
   width: 100px;
@@ -301,6 +285,9 @@ body {
   margin-left: auto;
   font-size: 14px; /* Ukuran teks */
   cursor: pointer;
+}
+.show-all:hover {
+  color: #ff5500;
 }
 
 .match-header {
@@ -808,4 +795,60 @@ table tbody td {
 
 .result-button-matchesDetailTeam:hover {
   background-color: var(--Foundation-Primary-primary-600, #b4b4b4);
+}
+
+.border-column {
+  border-left: 1px solid #929292;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  width: 7%; /* Kolom keempat (Rank) */
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 7%; /* Kolom keempat (Rank) */
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  width: 7%; /* Kolom keempat (Rank) */
+}
+
+/* Menghapus garis bawah pada setiap baris */
+.no-border-bottom td,
+.no-border-bottom th {
+  border-bottom: none;
+}
+
+.teks-tengah {
+  text-align: center;
+}
+
+/* Kelas umum untuk tombol lingkaran */
+.rounded-btn {
+  width: 25px; /* Ukuran tombol */
+  height: 25px; /* Ukuran tombol agar berbentuk lingkaran */
+  border-radius: 50%; /* Membuat tombol menjadi lingkaran */
+  padding: 0; /* Menghilangkan padding agar gambar pas dengan ukuran tombol */
+  background-color: rgba(
+    245,
+    245,
+    245,
+    0.774
+  ); /* Warna latar belakang tombol */
+  border: none; /* Menghilangkan border */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rounded-btn img {
+  width: 100%; /* Ukuran gambar dalam tombol */
+  height: auto; /* Menjaga rasio gambar */
+}
+
+.rounded-btn:hover {
+  background-color: white;
 }

@@ -993,7 +993,7 @@ def detailSquad(id):
 
 
 @app.route('/api/football/detailTeam/stat/<string:teamId>/', defaults={'eventId': None})
-@app.route('/api/football/detailTeam/stat/<string:teamId>/<eventId>')
+@app.route('/api/football/detailTeam/stat/<string:teamId>/<eventId>/')
 def teamStat(teamId, eventId):
     # Define the URL for team details
     url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/details?locale=en&MD=1"
@@ -1135,4 +1135,4 @@ def detTeam(idTeam):
     return render_template('detail_team.html', data=data, host=host)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

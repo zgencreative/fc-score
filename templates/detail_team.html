@@ -75,7 +75,7 @@
         },
         {
           id: "team-link",
-          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+          endpoint: (id) => `/api/football/detailTeam/stat/${id}/`,
         }
       ];
 
@@ -127,6 +127,8 @@
                 squad(data);
               } else if (link.id == "player-link"){
                 playerstat(data);
+              } else if (link.id == "team-link"){
+                teamstat(data);
               }else {
                 console.error("Container element not found!");
               }
@@ -137,6 +139,115 @@
         });
       });
     })
+
+    function teamstat(data, additionalData = null){
+      const container = document.getElementById("dinamic-content");
+      container.innerHTML = "";  // Reset kontainer sebelum menambah konten baru
+      const TeamStat = data.data.TeamStat[0];
+
+      // Menambahkan data ke dalam dropdown
+      const dropdownContent = document.createElement("div");
+      dropdownContent.classList.add("dropdown");
+
+      // Fungsi untuk menambahkan item ke dalam dropdown
+      function populateDropdown(events) {
+        // Mengosongkan dropdown sebelum menambahkan data baru
+        dropdownContent.innerHTML = '';
+
+        // Menambahkan item 'All' yang menampilkan semua event
+        const allOption = document.createElement('button');
+        allOption.classList.add("dropdown-btn");
+        allOption.id = "dropdownBtn";
+        allOption.innerHTML = `${events[0]['Snm']} <span>&#9662;</span>`;
+        if (additionalData !== null) {
+          allOption.innerHTML = `${additionalData} <span>&#9662;</span>`;
+        }
+        dropdownContent.appendChild(allOption);
+
+        const divDropdown = document.createElement("div");
+        divDropdown.classList.add('dropdown-content');
+        divDropdown.id = 'dropdownContent';
+
+        const currentPath = window.location.pathname; // Contoh: "/match/1251295"
+        const segments = currentPath.split("/"); // ["", "match", "1251295"]
+        const idTable = `${segments[2]}.${segments[3]}`;
+        const idTeam = segments[segments.length - 2]; // Ambil elemen terakhir sebagai ID ("1251295")
+
+        // Menambahkan setiap event ke dropdown
+        events.forEach(event => {
+          const eventLink = document.createElement('a');
+          eventLink.href = "#";  // Bisa juga menambahkan href jika diperlukan
+          eventLink.innerHTML = event.Snm;
+
+          // Tambahkan event listener pada setiap link <a>
+          eventLink.addEventListener('click', (e) => {
+            e.preventDefault();  // Mencegah link untuk navigasi
+
+            // Lakukan request ke URL yang sesuai (misalnya URL menggunakan event.Snm atau ID)
+            const url = `/api/football/detailTeam/stat/${idTeam}/${event.Sid}/`;  // Contoh URL
+            fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                teamstat(data, event.Snm);
+                // Panggil fungsi lain untuk memproses data yang diterima
+              })
+              .catch(error => {
+                console.error("Error fetching data:", error);
+              });
+          });
+
+          // Menambahkan link ke dalam dropdown
+          divDropdown.appendChild(eventLink);
+        });
+        dropdownContent.appendChild(divDropdown);
+        container.appendChild(dropdownContent);
+      }
+
+      // Memanggil fungsi untuk mengisi dropdown
+      populateDropdown(data.data.Events);
+
+      TeamStat.forEach(section => {
+        // Membuat elemen untuk setiap section (ATTACKING, DEFENDING, DISCIPLINE)
+        const sectionDiv = document.createElement('div');
+        const titleDiv = document.createElement('div');
+        titleDiv.classList.add('title-detail');
+        titleDiv.textContent = section.name;  // Nama kategori seperti ATTACKING
+        sectionDiv.appendChild(titleDiv);
+
+        // Membuat tabel untuk stats
+        const table = document.createElement('table');
+        table.classList.add('no-border-bottom');
+
+        // Membuat header tabel
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = `
+          <th></th>
+          <th class="teks-tengah">Per Game</th>
+          <th class="teks-tengah">Total</th>
+          <th class="border-column teks-tengah">Rank</th>
+        `;
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Membuat body tabel dan mengisi data dengan looping
+        const tbody = document.createElement('tbody');
+        section.stats.forEach(stat => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${stat.name}</td>
+            <td class="teks-tengah">${stat.pgValue || '-'}</td>
+            <td class="teks-tengah">${stat.totalValue}</td>
+            <td class="border-column teks-tengah">${stat.rank}</td>
+          `;
+          tbody.appendChild(row);
+        });
+        table.appendChild(tbody);
+
+        sectionDiv.appendChild(table);
+        container.appendChild(sectionDiv);
+      });
+    }
 
     function playerstat(data){
       let activeFilter = 'all';
