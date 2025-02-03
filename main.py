@@ -1102,14 +1102,14 @@ def teamTable(id):
 @app.route('/', methods=["GET"])
 def home():
     host = request.host
-    return render_template('home.html', host=host)
+    return render_template('home.html', host=host, page_name="home")
 
 @app.route('/match/<string:country>/<string:comp>/<string:idMatch>/', methods=['GET'])
 def detailMatch(idMatch, country, comp):
     data = get_detail_match(idMatch)
     data['data']['time_start'] = convert_time(data['data']['time_start'])
     host = request.host
-    return render_template('detail_match.html', data=data, host=host)
+    return render_template('detail_match.html', data=data, host=host, page_name="match")
 
 def convert_time(timestamp):
     # Ensure the timestamp is converted to a string
@@ -1126,13 +1126,13 @@ def convert_time(timestamp):
 def detComp(country, comp):
     data = detailComp(f'{country}.{comp}')
     host = request.host
-    return render_template('detail_comp.html', data=data, host=host)
+    return render_template('detail_comp.html', data=data, host=host, page_name="comp")
 
 @app.route('/team/<string:idTeam>/', methods=['GET'])
 def detTeam(idTeam):
     data = detailTeam(idTeam)
     host = request.host
-    return render_template('detail_team.html', data=data, host=host)
+    return render_template('detail_team.html', data=data, host=host, page_name="team")
 
 if __name__ == '__main__':
     app.run(debug=True)
