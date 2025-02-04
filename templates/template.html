@@ -39,64 +39,136 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand" href="/">
-          <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
-        </a>
         <!-- Navbar Toggler -->
         <button
           class="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasLeft"
+          aria-controls="offcanvasLeft"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
+        </a>
+        <!-- search -->
+        <button
+          class="btn search-icon"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasRight"
+          aria-controls="offcanvasRight"
+        >
+          <img
+            src="{{ url_for('static', filename='img/search.png') }}"
+            alt="Search"
+          />
+        </button>
         <!-- Navbar Links -->
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="/"
-                ><i class="fas fa-home"></i> Home</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"
-                ><i class="fas fa-futbol"></i> Scores</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"
-                ><i class="fas fa-star"></i> Favorite</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"
-                ><i class="fas fa-newspaper"></i> News</a
-              >
-            </li>
-            <!-- <li class="nav-item">
-              <a class="nav-link" href="#"
-                ><i class="fas fa-address-book"></i> Contact</a
-              >
-            </li> -->
-          </ul>
-          <!-- Right Section -->
-          <div class="d-flex align-items-center">
-            <span class="text-light me-3">ENG</span>
-            <button class="btn btn-sm btn-signin me-2">Sign In</button>
-            <button class="btn btn-sm btn-signup">Sign Up</button>
+        <div
+          class="offcanvas offcanvas-start bg-dark"
+          tabindex="-1"
+          id="offcanvasLeft"
+          aria-labelledby="offcanvasLeftLabel"
+          style="width: 133px"
+        >
+          <div class="offcanvas-body">
+            <!-- Right Section mobile -->
+            <button
+              type="button"
+              class="btn-close btn-close-white d-lg-none"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+            <div class="d-lg-none">
+              <div class="mt-2">
+                <button class="btn btn-sm btn-signin" style="width: 91px">
+                  Sign In
+                </button>
+              </div>
+              <div class="mt-2">
+                <button class="btn btn-sm btn-signup" style="width: 91px">
+                  Sign Up
+                </button>
+              </div>
+            </div>
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" href="#"
+                  ><i class="fas fa-home"></i>
+                  <span class="d-none d-lg-inline"> Home </span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  ><i class="fas fa-futbol"></i>
+                  <span class="d-none d-lg-inline"> Scores </span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  ><i class="fas fa-star"></i>
+                  <span class="d-none d-lg-inline"> Favorite </span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  ><i class="fas fa-newspaper"></i>
+                  <span class="d-none d-lg-inline"> News </span></a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#"
+                  ><i class="fas fa-address-book"></i>
+                  <span class="d-none d-lg-inline"> Contact </span></a
+                >
+              </li>
+            </ul>
+            <!-- Right Section -->
+            <div class="d-lg-flex align-items-center d-none">
+              <span class="text-light me-3">ENG</span>
+              <button class="btn btn-sm btn-signin me-2">Sign In</button>
+              <button class="btn btn-sm btn-signup">Sign Up</button>
+            </div>
           </div>
+        </div>
+        <!-- Right Side Bar -->
+        <div
+          class="offcanvas offcanvas-end bg-dark"
+          tabindex="-1"
+          id="offcanvasRight"
+          aria-labelledby="offcanvasRightLabel"
+          style="width: 100%"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasRightLabel">
+              Offcanvas right
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="offcanvas-body" id="new_search"></div>
         </div>
       </div>
     </nav>
     <!-- Main content -->
     <section class="container">{% block content %}{% endblock %}</section>
     <footer class="text-light py-4">
-      <center><a href="https://sparxbenelux.com/" class="text-white" style="text-decoration: none;"><p>&copy;MansionSports</p></a></center>
+      <center>
+        <a
+          href="https://sparxbenelux.com/"
+          class="text-white"
+          style="text-decoration: none"
+          ><p>&copy;MansionSports</p></a
+        >
+      </center>
     </footer>
     {% block extra_js %}{% endblock %}
     <!-- Bootstrap JS Bundle -->

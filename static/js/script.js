@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (link.id == "overview-link") {
             overview(data.data);
           } else if (link.id == "matches-link") {
-            matches(data.data.Events, "FIXTURES");
+            matches(data.data.Events, "FIXTURES", data.data.urlComp);
           } else if (link.id == "table-link") {
             tables(data.data.LeagueTable);
           } else {
@@ -318,6 +318,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+
+// Fungsi untuk memindahkan konten ketika ukuran halaman berubah
+function moveContent() {
+  const content = document.getElementById("leftSide");
+  const newContainer = document.getElementById("new_search");
+
+  // Cek jika lebar viewport lebih kecil atau sama dengan 600px
+  if (window.innerWidth <= 720) {
+    // Pindahkan konten ke #new-container jika ukuran layar kecil
+    newContainer.appendChild(content);
+  } else {
+    // Kembalikan konten ke posisi semula jika layar lebih besar dari 600px
+    document.getElementById("main-search").appendChild(content);
+  }
+}
+
+// Panggil fungsi saat halaman dimuat dan saat ukuran jendela berubah
+window.addEventListener("resize", moveContent);
+window.addEventListener("load", moveContent);
 
 // Variabel untuk melacak status aktif dan filter kompetisi
 let activeView = "fixtures"; // Variabel untuk menandakan apakah kita sedang melihat "Fixtures" atau "Results"
@@ -516,6 +535,13 @@ function overview(data) {
                 </div>
               </div>
             `;
+      // Tambahkan event listener untuk mengarahkan ke URL
+      matchCard.addEventListener("click", () => {
+        window.location.href = `/match/${data.urlComp}/${event.IDMatch}`; // Gunakan data.url sebagai target URL
+      });
+
+      // Opsional: Tambahkan gaya kursor agar pengguna tahu card dapat diklik
+      matchCard.style.cursor = "pointer";
 
       // Append the match card to main section
       mainSection.appendChild(matchCard);
@@ -538,7 +564,7 @@ function overview(data) {
   container.appendChild(footertSection);
 
   document.getElementById("show-all-fix").addEventListener("click", () => {
-    matches(data.Events, "FIXTURES"); // Calls the 'tables' function with the LeagueTable data
+    matches(data.Events, "FIXTURES", data.urlComp); // Calls the 'tables' function with the LeagueTable data
   });
 
   // Title2 Section
@@ -633,7 +659,7 @@ function overview(data) {
   container.appendChild(footer2Section);
 
   document.getElementById("show-all-res").addEventListener("click", () => {
-    matches(data.Events, "RESULTS"); // Calls the 'tables' function with the LeagueTable data
+    matches(data.Events, "RESULTS", data.urlComp); // Calls the 'tables' function with the LeagueTable data
   });
 
   // Title3 Section
@@ -730,7 +756,7 @@ function overview(data) {
   });
 }
 
-function matches(data, tipe) {
+function matches(data, tipe, urlComp) {
   const container = document.getElementById("dinamic-content");
   container.innerHTML = "";
 
@@ -763,12 +789,12 @@ function matches(data, tipe) {
   }
   container.appendChild(button1);
   button1.addEventListener("click", () => {
-    matches(data, "FIXTURES"); // Calls the 'tables' function with the LeagueTable data
+    matches(data, "FIXTURES", urlComp); // Calls the 'tables' function with the LeagueTable data
   });
 
   container.appendChild(button2);
   button2.addEventListener("click", () => {
-    matches(data, "RESULTS"); // Calls the 'tables' function with the LeagueTable data
+    matches(data, "RESULTS", urlComp); // Calls the 'tables' function with the LeagueTable data
   });
 
   // Main2 Section
@@ -851,6 +877,13 @@ function matches(data, tipe) {
                 </div>
               </div>
             `;
+      // Tambahkan event listener untuk mengarahkan ke URL
+      matchCard.addEventListener("click", () => {
+        window.location.href = `/match/${urlComp}/${event.IDMatch}`; // Gunakan data.url sebagai target URL
+      });
+
+      // Opsional: Tambahkan gaya kursor agar pengguna tahu card dapat diklik
+      matchCard.style.cursor = "pointer";
 
       // Append the match card to main section
       main2Section.appendChild(matchCard);

@@ -1022,3 +1022,77 @@ td:nth-child(4) {
   width: 100%;
   height: 100%;
 }
+
+@media (max-width: 720px) {
+  .search-icon {
+    display: block; /* Menampilkan ikon pencarian pada layar kecil */
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+  .menu-link {
+    font-size: 10px;
+    text-align: center;
+  }
+  .menu-items {
+    gap: 10px;
+  }
+  .subs {
+    font-size: 10px;
+  }
+  .subs-time {
+    width: 25px;
+    height: 25px;
+  }
+  .title-sub-squad-detailTeam {
+    font-size: 12px;
+  }
+  #team-name {
+    font-size: 14px;
+  }
+  #region-team {
+    font-size: 12px;
+  }
+  .button-matchesDetailTeam {
+    font-size: 12px;
+    min-width: 110px;
+    height: 36px;
+    padding: 0;
+  }
+  .button-matchesDetailTeam.active {
+    font-size: 12px;
+    min-width: 110px;
+    height: 36px;
+    padding: 0;
+  }
+  table thead th {
+    color: #929292;
+    padding: 10px;
+    text-align: left;
+    border-bottom-width: 1px;
+    font-size: 14px;
+    font-weight: 200;
+  }
+  table tbody td {
+    color: #929292;
+    padding: 10px;
+    text-align: left;
+    border-bottom-width: 1px;
+    font-size: 14px;
+    font-weight: 200;
+  }
+  .truncate-text {
+    max-width: 100px; /* Lebih kecil di layar mobile */
+  }
+}
+/* Menyembunyikan ikon pencarian pada layar lebih besar dari 991px */
+@media (min-width: 721px) {
+  .search-icon {
+    display: none; /* Menyembunyikan ikon pencarian pada layar besar (desktop) */
+  }
+}
+@media (max-width: 991px) {
+  .hide-on-mobile {
+    display: none;
+  }
+}

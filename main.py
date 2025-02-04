@@ -674,6 +674,7 @@ def detailComp(urlComp):
             'CompId': stages.get('CompId', ''),
             'CompN': stages.get('CompN', ''),
             'CompST': stages.get('CompST', ''),
+            'urlComp': modified_url,
             'Events': [],
             'LeagueTable': []
         }
@@ -1125,6 +1126,7 @@ def convert_time(timestamp):
 @app.route('/comp/<string:country>/<string:comp>/', methods=['GET'])
 def detComp(country, comp):
     data = detailComp(f'{country}.{comp}')
+    print(data)
     host = request.host
     return render_template('detail_comp.html', data=data, host=host, page_name="comp")
 
