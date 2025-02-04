@@ -1622,7 +1622,7 @@ const createCompetitionItem = (competition) => {
 async function detailCountry(country, title) {
   try {
     // Melakukan permintaan ke API
-    const response = await fetch(`/api/football/detailCountry/${country}`);
+    const response = await fetch(`/api/football/detailCountry/${country}/`);
     const data = await response.json();
 
     const leftBar = document.getElementById("leftSide");
