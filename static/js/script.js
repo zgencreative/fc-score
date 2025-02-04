@@ -515,10 +515,10 @@ function overview(data) {
                   </div>
                   <div class="frame-container">
                       <div class="nd-round-parent">
-                        <i class="nd-round">2nd Round</i>
-                        <i class="nd-round">67</i>
+                        <i class="nd-round"></i>
+                        <i class="nd-round"></i>
                       </div>
-                      <img class="frame-child" alt="" src="/static/img/Group 1011.png">
+                      <div class="spacing-line" ></div>
                   </div>
                   <div class="frame-div">
                     <div class="d-flex justify-content-between">
@@ -615,10 +615,10 @@ function overview(data) {
                   </div>
                   <div class="frame-container">
                       <div class="nd-round-parent">
-                        <i class="nd-round">2nd Round</i>
-                        <i class="nd-round">67</i>
+                        <i class="nd-round"></i>
+                        <i class="nd-round"></i>
                       </div>
-                      <img class="frame-child" alt="" src="/static/img/Group 1011.png">
+                      <div class="spacing-line" ></div>
                   </div>
                   <div class="frame-div">
                     <div class="d-flex justify-content-between">
@@ -855,10 +855,10 @@ function matches(data, tipe, urlComp) {
                   </div>
                   <div class="frame-container">
                       <div class="nd-round-parent">
-                        <i class="nd-round">2nd Round</i>
-                        <i class="nd-round">67</i>
+                        <i class="nd-round"></i>
+                        <i class="nd-round"></i>
                       </div>
-                      <img class="frame-child" alt="" src="/static/img/Group 1011.png">
+                      <div class="spacing-line" ></div>
                   </div>
                   <div class="frame-div">
                     <div class="d-flex justify-content-between">
@@ -2119,10 +2119,10 @@ function displayAll(category, index, urlComp) {
                   </div>
                   <div class="frame-container">
                       <div class="nd-round-parent">
-                        <i class="nd-round">2nd Round</i>
-                        <i class="nd-round">67</i>
+                        <i class="nd-round"></i>
+                        <i class="nd-round"></i>
                       </div>
-                      <img class="frame-child" alt="" src="/static/img/Group 1011.png">
+                      <div class="spacing-line" ></div>
                   </div>
                   <div class="frame-div">
                     <div class="d-flex justify-content-between">
@@ -2223,10 +2223,10 @@ function displayCategory(category, index, urlComp) {
                   </div>
                   <div class="frame-container">
                       <div class="nd-round-parent">
-                        <i class="nd-round">2nd Round</i>
-                        <i class="nd-round">67</i>
+                        <i class="nd-round"></i>
+                        <i class="nd-round"></i>
                       </div>
-                      <img class="frame-child" alt="" src="/static/img/Group 1011.png">
+                      <div class="spacing-line" ></div>
                   </div>
                   <div class="frame-div">
                     <div class="d-flex justify-content-between">
