@@ -1035,7 +1035,7 @@ td:nth-child(4) {
 }
 
 @media (max-width: 720px) {
-  #nav-sm {
+  #NavSm {
     display: block;
   }
   #nav-large {
