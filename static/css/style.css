@@ -959,9 +959,9 @@ td:nth-child(4) {
   max-height: 100%;
 }
 
-.spacing-line{
+.spacing-line {
   height: 2px;
-  background-color: #FF5500;
+  background-color: #ff5500;
   width: 163px;
 }
 
@@ -1030,7 +1030,17 @@ td:nth-child(4) {
   height: 100%;
 }
 
+#nav-sm {
+  display: none;
+}
+
 @media (max-width: 720px) {
+  #nav-sm {
+    display: block;
+  }
+  #nav-large {
+    display: none;
+  }
   .search-icon {
     display: block; /* Menampilkan ikon pencarian pada layar kecil */
   }

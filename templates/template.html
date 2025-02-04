@@ -1,7 +1,7 @@
 {% set title = 'YUKSCORE' %} {% set logo = 'img/logo.png' %} {% set ico =
 'img/logo.ico' %} {% if 'mansionsportsfc' in host %} {% set title =
-'MansionsportsFC' %} {% set logo = 'img/logo-mansionsportsfc.png' %} {% set ico
-= 'img/favicon.png' %} {% endif %}
+'MansionsportsFC' %} {% set logo = 'img/logo-mansiionsportsfc.png' %} {% set ico
+= 'img/favicon.ico' %} {% endif %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +37,7 @@
     {% block extra_head %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" id="nav-sm">
       <div class="container">
         <!-- Navbar Toggler -->
         <button
@@ -50,7 +50,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Logo -->
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="#">
           <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
         </a>
         <!-- search -->
@@ -61,10 +61,8 @@
           data-bs-target="#offcanvasRight"
           aria-controls="offcanvasRight"
         >
-          <img
-            src="{{ url_for('static', filename='img/search.png') }}"
-            alt="Search"
-          />
+          <img src="{{ url_for('static', filename="img/search.png") }}"
+          alt="Search" />
         </button>
         <!-- Navbar Links -->
         <div
@@ -96,12 +94,12 @@
             </div>
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <a class="nav-link active" href="#"
                   ><i class="fas fa-home"></i>
                   <span class="d-none d-lg-inline"> Home </span></a
                 >
-              </li> -->
+              </li>
               <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-futbol"></i>
@@ -120,12 +118,12 @@
                   <span class="d-none d-lg-inline"> News </span></a
                 >
               </li>
-              <!-- <li class="nav-item">
+              <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-address-book"></i>
                   <span class="d-none d-lg-inline"> Contact </span></a
                 >
-              </li> -->
+              </li>
             </ul>
             <!-- Right Section -->
             <div class="d-lg-flex align-items-center d-none">
@@ -158,17 +156,56 @@
         </div>
       </div>
     </nav>
+    <nav class="navbar navbar-expand-lg navbar-dark" id="nav-large">
+      <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
+        </a>
+        <!-- Navbar Toggler -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-futbol"></i> Scores</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-star"></i> Favorite</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"
+                ><i class="fas fa-newspaper"></i> News</a
+              >
+            </li>
+          </ul>
+          <!-- Right Section -->
+          <div class="d-flex align-items-center">
+            <span class="text-light me-3">ENG</span>
+            <button class="btn btn-sm btn-signin me-2">Sign In</button>
+            <button class="btn btn-sm btn-signup">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </nav>
     <!-- Main content -->
     <section class="container">{% block content %}{% endblock %}</section>
     <footer class="text-light py-4">
-      <center>
-        <a
-          href="https://sparxbenelux.com/"
-          class="text-white"
-          style="text-decoration: none"
-          ><p>&copy;MansionSports</p></a
-        >
-      </center>
+      <center><p>&copy; 2025 {{title}}. All rights reserved.</p></center>
     </footer>
     {% block extra_js %}{% endblock %}
     <!-- Bootstrap JS Bundle -->

@@ -12,7 +12,7 @@
 
     <!-- Main Content Tengah -->
     <div class="col-md-9" id="main-div">
-      <div class="p-3 rounded shadow-sm bg-dark text-light">
+      <div class="p-3 rounded shadow-sm text-light">
         <p>
           <a href="/" style="text-decoration: none">
             <i class="fas fa-arrow-left" style="color: white"></i>
@@ -129,7 +129,7 @@
           {% for event in events %} {% if event['score']|length != 0 %} {% set
           ns.scores = event['score'] %} {# Perbarui skor jika ada #} {% endif %}
           <div
-            class="py-2 bg-dark text-white {% if event['team'] == 1 %}text-start{% else %}text-end{% endif %}"
+            class="py-2 text-white {% if event['team'] == 1 %}text-start{% else %}text-end{% endif %}"
           >
             <div class="col-12">
               {% if event['team'] == 1 %} {% if half != '4' %}

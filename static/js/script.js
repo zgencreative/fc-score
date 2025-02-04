@@ -1944,13 +1944,7 @@ function showAll(data, title) {
 
   // Buat elemen konten utama
   const mainContent = document.createElement("div");
-  mainContent.classList.add(
-    "p-3",
-    "rounded",
-    "shadow-sm",
-    "bg-dark",
-    "text-light"
-  );
+  mainContent.classList.add("p-3", "rounded", "shadow-sm", "text-light");
 
   mainContent.innerHTML = `
       <p>
