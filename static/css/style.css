@@ -1,6 +1,7 @@
 body {
   font-family: "Inter";
   background-color: #121212;
+  font-size: 14px;
 }
 .navbar-dark {
   background-color: #121212; /* Warna latar hitam */
@@ -963,6 +964,7 @@ td:nth-child(4) {
   height: 2px;
   background-color: #ff5500;
   width: 163px;
+  margin: 1rem 0;
 }
 
 .frame-div {
@@ -981,7 +983,7 @@ td:nth-child(4) {
   position: absolute;
   height: 8.16%;
   width: 87.15%;
-  top: 82.98%;
+  top: 86.98%;
   right: 6.47%;
   bottom: 8.87%;
   left: 6.38%;
