@@ -197,15 +197,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     <thead>
                       <tr>
                         <th style="font-weight: 500; width: 5%">#</th>
-                        <th style="width: 40%">TEAM</th>
-                        <th style="width: 7.5%">P</th>
-                        <th style="width: 7.5%">W</th>
-                        <th style="width: 7.5%">D</th>
-                        <th style="width: 7.5%">L</th>
-                        <th style="width: 7.5%">F</th>
-                        <th style="width: 7.5%">A</th>
-                        <th style="width: 7.5%">GD</th>
-                        <th style="width: 7.5%">PTS</th>
+                        <th class="col-team" style="width: 40%; color: white">TEAM</th>
+                        <th class="col-p" style="width: 7.5%; color: white">P</th>
+                        <th class="col-w"style="width: 7.5%; color: white">W</th>
+                        <th class="col-d"style="width: 7.5%; color: white">D</th>
+                        <th class="col-l"style="width: 7.5%; color: white">L</th>
+                        <th class="col-f"style="width: 7.5%; color: white">F</th>
+                        <th class="col-a"style="width: 7.5%; color: white">A</th>
+                        <th class="col-gd"style="width: 7.5%; color: white">GD</th>
+                        <th class="col-pts"style="width: 7.5%; color: white">PTS</th>
                       </tr>
                     </thead>
                     <tbody id="rankTable"></tbody>
@@ -232,23 +232,18 @@ document.addEventListener("DOMContentLoaded", function () {
                   // Menambahkan data ke dalam setiap sel (td)
                   row.innerHTML = `
                     <td style="font-weight: 500; width: 5%; color: white">${team.rank}</td>
-                    <td style="width: 40%; color: white">
-                      <img
-                        loading="lazy"
-                        src="${team.teamIMG}"
-                        class="icon"
-                        style="height: 30px; width: 30px"
-                      />
-                      ${team.teamNM}
+                    <td class="col-team">
+                        <img loading="lazy" src="${team.teamIMG}" class="icon" style="height: 30px; width: 30px" />
+                        ${team.teamNM}
                     </td>
-                    <td style="width: 7.5%; color: white">${team.p}</td>
-                    <td style="width: 7.5%; color: white">${team.w}</td>
-                    <td style="width: 7.5%; color: white">${team.d}</td>
-                    <td style="width: 7.5%; color: white">${team.l}</td>
-                    <td style="width: 7.5%; color: white">${team.f}</td>
-                    <td style="width: 7.5%; color: white">${team.a}</td>
-                    <td style="width: 7.5%; color: white">${team.gd}</td>
-                    <td style="width: 7.5%; color: white">${team.pts}</td>
+                    <td class="col-p">${team.p}</td>
+                    <td class="col-w">${team.w}</td>
+                    <td class="col-d">${team.d}</td>
+                    <td class="col-l">${team.l}</td>
+                    <td class="col-f">${team.f}</td>
+                    <td class="col-a">${team.a}</td>
+                    <td class="col-gd">${team.gd}</td>
+                    <td class="col-pts">${team.pts}</td>
                   `;
 
                   // Menambahkan baris baru ke dalam tbody
@@ -676,17 +671,17 @@ function overview(data) {
   tableContainer.innerHTML = `
         <table>
         <thead>
-            <tr>
-            <th style="font-weight: 500; width: 5%">#</th>
-            <th style="width: 40%">TEAM</th>
-            <th style="width: 7.5%">P</th>
-            <th style="width: 7.5%">W</th>
-            <th style="width: 7.5%">D</th>
-            <th style="width: 7.5%">L</th>
-            <th style="width: 7.5%">F</th>
-            <th style="width: 7.5%">A</th>
-            <th style="width: 7.5%">GD</th>
-            <th style="width: 7.5%">PTS</th>
+          <tr>
+              <th style="font-weight: 500; width: 5%">#</th>
+              <th class="col-team" style="width: 40%; color: white">TEAM</th>
+              <th class="col-p" style="width: 7.5%; color: white">P</th>
+              <th class="col-w"style="width: 7.5%; color: white">W</th>
+              <th class="col-d"style="width: 7.5%; color: white">D</th>
+              <th class="col-l"style="width: 7.5%; color: white">L</th>
+              <th class="col-f"style="width: 7.5%; color: white">F</th>
+              <th class="col-a"style="width: 7.5%; color: white">A</th>
+              <th class="col-gd"style="width: 7.5%; color: white">GD</th>
+              <th class="col-pts"style="width: 7.5%; color: white">PTS</th>
             </tr>
         </thead>
         <tbody id="rankTable"></tbody>
@@ -711,23 +706,18 @@ function overview(data) {
       // Menambahkan data ke dalam setiap sel (td)
       row.innerHTML = `
         <td style="font-weight: 500; width: 5%; color: white">${team.rank}</td>
-        <td style="width: 40%; color: white">
-            <img
-            loading="lazy"
-            src="${team.teamIMG}"
-            class="icon"
-            style="height: 30px; width: 30px"
-            />
+        <td class="col-team">
+            <img loading="lazy" src="${team.teamIMG}" class="icon" style="height: 30px; width: 30px" />
             ${team.teamNM}
         </td>
-        <td style="width: 7.5%; color: white">${team.p}</td>
-        <td style="width: 7.5%; color: white">${team.w}</td>
-        <td style="width: 7.5%; color: white">${team.d}</td>
-        <td style="width: 7.5%; color: white">${team.l}</td>
-        <td style="width: 7.5%; color: white">${team.f}</td>
-        <td style="width: 7.5%; color: white">${team.a}</td>
-        <td style="width: 7.5%; color: white">${team.gd}</td>
-        <td style="width: 7.5%; color: white">${team.pts}</td>
+        <td class="col-p">${team.p}</td>
+        <td class="col-w">${team.w}</td>
+        <td class="col-d">${team.d}</td>
+        <td class="col-l">${team.l}</td>
+        <td class="col-f">${team.f}</td>
+        <td class="col-a">${team.a}</td>
+        <td class="col-gd">${team.gd}</td>
+        <td class="col-pts">${team.pts}</td>
         `;
 
       // Menambahkan baris baru ke dalam tbody
@@ -893,6 +883,7 @@ function matches(data, tipe, urlComp) {
 
 function tables(data) {
   const container = document.getElementById("dinamic-content");
+  
   container.innerHTML = "";
   // Ambil elemen dengan id "table-link"
   var links_id = document.getElementById("table-link");
@@ -918,15 +909,15 @@ function tables(data) {
         <thead>
             <tr>
             <th style="font-weight: 500; width: 5%">#</th>
-            <th style="width: 40%">TEAM</th>
-            <th style="width: 7.5%">P</th>
-            <th style="width: 7.5%">W</th>
-            <th style="width: 7.5%">D</th>
-            <th style="width: 7.5%">L</th>
-            <th style="width: 7.5%">F</th>
-            <th style="width: 7.5%">A</th>
-            <th style="width: 7.5%">GD</th>
-            <th style="width: 7.5%">PTS</th>
+            <th class="col-team" style="width: 40%; color: white">TEAM</th>
+            <th class="col-p" style="width: 7.5%; color: white">P</th>
+            <th class="col-w"style="width: 7.5%; color: white">W</th>
+            <th class="col-d"style="width: 7.5%; color: white">D</th>
+            <th class="col-l"style="width: 7.5%; color: white">L</th>
+            <th class="col-f"style="width: 7.5%; color: white">F</th>
+            <th class="col-a"style="width: 7.5%; color: white">A</th>
+            <th class="col-gd"style="width: 7.5%; color: white">GD</th>
+            <th class="col-pts"style="width: 7.5%; color: white">PTS</th>
             </tr>
         </thead>
         <tbody id="rankTable"></tbody>
@@ -949,23 +940,18 @@ function tables(data) {
     // Menambahkan data ke dalam setiap sel (td)
     row.innerHTML = `
         <td style="font-weight: 500; width: 5%; color: white">${team.rank}</td>
-        <td style="width: 40%; color: white">
-            <img
-            loading="lazy"
-            src="${team.teamIMG}"
-            class="icon"
-            style="height: 30px; width: 30px"
-            />
+        <td class="col-team">
+            <img loading="lazy" src="${team.teamIMG}" class="icon" style="height: 30px; width: 30px" />
             ${team.teamNM}
         </td>
-        <td style="width: 7.5%; color: white">${team.p}</td>
-        <td style="width: 7.5%; color: white">${team.w}</td>
-        <td style="width: 7.5%; color: white">${team.d}</td>
-        <td style="width: 7.5%; color: white">${team.l}</td>
-        <td style="width: 7.5%; color: white">${team.f}</td>
-        <td style="width: 7.5%; color: white">${team.a}</td>
-        <td style="width: 7.5%; color: white">${team.gd}</td>
-        <td style="width: 7.5%; color: white">${team.pts}</td>
+        <td class="col-p">${team.p}</td>
+        <td class="col-w">${team.w}</td>
+        <td class="col-d">${team.d}</td>
+        <td class="col-l">${team.l}</td>
+        <td class="col-f">${team.f}</td>
+        <td class="col-a">${team.a}</td>
+        <td class="col-gd">${team.gd}</td>
+        <td class="col-pts">${team.pts}</td>
         `;
 
     // Menambahkan baris baru ke dalam tbody
