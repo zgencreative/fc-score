@@ -1126,6 +1126,21 @@ def convert_time(timestamp):
 @app.route('/comp/<string:country>/<string:comp>/', methods=['GET'])
 def detComp(country, comp):
     data = detailComp(f'{country}.{comp}')
+    upcome = []
+    ns = []
+
+    for i in data['data']['Events']:
+        if i['Status_Match'] == 'FT':
+            upcome.append(i)
+        else:
+            ns.append(i)
+
+    # Membalikkan upcome (gunakan reverse tanpa assignment)
+    upcome.reverse()
+
+    # Menggabungkan upcome yang sudah dibalik dengan ns
+    data['data']['Events'] = upcome + ns
+
     host = request.host
     return render_template('detail_comp.html', data=data, host=host, page_name="comp")
 
