@@ -13,8 +13,8 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def detailCountry(country, methods=["GET"]):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/category-s/soccer/{
-        country}?locale=ID"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/category-s/soccer/
+    {country}?locale=ID"
 
     try:
         # Mengirimkan request GET
