@@ -44,11 +44,11 @@ document.addEventListener("DOMContentLoaded", function () {
         },
         {
           id: "lineups-link",
-          endpoint: (id) => `/api/football/detailMatch/lineup/${id}`,
+          endpoint: (id) => `/api/football/detailMatch/lineup/${id}/`,
         },
         {
           id: "table-link",
-          endpoint: (id) => `/api/football/detailMatch/table/${idTable}`,
+          endpoint: (id) => `/api/football/detailMatch/table/${idTable}/`,
         },
       ];
 
@@ -883,7 +883,7 @@ function matches(data, tipe, urlComp) {
 
 function tables(data) {
   const container = document.getElementById("dinamic-content");
-  
+
   container.innerHTML = "";
   // Ambil elemen dengan id "table-link"
   var links_id = document.getElementById("table-link");
