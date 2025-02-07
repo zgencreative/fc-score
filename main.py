@@ -13,8 +13,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def detailCountry(country, methods=["GET"]):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/category-s/soccer/
-    {country}?locale=ID"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/category-s/soccer/{country}?locale=ID"
 
     try:
         # Mengirimkan request GET
@@ -66,8 +65,7 @@ def detailCountry(country, methods=["GET"]):
 @app.route('/api/football/<date>/', methods=["GET"])
 def index(date):
     # Define the URL for the external API request
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/date/soccer/{
-        date}/7?countryCode=ID&locale=en&MD=1"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/date/soccer/{date}/7?countryCode=ID&locale=en&MD=1"
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
@@ -242,8 +240,7 @@ def search(keyword=''):
     }
     try:
         if keyword:
-            search_url = f"https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer?query={
-                keyword}&limit=10&locale=ID&teams=true&stages=true&categories=true&countryCode=ID"
+            search_url = f"https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer?query={keyword}&limit=10&locale=ID&teams=true&stages=true&categories=true&countryCode=ID"
         else:
             search_url = "https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer?locale=ID&limit=5&teams=true&stages=true&categories=true&countryCode=ID"
         res = requests.get(search_url).json()
@@ -325,10 +322,8 @@ def get_detail_match(idMatch):
         'data': []
     }
 
-    summary_url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/incidents/soccer/{
-        idMatch}"
-    match_url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{
-        idMatch}?locale=ID"
+    summary_url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/incidents/soccer/{idMatch}"
+    match_url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{idMatch}?locale=ID"
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
     try:
@@ -449,8 +444,7 @@ def stat(idMatch):
     }
 
     # URL API untuk mengambil data statistik
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/statistics/soccer/{
-        idMatch}"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/statistics/soccer/{idMatch}"
 
     try:
         # Lakukan request GET ke API
@@ -498,8 +492,7 @@ def stat(idMatch):
 
 @app.route('/api/football/detailMatch/lineup/<string:idMatch>/')
 def get_detail_match_lineup(idMatch):
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/lineups/soccer/{
-        idMatch}"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/lineups/soccer/{idMatch}"
 
     try:
         # Make the GET request
@@ -612,8 +605,7 @@ def process_substitutions(subs, team1, team2):
 def rank(urlComp):
     # URL API yang akan diakses
     modified_url = urlComp.replace('.', '/')
-    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/leagueTable-s/soccer/{
-        modified_url}?locale=ID"
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/leagueTable-s/soccer/{modified_url}?locale=ID"
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
@@ -683,8 +675,7 @@ def detailComp(urlComp):
 
     # Daftar URL tournament
     modified_url = urlComp.replace('.', '/')
-    url_comp_full = f'https://prod-cdn-public-api.lsmedia1.com/v1/api/app/stage/soccer/{
-        modified_url}/7?countryCode=ID&locale=en&MD=1'
+    url_comp_full = f'https://prod-cdn-public-api.lsmedia1.com/v1/api/app/stage/soccer/{modified_url}/7?countryCode=ID&locale=en&MD=1'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
     img_badge = 'https://static.lsmedia1.com/competition/high/'
 
@@ -772,10 +763,8 @@ def detailComp(urlComp):
 @app.route('/api/football/detailTeam/<string:idTeam>/', methods=['GET'])
 def detailTeam(idTeam):
     # URL API
-    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-        idTeam}/details?locale=en&MD=1"
-    url_next = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-        idTeam}/nextevent"
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/details?locale=en&MD=1"
+    url_next = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/nextevent"
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
     try:
@@ -906,8 +895,7 @@ def detailPlayerStat(teamId, eventId):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
 
     # Request pertama untuk mendapatkan detail tim berdasarkan teamId
-    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-        teamId}/details?locale=en&MD=1"
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/details?locale=en&MD=1"
     response = requests.get(url)
     res = response.json()
 
@@ -936,14 +924,12 @@ def detailPlayerStat(teamId, eventId):
 
     # Jika eventId diberikan, kita ambil statistik pemain untuk event tersebut
     if eventId is not None:
-        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-            teamId}/playersstat/{eventId}?limit=20"
+        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/playersstat/{eventId}?limit=20"
     else:
         # Jika eventId tidak diberikan, gunakan Sid dari event pertama di datas['Events']
         # Mendapatkan Sid dari event pertama
         event_sid = datas['Events'][0]['Sid']
-        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-            teamId}/playersstat/{event_sid}?limit=20"
+        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/playersstat/{event_sid}?limit=20"
 
     response = requests.get(url)
     res = response.json()
@@ -1035,8 +1021,7 @@ def detailSquad(id):
 @app.route('/api/football/detailTeam/stat/<string:teamId>/<eventId>/')
 def teamStat(teamId, eventId):
     # Define the URL for team details
-    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-        teamId}/details?locale=en&MD=1"
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/details?locale=en&MD=1"
 
     # Make the GET request for team details
     response = requests.get(url)
@@ -1068,13 +1053,11 @@ def teamStat(teamId, eventId):
     # Requesting team statistics based on eventId
     if eventId is not None:
         # If eventId is provided, use it for the request
-        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-            teamId}/teamstat/{eventId}"
+        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/teamstat/{eventId}"
     else:
         # If eventId is not provided, use Sid from the first event
         event_sid = datas['Events'][0]['Sid']  # Get Sid from the first event
-        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-            teamId}/teamstat/{event_sid}"
+        url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{teamId}/teamstat/{event_sid}"
 
     # Make the GET request for team statistics
     response = requests.get(url)
@@ -1094,8 +1077,7 @@ def teamStat(teamId, eventId):
 @app.route('/api/football/detailTeam/table/<string:id>/', methods=['GET'])
 def teamTable(id):
     # Define the URL for the league table
-    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{
-        id}/league-table?type=full&locale=ID"
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{id}/league-table?type=full&locale=ID"
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
