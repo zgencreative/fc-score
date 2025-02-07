@@ -222,10 +222,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 tableRank.forEach((team) => {
                   // Membuat baris baru (tr) untuk setiap tim
                   const row = document.createElement("tr");
-                  row.classList.add("bg-secondary");
-                  if (team.teamNM != name_team1 && team.teamNM != name_team2) {
-                    row.classList.remove("bg-secondary");
+                  row.classList.add("bg-dark-1");
+
+                  if (team.teamNM === name_team1 || team.teamNM === name_team2) {
+                    row.classList.add("highlighted"); 
+                  } else {
+                    row.classList.remove("bg-dark-1");
                   }
+                  // if (team.teamNM != name_team1 && team.teamNM != name_team2) {
+                  //   row.classList.remove("bg-black");
+                  // }
 
                   row.style.fontSize = "14px";
 
