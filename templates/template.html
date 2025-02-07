@@ -70,60 +70,68 @@
           tabindex="-1"
           id="offcanvasLeft"
           aria-labelledby="offcanvasLeftLabel"
-          style="width: 133px"
+          style="width: 225px"
         >
           <div class="offcanvas-body">
             <!-- Right Section mobile -->
-            <button
-              type="button"
-              class="btn-close btn-close-white d-lg-none"
-              data-bs-dismiss="offcanvas"
-              aria-label="Close"
-            ></button>
+             <div class="d-flex justify-content-between">
+                <a class="navbar-brand" href="/">
+                  <img src="{{ url_for('static', filename=logo) }}" alt="Logo" />
+                </a>
+                <button
+                  type="button"
+                  class="btn-close btn-close-white d-lg-none"
+                  data-bs-dismiss="offcanvas"
+                  aria-label="Close"
+                ></button>
+             </div>
             <div class="d-lg-none">
-              <div class="mt-2">
-                <button class="btn btn-sm btn-signin" style="width: 91px">
-                  Sign In
-                </button>
+              <div class="d-flex flex-row gap-2">
+                <div class="my-3">
+                  <button class="btn btn-sm btn-signin" style="width: 91px">
+                    Sign In
+                  </button>
+                </div>
+                <div class="my-3">
+                  <button class="btn btn-sm btn-signup" style="width: 91px">
+                    Sign Up
+                  </button>
+                </div>
               </div>
-              <div class="mt-2">
-                <button class="btn btn-sm btn-signup" style="width: 91px">
-                  Sign Up
-                </button>
-              </div>
+             
             </div>
 
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link active" href="/"
                   ><i class="fas fa-home"></i>
                   <span class="d-none d-lg-inline"> Home </span></a
                 >
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-futbol"></i>
-                  <span class="d-none d-lg-inline"> Scores </span></a
+                  <span class="d-lg-inline"> Scores </span></a
                 >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-star"></i>
-                  <span class="d-none d-lg-inline"> Favorite </span></a
+                  <span class="d-lg-inline"> Favorite </span></a
                 >
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-newspaper"></i>
-                  <span class="d-none d-lg-inline"> News </span></a
+                  <span class="d-lg-inline"> News </span></a
                 >
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" href="#"
                   ><i class="fas fa-address-book"></i>
-                  <span class="d-none d-lg-inline"> Contact </span></a
+                  <span class="d-lg-inline"> Contact </span></a
                 >
-              </li>
+              </li> -->
             </ul>
             <!-- Right Section -->
             <div class="d-lg-flex align-items-center d-none">
