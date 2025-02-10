@@ -12,19 +12,19 @@
 # # RewriteCond %{REQUEST_FILENAME} !-f
 # # RewriteCond %{REQUEST_FILENAME} !-d
 
-RewriteEngine On
-RewriteBase /
+# RewriteEngine On
+# RewriteBase /
 
-# Redirect HTTP requests for index.php or the root to the external server
-RewriteRule ^(index\.php|)$ http://mansionsportsfc.com:8080/ [P,L]
+# # Redirect HTTP requests for index.php or the root to the external server
+# RewriteRule ^(index\.php|)$ http://mansionsportsfc.com:8080/ [P,L]
 
-# Tangani file statis secara langsung
-RewriteCond %{REQUEST_FILENAME} -f
-RewriteRule \.(css|js|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg|eot|mp4|webm|ogg)$ - [L]
+# # Tangani file statis secara langsung
+# RewriteCond %{REQUEST_FILENAME} -f
+# RewriteRule \.(css|js|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg|eot|mp4|webm|ogg)$ - [L]
 
-# Proxy untuk permintaan lainnya
-RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg|eot|mp4|webm|ogg)$
-RewriteRule ^(.*)$ http://mansionsportsfc.com:8080/$1 [P,L]
+# # Proxy untuk permintaan lainnya
+# RewriteCond %{REQUEST_URI} !\.(css|js|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg|eot|mp4|webm|ogg)$
+# RewriteRule ^(.*)$ http://mansionsportsfc.com:8080/$1 [P,L]
 
-# Redirect all other requests to the external server
-RewriteRule ^(.*)$ http://mansionsportsfc.com:8080/$1 [P,L]
+# # Redirect all other requests to the external server
+# RewriteRule ^(.*)$ http://mansionsportsfc.com:8080/$1 [P,L]

@@ -1041,6 +1041,14 @@ th, td {
   display: table-cell;
 }
 
+.bg-dark-1{
+  background-color: #222121;
+}
+
+.highlighted td{
+  font-weight: bold;
+}
+
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */
 @media screen and (max-width: 768px) {
   .col-rank,
