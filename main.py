@@ -163,7 +163,10 @@ def sorted_data(date):
         # Memformat tanggal ke format 'yyyymmdd'
         date = current_date.strftime('%Y%m%d')
 
+
     index_data = index(date)
+    liga_tertentu = requests.get("https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer/stage?limit=15").json()
+    liga_tertentu = [i['Sid'] for i in liga_tertentu['Stages']]
     sorted_data = {
         'live': [],
         'previous': [],
@@ -171,34 +174,22 @@ def sorted_data(date):
     }
     for match in index_data['data']:
         events = match['Events']
+        if match['Sid'] in liga_tertentu or match['Sid'] == '18822':
 
-        live_events = []
-        previous_events = []
-        next_events = []
+            live_events = []
+            previous_events = []
+            next_events = []
 
-        for event in events:
-            if event['Status_Match'] == 'FT' or event['Status_Match'] == 'AP' or event['Status_Match'] == 'AET' or event['Status_Match'] == 'Aband.' or event['Status_Match'] == 'AW':
-                previous_events.append(event)
-            elif event['Status_Match'] == 'NS' or event['Status_Match'] == 'Postp.' or event['Status_Match'] == 'Canc.':
-                next_events.append(event)
-            else:
-                live_events.append(event)
+            for event in events:
+                if event['Status_Match'] == 'FT' or event['Status_Match'] == 'AP' or event['Status_Match'] == 'AET' or event['Status_Match'] == 'Aband.' or event['Status_Match'] == 'AW':
+                    previous_events.append(event)
+                elif event['Status_Match'] == 'NS' or event['Status_Match'] == 'Postp.' or event['Status_Match'] == 'Canc.':
+                    next_events.append(event)
+                else:
+                    live_events.append(event)
 
-        if live_events:
-            sorted_data['live'].append({"Sid": match.get('Sid'),
-                                        'Snm': match.get('Sds', '') or match.get('Snm', ''),
-                                        "Scd": match.get('Scd'),
-                                        "Cnm": match.get('Cnm'),
-                                        "CnmT": match.get('CnmT'),
-                                        "Csnm": match.get('Csnm', ''),
-                                        "Ccd": match.get('Ccd'),
-                                        "CompID": match.get('CompId', ''),
-                                        "CompN": match.get('CompN', ''),
-                                        "urlComp": f"{match.get('CnmT')}/{match.get('Scd')}",
-                                        "badgeUrl": match.get('badgeUrl'),
-                                        'events': live_events})
-        if previous_events:
-            sorted_data['previous'].append({"Sid": match.get('Sid'),
+            if live_events:
+                sorted_data['live'].append({"Sid": match.get('Sid'),
                                             'Snm': match.get('Sds', '') or match.get('Snm', ''),
                                             "Scd": match.get('Scd'),
                                             "Cnm": match.get('Cnm'),
@@ -209,20 +200,33 @@ def sorted_data(date):
                                             "CompN": match.get('CompN', ''),
                                             "urlComp": f"{match.get('CnmT')}/{match.get('Scd')}",
                                             "badgeUrl": match.get('badgeUrl'),
-                                            'events': previous_events})
-        if next_events:
-            sorted_data['next'].append({"Sid": match.get('Sid'),
-                                        'Snm': match.get('Sds', '') or match.get('Snm', ''),
-                                        "Scd": match.get('Scd'),
-                                        "Cnm": match.get('Cnm'),
-                                        "CnmT": match.get('CnmT'),
-                                        "Csnm": match.get('Csnm', ''),
-                                        "Ccd": match.get('Ccd'),
-                                        "CompID": match.get('CompId', ''),
-                                        "CompN": match.get('CompN', ''),
-                                        "urlComp": f"{match.get('CnmT')}/{match.get('Scd')}",
-                                        "badgeUrl": match.get('badgeUrl'),
-                                        'events': next_events})
+                                            'events': live_events})
+            if previous_events:
+                sorted_data['previous'].append({"Sid": match.get('Sid'),
+                                                'Snm': match.get('Sds', '') or match.get('Snm', ''),
+                                                "Scd": match.get('Scd'),
+                                                "Cnm": match.get('Cnm'),
+                                                "CnmT": match.get('CnmT'),
+                                                "Csnm": match.get('Csnm', ''),
+                                                "Ccd": match.get('Ccd'),
+                                                "CompID": match.get('CompId', ''),
+                                                "CompN": match.get('CompN', ''),
+                                                "urlComp": f"{match.get('CnmT')}/{match.get('Scd')}",
+                                                "badgeUrl": match.get('badgeUrl'),
+                                                'events': previous_events})
+            if next_events:
+                sorted_data['next'].append({"Sid": match.get('Sid'),
+                                            'Snm': match.get('Sds', '') or match.get('Snm', ''),
+                                            "Scd": match.get('Scd'),
+                                            "Cnm": match.get('Cnm'),
+                                            "CnmT": match.get('CnmT'),
+                                            "Csnm": match.get('Csnm', ''),
+                                            "Ccd": match.get('Ccd'),
+                                            "CompID": match.get('CompId', ''),
+                                            "CompN": match.get('CompN', ''),
+                                            "urlComp": f"{match.get('CnmT')}/{match.get('Scd')}",
+                                            "badgeUrl": match.get('badgeUrl'),
+                                            'events': next_events})
     return jsonify(sorted_data)
 
 
