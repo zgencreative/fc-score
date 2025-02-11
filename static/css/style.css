@@ -1056,9 +1056,35 @@ th, td {
   background: var(--bs-card-bg);
 }
 
+.news .card:hover{
+  background-color: #ff5500;
+}
+
 .news .card .card-body{
   color: var(--bs-body-color);
+}
 
+.news .card-title{
+  color: white;
+}
+
+.news .card-text{
+  color: white;
+}
+
+.news a .title{
+  text-decoration: none;
+  color: white;
+}
+
+.news .title{
+  text-decoration: none;
+  color: white;
+}
+
+.news a:hover{
+  text-decoration: none;
+  color: #ff5500;
 }
 
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */

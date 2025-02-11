@@ -880,40 +880,53 @@
                 const contentContainer = document.createElement("div");
                 contentContainer.classList.add('py-2')
                 const imageUrl = `${baseURL}/${item.cover}`;
+                const newsUrl = `${baseURL}news/${item.slug}`
                 contentContainer.innerHTML = `
-                    <div class="news">
-                        <div class="card bg-black mb-3">
-                            <div class="row g-0">
-                                <div class="col-md-4">
-                                    <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-white">${item.title}</h5>
-                                        <p class="card-text text-white">${item.description}</p>
-                                        <p class="card-text text-white"><small class="text-white">Last updated ${timeAgo(item.updated_at)}</small></p>
+                      <div class="news">
+                          <div class="card bg-black mb-3" id="cardNEws">
+                              <div class="row g-0">
+                                  <div class="col-md-4">
+                                    <a class="title" href="${newsUrl}" target="_blank">
+                                      <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}" />
+                                    </a>    
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                                  <div class="col-md-8">
+                                      <div class="card-body">
+                                          <h5 class="card-title">
+                                            <a class="title" href="${newsUrl}" target="_blank">
+                                              ${item.title}
+                                            </a>
+                                          </h5>
+                                          <p class="card-text">${item.description}</p>
+                                          <p class="card-text text-end"><small class="">${timeAgo(item.updated_at)}</small></p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div> 
+                      </div>
                 `;
 
                 // Tambahkan setiap contentContainer ke container
+                contentContainer.querySelector(".card").addEventListener("click", () => {
+                    window.open(newsUrl, "_blank"); // Membuka link di tab baru
+                });
+                // Tambahkan ke container utama
                 container.appendChild(contentContainer);
+
             });
         }
+
         function timeAgo(dateString) {
             const now = new Date();
             const pastDate = new Date(dateString);
             const diffInSeconds = Math.floor((now - pastDate) / 1000);
 
             const intervals = {
-                year: 31536000,  // 365 * 24 * 60 * 60
-                month: 2592000,  // 30 * 24 * 60 * 60
-                week: 604800,    // 7 * 24 * 60 * 60
-                day: 86400,      // 24 * 60 * 60
-                hour: 3600,      // 60 * 60
+                year: 31536000,  
+                month: 2592000,  
+                week: 604800,    
+                day: 86400,      
+                hour: 3600,      
                 minute: 60,
                 second: 1
             };
@@ -924,7 +937,7 @@
                     return `${count} ${key}${count !== 1 ? 's' : ''} ago`;
                 }
             }
-            return "Just now"; // Jika waktu sangat dekat
+            return "Just now"; 
         }
 
 

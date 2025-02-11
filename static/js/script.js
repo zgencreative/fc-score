@@ -94,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
               return response.json();
             })
             .then((data) => {
-              console.log(data);
               const container = document.getElementById("dinamic-content");
               container.innerHTML = "";
               if (link.id == "stats-link") {
@@ -283,37 +282,35 @@ document.addEventListener("DOMContentLoaded", function () {
                   const contentContainer = document.createElement("div");
                   contentContainer.classList.add("py-2");
                   const imageUrl = `${baseURL}/${item.cover}`;
+                  const newsUrl = `${baseURL}news/${item.slug}`
                   contentContainer.innerHTML = `
                         <div class="news">
-                            <div class="card bg-black mb-3">
-                                <div class="row g-0">
-                                    <div class="col-md-4">
-                                        <img src=" ${
-                                          imageUrl ||
-                                          "https://placehold.co/600x400"
-                                        }" class="img-fluid rounded-start"alt="${
-                    item.title
-                  }">
+                          <div class="card bg-black mb-3" id="cardNEws">
+                              <div class="row g-0">
+                                  <div class="col-md-4">
+                                    <a class="title" href="${newsUrl}" target="_blank">
+                                      <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}" />
+                                    </a>    
                                     </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title text-white">${
-                                              item.title
-                                            }</h5>
-                                            <p class="card-text text-white">${
-                                              item.description
-                                            }</p>
-                                            <p class="card-text text-white"><small class="text-white">Last updated ${timeAgo(
-                                              item.updated_at
-                                            )}</small></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                                  <div class="col-md-8">
+                                      <div class="card-body">
+                                          <h5 class="card-title">
+                                            <a class="title" href="${newsUrl}" target="_blank">
+                                              ${item.title}
+                                            </a>
+                                          </h5>
+                                          <p class="card-text">${item.description}</p>
+                                          <p class="card-text text-end"><small class="">${timeAgo(item.updated_at)}</small></p>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div> 
+                      </div>
                     `;
 
-                  // Tambahkan setiap contentContainer ke container
+                  contentContainer.querySelector(".card").addEventListener("click", () => {
+                      window.open(newsUrl, "_blank"); // Membuka link di tab baru
+                  });
                   container.appendChild(contentContainer);
                 });
               } else {
