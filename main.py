@@ -1143,8 +1143,8 @@ def teamNews(idTeam):
     team_name = res['Nm']
     slug = team_name.lower().replace(" ", "-")
 
-    api_url = f"http://127.0.0.1:8000/api/news/tag?key={key}&slug={slug}"
-    url = 'http://127.0.0.1:8000'
+    api_url = f"https://mansionsportsfc.com/api/news/tag?key={key}&slug={slug}"
+    url = 'https://mansionsportsfc.com/'
     response2 = requests.get(api_url)
     res2 = response2.json()
 
