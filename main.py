@@ -166,7 +166,8 @@ def sorted_data(date):
     index_data = index(date)
     liga_tertentu = requests.get(
         "https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer/stage?limit=15").json()
-    liga_tertentu = ['18173','18418','18176','18420','18227','20106','18483','18546','17004','19232','19243','19244','20222','18181','18599','18307']
+    liga_tertentu = ['18173', '18418', '18176', '18420', '18227', '20106', '18483',
+                     '18546', '17004', '19232', '19243', '19244', '20222', '18181', '18599', '18307']
     sorted_data = {
         'live': [],
         'previous': [],
@@ -667,6 +668,46 @@ def rank(urlComp):
 
     # Mengembalikan data sebagai response JSON
     return jsonify(final_response)
+
+
+@app.route('/api/football/detailMatch/news/<string:idMatch>/', methods=['GET'])
+def news(idMatch):
+    response = {
+        'code': 200,
+        'message': 'success',
+        'data': []
+    }
+    # URL API yang akan diakses
+    match_url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{idMatch}?locale=ID"
+    key = 'JDJhJDEyJFVLNUJ3d2c1MnFCaktnU0w0dzJMNU9GWEJQT0FaSTcwa0ZZUWpIbXF0YVRNMEU3aHZwQkF1'
+    try:
+        # Fetch match data
+        match_response = requests.get(match_url)
+        match_response.raise_for_status()
+        match_data = match_response.json()
+
+        team_1 = match_data['T1'][0]['Nm'].lower().replace(" ", "-")
+        team_2 = match_data['T2'][0]['Nm'].lower().replace(" ", "-")
+        slug = f"{team_1},{team_2}"
+
+        api_url = f"https://mansionsportsfc.com/api/news/tag/more?key={key}&slug={slug}"
+        url = 'https://mansionsportsfc.com/'
+
+        response2 = requests.get(api_url)
+        res2 = response2.json()
+        datas = {
+            'URL': url,
+            'News': res2['news'],
+        }
+        response['data'] = datas
+        return response
+
+    except requests.exceptions.RequestException as e:
+        return {
+            'code': 500,
+            'message': 'Error fetching data',
+            'error': str(e)
+        }
 
 
 @app.route('/api/football/detailComp/<string:urlComp>/', methods=['GET'])

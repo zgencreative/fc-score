@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ycs: "Yellow Cards",
         rcs: "Red Cards",
       };
-
+      
       // Pastikan ID valid sebelum melanjutkan
       if (!id) {
         console.error("ID not found in the URL!");
@@ -49,6 +49,10 @@ document.addEventListener("DOMContentLoaded", function () {
         {
           id: "table-link",
           endpoint: (id) => `/api/football/detailMatch/table/${idTable}/`,
+        },
+        {
+          id: "news-link",
+          endpoint: (id) => `/api/football/detailMatch/news/${id}/`,
         },
       ];
 
@@ -259,7 +263,43 @@ document.addEventListener("DOMContentLoaded", function () {
 
                   // Menambahkan baris baru ke dalam tbody
                   rankTable.appendChild(row);
+                });  
+              } else if (link.id == "news-link") {
+                const container = document.getElementById("dinamic-content");
+                if (!container) {
+                    console.error("Container element 'dinamic-content' not found!");
+                    return;
+                }
+                container.innerHTML = "";
+                const news = data.data.News;
+                const baseURL = data.data.URL;
+                news.forEach((item) => {
+                    const contentContainer = document.createElement("div");
+                    contentContainer.classList.add('py-2')
+                    const imageUrl = `${baseURL}/${item.cover}`;
+                    contentContainer.innerHTML = `
+                        <div class="news">
+                            <div class="card bg-black mb-3">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-white">${item.title}</h5>
+                                            <p class="card-text text-white">${item.description}</p>
+                                            <p class="card-text text-white"><small class="text-white">Last updated ${timeAgo(item.updated_at)}</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+    
+                    // Tambahkan setiap contentContainer ke container
+                    container.appendChild(contentContainer);
                 });
+
               } else {
                 console.error("Container element not found!");
               }
@@ -2430,4 +2470,28 @@ function formatTimestamp(timestamp) {
   } ${year} - ${hour}.${minute}`;
 
   return formattedDate;
+}
+
+function timeAgo(dateString) {
+  const now = new Date();
+  const pastDate = new Date(dateString);
+  const diffInSeconds = Math.floor((now - pastDate) / 1000);
+
+  const intervals = {
+      year: 31536000,  
+      month: 2592000,  
+      week: 604800,    
+      day: 86400,      
+      hour: 3600,      
+      minute: 60,
+      second: 1
+  };
+
+  for (let key in intervals) {
+      const count = Math.floor(diffInSeconds / intervals[key]);
+      if (count > 0) {
+          return `${count} ${key}${count !== 1 ? 's' : ''} ago`;
+      }
+  }
+  return "Just now"; 
 }
