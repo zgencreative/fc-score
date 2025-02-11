@@ -1096,6 +1096,15 @@ th, td {
   color: #ff5500;
 }
 
+.news a{
+  text-decoration: none;
+}
+
+.news a:hover{
+  text-decoration: none;
+  color: #ff5500;
+}
+
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */
 @media screen and (max-width: 768px) {
   .col-rank,
