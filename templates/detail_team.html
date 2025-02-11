@@ -41,9 +41,10 @@
             <p class="menu-link" id="squad-link">SQUAD</p>
             <p class="menu-link" id="player-link">PLAYER STAT</p>
             <p class="menu-link" id="team-link">TEAM STAT</p>
+            <p class="menu-link" id="team-news">NEWS</p>
           </div>
         </div>
-        <div id="dinamic-content"></div>
+        <div class="py-3" id="dinamic-content"></div>
       </div>
     </div>
   </div>
@@ -76,8 +77,15 @@
             {
               id: "team-link",
               endpoint: (id) => `/api/football/detailTeam/stat/${id}/`,
+            },
+            {
+              id: "team-news",
+              endpoint: (id) => `/api/football/detailTeam/news/${id}/`,
             }
+
           ];
+
+          
 
           // Iterasi setiap link dan tambahkan event listener
           links.forEach((link) => {
@@ -129,7 +137,10 @@
                     playerstat(data);
                   } else if (link.id == "team-link"){
                     teamstat(data);
-                  }else {
+                  } else if (link.id == "team-news"){
+                    teamnews(data);
+                  }
+                  else {
                     console.error("Container element not found!");
                   }
                 })
@@ -792,14 +803,14 @@
                 />
                 ${team.teamNM}
               </td>
-              <td style="width: 7.5%; color: white">${team.p}</td>
-              <td style="width: 7.5%; color: white">${team.w}</td>
-              <td style="width: 7.5%; color: white">${team.d}</td>
-              <td style="width: 7.5%; color: white">${team.l}</td>
-              <td style="width: 7.5%; color: white">${team.f}</td>
-              <td style="width: 7.5%; color: white">${team.a}</td>
-              <td style="width: 7.5%; color: white">${team.gd}</td>
-              <td style="width: 7.5%; color: white">${team.pts}</td>
+              <td class="col-p" style="width: 7.5%; color: white">${team.p}</td>
+              <td class="col-w" style="width: 7.5%; color: white">${team.w}</td>
+              <td class="col-d" style="width: 7.5%; color: white">${team.d}</td>
+              <td class="col-l" style="width: 7.5%; color: white">${team.l}</td>
+              <td class="col-f" style="width: 7.5%; color: white">${team.f}</td>
+              <td class="col-a" style="width: 7.5%; color: white">${team.a}</td>
+              <td class="col-gd" style="width: 7.5%; color: white">${team.gd}</td>
+              <td class="col-pts" style="width: 7.5%; color: white">${team.pts}</td>
             `;
 
             // Menambahkan baris baru ke dalam tbody
@@ -852,6 +863,73 @@
           renderPlayers(players);
 
         }
+
+        function teamnews(data) {
+            const container = document.getElementById("dinamic-content");
+            console.log(data)
+            if (!container) {
+                console.error("Container element 'dinamic-content' not found!");
+                return;
+            }
+
+            // Kosongkan container sebelum mengisi dengan berita baru
+            container.innerHTML = "";
+
+            const news = data.data.News;
+            const baseURL = data.data.URL;
+            news.forEach((item) => {
+                const contentContainer = document.createElement("div");
+                contentContainer.classList.add('py-2')
+                const imageUrl = `${baseURL}/${item.cover}`;
+                contentContainer.innerHTML = `
+                    <div class="news">
+                        <div class="card bg-black mb-3">
+                            <div class="row g-0">
+                                <div class="col-md-4">
+                                    <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-white">${item.title}</h5>
+                                        <p class="card-text text-white">${item.description}</p>
+                                        <p class="card-text text-white"><small class="text-white">Last updated ${timeAgo(item.updated_at)}</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Tambahkan setiap contentContainer ke container
+                container.appendChild(contentContainer);
+            });
+        }
+        function timeAgo(dateString) {
+            const now = new Date();
+            const pastDate = new Date(dateString);
+            const diffInSeconds = Math.floor((now - pastDate) / 1000);
+
+            const intervals = {
+                year: 31536000,  // 365 * 24 * 60 * 60
+                month: 2592000,  // 30 * 24 * 60 * 60
+                week: 604800,    // 7 * 24 * 60 * 60
+                day: 86400,      // 24 * 60 * 60
+                hour: 3600,      // 60 * 60
+                minute: 60,
+                second: 1
+            };
+
+            for (let key in intervals) {
+                const count = Math.floor(diffInSeconds / intervals[key]);
+                if (count > 0) {
+                    return `${count} ${key}${count !== 1 ? 's' : ''} ago`;
+                }
+            }
+            return "Just now"; // Jika waktu sangat dekat
+        }
+
+
+
   </script>
 
   <script>

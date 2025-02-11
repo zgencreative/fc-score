@@ -247,14 +247,14 @@ document.addEventListener("DOMContentLoaded", function () {
                       />
                       ${team.teamNM}
                     </td>
-                    <td style="width: 7.5%; color: white">${team.p}</td>
-                    <td style="width: 7.5%; color: white">${team.w}</td>
-                    <td style="width: 7.5%; color: white">${team.d}</td>
-                    <td style="width: 7.5%; color: white">${team.l}</td>
-                    <td style="width: 7.5%; color: white">${team.f}</td>
-                    <td style="width: 7.5%; color: white">${team.a}</td>
-                    <td style="width: 7.5%; color: white">${team.gd}</td>
-                    <td style="width: 7.5%; color: white">${team.pts}</td>
+                    <td class="col-p" style="width: 7.5%; color: white">${team.p}</td>
+                    <td class="col-w" style="width: 7.5%; color: white">${team.w}</td>
+                    <td class="col-d" style="width: 7.5%; color: white">${team.d}</td>
+                    <td class="col-l" style="width: 7.5%; color: white">${team.l}</td>
+                    <td class="col-f" style="width: 7.5%; color: white">${team.f}</td>
+                    <td class="col-a" style="width: 7.5%; color: white">${team.a}</td>
+                    <td class="col-gd" style="width: 7.5%; color: white">${team.gd}</td>
+                    <td class="col-pts" style="width: 7.5%; color: white">${team.pts}</td>
                   `;
 
                   // Menambahkan baris baru ke dalam tbody

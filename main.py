@@ -163,9 +163,9 @@ def sorted_data(date):
         # Memformat tanggal ke format 'yyyymmdd'
         date = current_date.strftime('%Y%m%d')
 
-
     index_data = index(date)
-    liga_tertentu = requests.get("https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer/stage?limit=15").json()
+    liga_tertentu = requests.get(
+        "https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer/stage?limit=15").json()
     liga_tertentu = [i['Sid'] for i in liga_tertentu['Stages']]
     sorted_data = {
         'live': [],
@@ -1123,6 +1123,41 @@ def teamTable(id):
         'code': 200,
         'message': 'success',
         'data': data
+    }
+
+    return final_response
+
+
+@app.route('/api/football/detailTeam/news/<string:idTeam>/', methods=['GET'])
+def teamNews(idTeam):
+    # Define the URL for the league table
+    key = 'JDJhJDEyJFVLNUJ3d2c1MnFCaktnU0w0dzJMNU9GWEJQT0FaSTcwa0ZZUWpIbXF0YVRNMEU3aHZwQkF1'
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/details?locale=en&MD=1"
+    img_badge = 'https://static.lsmedia1.com/competition/high/'
+    img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
+
+    # Make the GET request for league table
+    response = requests.get(url)
+    res = response.json()
+
+    team_name = res['Nm']
+    slug = team_name.lower().replace(" ", "-")
+
+    api_url = f"http://127.0.0.1:8000/api/news/tag?key={key}&slug={slug}"
+    url = 'http://127.0.0.1:8000'
+    response2 = requests.get(api_url)
+    res2 = response2.json()
+
+    # Prepare the response structure
+    data = {
+        'NMTeam': res['Nm'],
+        'News': res2['news'],
+        'URL': url
+    }
+    final_response = {
+        'code': 200,
+        'message': 'success',
+        'data': data,
     }
 
     return final_response

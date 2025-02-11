@@ -1049,6 +1049,18 @@ th, td {
   font-weight: bold;
 }
 
+.news .card{
+  height: var(--bs-card-height);
+  width: fit-content;
+  background-color: var(--bs-card-bg);
+  background: var(--bs-card-bg);
+}
+
+.news .card .card-body{
+  color: var(--bs-body-color);
+
+}
+
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */
 @media screen and (max-width: 768px) {
   .col-rank,
