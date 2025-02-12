@@ -54,6 +54,10 @@ document.addEventListener("DOMContentLoaded", function () {
           id: "news-link",
           endpoint: (id) => `/api/football/detailMatch/news/${id}/`,
         },
+        {
+          id: "info-link",
+          endpoint: (id) => `/api/football/detailMatch/info/${id}/`,
+        },
       ];
 
       // Iterasi setiap link dan tambahkan event listener
@@ -282,14 +286,19 @@ document.addEventListener("DOMContentLoaded", function () {
                   const contentContainer = document.createElement("div");
                   contentContainer.classList.add("py-2");
                   const imageUrl = `${baseURL}/${item.cover}`;
-                  const newsUrl = `${baseURL}news/${item.slug}`
+                  const newsUrl = `${baseURL}news/${item.slug}`;
                   contentContainer.innerHTML = `
                         <div class="news">
                           <div class="card bg-black mb-3" id="cardNEws">
                               <div class="row g-0">
                                   <div class="col-md-4">
                                     <a class="title" href="${newsUrl}" target="_blank">
-                                      <img src=" ${imageUrl || 'https://placehold.co/600x400'}" class="img-fluid rounded-start"alt="${item.title}" />
+                                      <img src=" ${
+                                        imageUrl ||
+                                        "https://placehold.co/600x400"
+                                      }" class="img-fluid rounded-start"alt="${
+                    item.title
+                  }" />
                                     </a>    
                                     </div>
                                   <div class="col-md-8">
@@ -299,8 +308,12 @@ document.addEventListener("DOMContentLoaded", function () {
                                               ${item.title}
                                             </a>
                                           </h5>
-                                          <p class="card-text">${item.description}</p>
-                                          <p class="card-text text-end"><small class="">${timeAgo(item.updated_at)}</small></p>
+                                          <p class="card-text">${
+                                            item.description
+                                          }</p>
+                                          <p class="card-text text-end"><small class="">${timeAgo(
+                                            item.updated_at
+                                          )}</small></p>
                                       </div>
                                   </div>
                               </div>
@@ -308,11 +321,15 @@ document.addEventListener("DOMContentLoaded", function () {
                       </div>
                     `;
 
-                  contentContainer.querySelector(".card").addEventListener("click", () => {
+                  contentContainer
+                    .querySelector(".card")
+                    .addEventListener("click", () => {
                       window.open(newsUrl, "_blank"); // Membuka link di tab baru
-                  });
+                    });
                   container.appendChild(contentContainer);
                 });
+              } else if (link.id == "info-link") {
+                console.log("aman");
               } else {
                 console.error("Container element not found!");
               }

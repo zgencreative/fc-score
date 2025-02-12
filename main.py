@@ -1,10 +1,15 @@
-from flask import Flask, render_template, jsonify, url_for, request
+from flask import Flask, render_template, jsonify, url_for, request, session, redirect
 import requests
 import datetime
 from flask_cors import CORS
+from flask_session import Session
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
+# Konfigurasi session
+app.config["SECRET_KEY"] = "its_0ur_5cr3t_k3y"
+app.config["SESSION_TYPE"] = "filesystem"  # Bisa diganti sesuai kebutuhan
+Session(app)
 
 # BACKEND
 
@@ -696,9 +701,14 @@ def news(idMatch):
         response2 = requests.get(api_url)
         res2 = response2.json()
         datas = {
-            'URL': url,
-            'News': res2['news'],
-        }
+                'URL': '',
+                'News': '',
+            }
+        if res2['status'] != 400:
+            datas = {
+                'URL': url,
+                'News': res2['news'],
+            }
         response['data'] = datas
         return response
 
@@ -708,7 +718,6 @@ def news(idMatch):
             'message': 'Error fetching data',
             'error': str(e)
         }
-
 
 @app.route('/api/football/detailComp/<string:urlComp>/', methods=['GET'])
 def detailComp(urlComp):
@@ -1203,6 +1212,39 @@ def teamNews(idTeam):
 
     return final_response
 
+@app.route('/api/football/detailMatch/info/<string:id>/', methods=['GET'])
+def detailInfo(id):
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{id}?locale=ID"
+    res = requests.get(url).json()
+    data = {
+        'code': 200,
+        'message': 'success',
+        'data': {
+            'time_start': res['Esd'],
+            'stadium': res['Venue']['Vnm'] if 'Venue' in res and 'Vnm' in res['Venue'] else '',
+            'views': res['Venue']['Vsp'] if 'Venue' in res and 'Vsp' in res['Venue'] else ''
+        }
+    }
+    return data
+
+@app.route('/login', methods=['POST'])
+def login():
+    usn = request.get_json()['email']
+    passwd = request.get_json()['password']
+    data = {'email':usn, 'password':passwd}
+    res = requests.post('https://mansionsportsfc.com/api/login', data=data).json()
+    if res['status'] == False:
+        return jsonify({"success": False, "message": "Email atau password salah!"})
+    else:
+        session["id"] = res['user']['id']
+        session["user"] = res['user']['name']  # Menyimpan user ke dalam session
+        return jsonify({"success": True, "message": "Login berhasil!", "redirect": "/"})
+
+@app.route('/logout')
+def logout():
+    session.pop("user", None)
+    session.pop("id", None)
+    return redirect(url_for('home'))
 # FRONTEND
 
 
