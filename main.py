@@ -2,8 +2,12 @@ from flask import Flask, render_template, jsonify, url_for, request, session, re
 import requests
 import datetime
 from flask_cors import CORS
+import os
+
 
 app = Flask(__name__)
+UPLOAD_FOLDER = 'static/img/jersey'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # BACKEND
@@ -1209,13 +1213,29 @@ def teamNews(idTeam):
 def detailInfo(id):
     url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{id}?locale=ID"
     res = requests.get(url).json()
+    images = os.listdir(app.config['UPLOAD_FOLDER'])
     data = {
         'code': 200,
         'message': 'success',
         'data': {
             'time_start': res['Esd'],
             'stadium': res['Venue']['Vnm'] if 'Venue' in res and 'Vnm' in res['Venue'] else '',
-            'views': res['Venue']['Vsp'] if 'Venue' in res and 'Vsp' in res['Venue'] else ''
+            'views': res['Venue']['Vsp'] if 'Venue' in res and 'Vsp' in res['Venue'] else '',
+            'score1': res['Tr1'] if 'Tr1' in res else '',
+            'score2': res['Tr2'] if 'Tr2' in res else '',
+            'match': {
+                'idMatch': res['Eid'],
+                'team1': {
+                    'IDTeam': res['T1'][0]['ID'],
+                    'NMTeam': res['T1'][0]['Nm'],
+                    'IMGJersey': f'img/jersey/{res["T1"][0]["Nm"].replace(" ", "-").lower()}.svg' if f"{res['T1'][0]['Nm'].replace(' ', '-')}.svg".lower() in images else 'img/jersey/team-1.svg'
+                },
+                'team2': {
+                    'IDTeam': res['T2'][0]['ID'],
+                    'NMTeam': res['T2'][0]['Nm'],
+                    'IMGJersey': f'img/jersey/{res["T2"][0]["Nm"].replace(" ","-").lower()}.svg' if f"{res['T2'][0]['Nm'].replace(' ', '-')}.svg".lower() in images else 'img/jersey/team-2.svg'
+                }
+            }
         }
     }
     return data

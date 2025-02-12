@@ -296,7 +296,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                       <img src=" ${
                                         imageUrl ||
                                         "https://placehold.co/600x400"
-                                      }" class="img-fluid rounded-start"alt="${item.title}" />
+                                      }" class="img-fluid rounded-start"alt="${
+                    item.title
+                  }" />
                                     </a>    
                                     </div>
                                   <div class="col-md-8">
@@ -327,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   container.appendChild(contentContainer);
                 });
               } else if (link.id == "info-link") {
-                console.log(data)
+                console.log(data);
                 const container = document.getElementById("dinamic-content");
                 if (!container) {
                   console.error(
@@ -337,26 +339,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 container.innerHTML = "";
                 const info = data.data;
-                var stadium = info['stadium']
+                var stadium = info["stadium"];
                 if (!stadium) {
-                  stadium = "-"
-                }else{
-                  stadium
+                  stadium = "-";
+                } else {
+                  stadium;
                 }
-                var time = info['time_start']
+                var time = info["time_start"];
                 if (!time) {
-                  time = "-"
-                }else{
-                  time = formatTimestamp(info['time_start']);
+                  time = "-";
+                } else {
+                  time = formatTimestamp(info["time_start"]);
                 }
-                var view = info['views']
+                var view = info["views"];
                 if (!view) {
-                  view = "-"
-                }else{
-                  view = view.toLocaleString('id-ID'); 
+                  view = "-";
+                } else {
+                  view = view.toLocaleString("id-ID");
                 }
-                container.innerHTML =
-                `<div class="info">
+                container.innerHTML = `<div class="info">
                     <h6>
                       Match Info
                     </h6>
@@ -390,10 +391,10 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="col-md-4">
                           <div class="d-flex flex-column align-items-center">
                             <div class="p-2 team-name text-uppercase fw-semibold">
-                              Leicester
+                              ${info["match"]["team1"]["NMTeam"]}
                             </div>
                             <div class="p-2 bg-black border border- border-secondary rounded-3">
-                              <img class="" src="/static/img/jersey/team-1.svg" width="50" alt="Default Team 1">
+                              <img class="" src="/static/${info["match"]["team1"]["IMGJersey"]}" width="50" alt="Default Team 1">
                             </div>
                           </div>
                         </div>
@@ -412,19 +413,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         <div class="col-md-4">
                           <div class="d-flex flex-column align-items-center">
                             <div class="p-2 team-name text-uppercase fw-semibold">
-                              Chelsea
+                              ${info["match"]["team2"]["NMTeam"]}
                             </div>
                             <div class="p-2 bg-black border border- border-secondary rounded-3">
-                              <img class="" src="/static/img/jersey/team-2.svg" width="50" alt="Default Team 1">
+                              <img class="" src="/static/${info["match"]["team2"]["IMGJersey"]}" width="50" alt="Default Team 1">
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                  `
-
-
+                  `;
               } else {
                 console.error("Container element not found!");
               }
