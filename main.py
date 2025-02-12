@@ -164,10 +164,8 @@ def sorted_data(date):
         date = current_date.strftime('%Y%m%d')
 
     index_data = index(date)
-    liga_tertentu = requests.get(
-        "https://prod-cdn-search-api.lsmedia1.com/api/v2/search/soccer/stage?limit=15").json()
     liga_tertentu = ['18173', '18418', '18176', '18420', '18227', '20106', '18483',
-                     '18546', '17004', '19232', '19243', '19244', '20222', '18181', '18599', '18307']
+                     '18546', '17004', '19232', '19243', '19244', '20222', '18181', '18599', '18307', '20510', '18213', '20202', '18179']
     sorted_data = {
         'live': [],
         'previous': [],
