@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ganti Nama Gambar</title>
+  </head>
+  <body>
+    <h1>Daftar Gambar</h1>
+
+    <div style="display: flex; flex-wrap: wrap">
+      {% for image in images %}
+      <div style="margin: 10px">
+        <img
+          src="{{ url_for('static', filename='img/jersey/' + image) }}"
+          width="150"
+          height="150"
+        />
+        <p>{{ image }}</p>
+        <form action="{{ url_for('rename_image') }}" method="POST">
+          <input type="hidden" name="old_filename" value="{{ image }}" />
+          <input
+            type="text"
+            name="new_filename"
+            placeholder="Masukkan nama baru"
+          />
+          <button type="submit">OK</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>
