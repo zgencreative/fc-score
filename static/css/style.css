@@ -1115,6 +1115,10 @@ td {
   color: #ff5500;
 }
 
+.info{
+  margin-bottom: 3rem;
+}
+
 .info .card{
   height: var(--bs-card-height);
   width: auto;
@@ -1150,6 +1154,21 @@ td {
 }
 .modall.show .modall-dialog {
   transform: translateY(0);
+}
+
+.win .team-name{
+  font-size: 16px;
+}
+
+.win .draw{
+  width: 68px;
+  height: 68px;
+}
+
+.win .draw h6{
+  align-items: center;
+  text-align: center;
+  margin-top: 15px;
 }
 
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */

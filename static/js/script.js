@@ -382,6 +382,46 @@ document.addEventListener("DOMContentLoaded", function () {
                       
                     </div>
                   </div>
+                    <div class="win">
+                      <h6 class="fw-bold mb-4">
+                        WHO WILL WIN?
+                      </h6>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="d-flex flex-column align-items-center">
+                            <div class="p-2 team-name text-uppercase fw-semibold">
+                              Leicester
+                            </div>
+                            <div class="p-2 bg-black border border- border-secondary rounded-3">
+                              <img class="" src="/static/img/jersey/team-1.svg" width="50" alt="Default Team 1">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="d-flex flex-column align-items-center">
+                            <div class="p-2 text-secondary">
+                              Select your team
+                            </div>
+                            <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
+                              <h6 class="fw-semibold">
+                                Draw
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="d-flex flex-column align-items-center">
+                            <div class="p-2 team-name text-uppercase fw-semibold">
+                              Chelsea
+                            </div>
+                            <div class="p-2 bg-black border border- border-secondary rounded-3">
+                              <img class="" src="/static/img/jersey/team-2.svg" width="50" alt="Default Team 1">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   `
 
 
