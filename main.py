@@ -2,14 +2,9 @@ from flask import Flask, render_template, jsonify, url_for, request, session, re
 import requests
 import datetime
 from flask_cors import CORS
-from flask_session import Session
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
-# Konfigurasi session
-app.config["SECRET_KEY"] = "its_0ur_5cr3t_k3y"
-app.config["SESSION_TYPE"] = "filesystem"  # Bisa diganti sesuai kebutuhan
-Session(app)
 
 # BACKEND
 
