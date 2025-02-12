@@ -296,9 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                       <img src=" ${
                                         imageUrl ||
                                         "https://placehold.co/600x400"
-                                      }" class="img-fluid rounded-start"alt="${
-                    item.title
-                  }" />
+                                      }" class="img-fluid rounded-start"alt="${item.title}" />
                                     </a>    
                                     </div>
                                   <div class="col-md-8">
@@ -329,7 +327,64 @@ document.addEventListener("DOMContentLoaded", function () {
                   container.appendChild(contentContainer);
                 });
               } else if (link.id == "info-link") {
-                console.log("aman");
+                console.log(data)
+                const container = document.getElementById("dinamic-content");
+                if (!container) {
+                  console.error(
+                    "Container element 'dinamic-content' not found!"
+                  );
+                  return;
+                }
+                container.innerHTML = "";
+                const info = data.data;
+                var stadium = info['stadium']
+                if (!stadium) {
+                  stadium = "-"
+                }else{
+                  stadium
+                }
+                var time = info['time_start']
+                if (!time) {
+                  time = "-"
+                }else{
+                  time = formatTimestamp(info['time_start']);
+                }
+                var view = info['views']
+                if (!view) {
+                  view = "-"
+                }else{
+                  view = view.toLocaleString('id-ID'); 
+                }
+                container.innerHTML =
+                `<div class="info">
+                    <h6>
+                      Match Info
+                    </h6>
+                    <div class="card bg-black border-2 border-secondary-subtle">
+                      <div class="card-body">
+                        <div class="d-flex flex-row justify-content-center flex-wrap ">
+                          <div class="d-flex flex-row gap-3">
+                            <div class="p-2 gap-2 align-items-center">
+                              <i class="fa-regular fa-calendar-days fa-xl"></i>
+                              ${time}
+                            </div>
+                            <div class="p-2 gap-2 align-items-center">
+                              <i class="fa-solid fa-monument fa-xl"></i> 
+                              ${stadium}
+                            </div>
+                            <div class="p-2 gap-2 align-items-center">
+                              <i class="fa-solid fa-users"></i>
+                              ${view}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  `
+
+
               } else {
                 console.error("Container element not found!");
               }

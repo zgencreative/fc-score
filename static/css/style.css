@@ -1115,6 +1115,13 @@ td {
   color: #ff5500;
 }
 
+.info .card{
+  height: var(--bs-card-height);
+  width: auto;
+  background-color: var(--bs-card-bg);
+  background: var(--bs-card-bg);
+}
+
 .modall {
   display: none;
   position: fixed;

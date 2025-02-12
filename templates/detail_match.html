@@ -108,6 +108,7 @@
         <div class="menu-bar">
           <div class="menu-items">
             <p class="menu-link" id="info-link">INFO</p>
+
             <a href="#" id="summary-link" class="menu-link active">SUMMARY</a>
             <p class="menu-link" id="stats-link">STATS</p>
             <p class="menu-link" id="lineups-link">LINE-UPS</p>
@@ -118,6 +119,7 @@
 
         <!-- Dynamic Content Section -->
         <div class="container mt-4" id="dinamic-content">
+          
           {# Inisialisasi untuk menyimpan skor setiap babak #} {% if
           data['data']['timeline']|length != 0 %} {% for half, events in
           data['data']['timeline'].items() %} {% set ns = namespace(scores=[0,
