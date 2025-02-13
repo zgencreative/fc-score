@@ -1171,6 +1171,31 @@ td {
   margin-top: 15px;
 }
 
+.progress-container {
+  position: relative;
+  width: 100%;
+  margin-top: 35px;
+}
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px; 
+  font-weight: bold;
+  text-align: center;
+}
+.progress-label {
+  flex: 1;
+  text-align: center;
+}
+.progress {
+  height: 15px; 
+}
+
+.bg-orange{
+  background-color: #ff5500;
+}
+
+
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */
 @media screen and (max-width: 768px) {
   .col-rank,

@@ -360,20 +360,38 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 let centerStyle = `
                 <div class="col-md-4">
-                          <div class="d-flex flex-column align-items-center">
-                            <div class="p-2 text-secondary">
-                              Select your team
-                            </div>
-                            <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
-                              <h6 class="fw-semibold">
-                                Draw
-                              </h6>
-                            </div>
-                          </div>
-                        </div>
+                  <div class="d-flex flex-column align-items-center">
+                    <div class="p-2 text-secondary">
+                      Select your team
+                    </div>
+                    <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
+                      <h6 class="fw-semibold">
+                        Draw
+                      </h6>
+                    </div>
+                  </div>
+                </div>
                         `;
                 if (info.score1 !== "") {
-                  centerStyle = ``;
+                  centerStyle = `
+                    <div class="col-md-4">
+                      <div class="progress-container">
+                        <div class="progress-labels">
+                            <div class="progress-label">25%</div>
+                            <div class="progress-label">50%</div>
+                            <div class="progress-label">25%</div>
+                        </div>
+                        <div class="progress bg-transparent" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-orange" style="width: 25%"></div>
+                            <div class="progress-bar bg-secondary" style="width: 50%"></div>
+                            <div class="progress-bar bg-danger" style="width: 25%"></div>
+                        </div>
+                      </div>
+                      <div class="votes text-center ">
+                        1231 votes
+                      </div>
+                    </div>
+                  `;
                 }
                 container.innerHTML = `<div class="info">
                     <h6>
