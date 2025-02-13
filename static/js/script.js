@@ -339,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 container.innerHTML = "";
                 const info = data.data;
+                console.log(info);
                 var stadium = info["stadium"];
                 if (!stadium) {
                   stadium = "-";
@@ -356,6 +357,23 @@ document.addEventListener("DOMContentLoaded", function () {
                   view = "-";
                 } else {
                   view = view.toLocaleString("id-ID");
+                }
+                let centerStyle = `
+                <div class="col-md-4">
+                          <div class="d-flex flex-column align-items-center">
+                            <div class="p-2 text-secondary">
+                              Select your team
+                            </div>
+                            <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
+                              <h6 class="fw-semibold">
+                                Draw
+                              </h6>
+                            </div>
+                          </div>
+                        </div>
+                        `;
+                if (info.score1 !== "") {
+                  centerStyle = ``;
                 }
                 container.innerHTML = `<div class="info">
                     <h6>
@@ -398,18 +416,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             </div>
                           </div>
                         </div>
-                        <div class="col-md-4">
-                          <div class="d-flex flex-column align-items-center">
-                            <div class="p-2 text-secondary">
-                              Select your team
-                            </div>
-                            <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
-                              <h6 class="fw-semibold">
-                                Draw
-                              </h6>
-                            </div>
-                          </div>
-                        </div>
+                        ${centerStyle}
                         <div class="col-md-4">
                           <div class="d-flex flex-column align-items-center">
                             <div class="p-2 team-name text-uppercase fw-semibold">
