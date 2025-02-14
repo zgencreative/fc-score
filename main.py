@@ -1228,12 +1228,12 @@ def detailInfo(id):
                 'team1': {
                     'IDTeam': res['T1'][0]['ID'],
                     'NMTeam': res['T1'][0]['Nm'],
-                    'IMGJersey': f'img/jersey/{res["T1"][0]["Nm"].replace(" ", "-").lower()}.svg' if f"{res['T1'][0]['Nm'].replace(' ', '-')}.svg".lower() in images else 'img/jersey/team-1.svg'
+                    'IMGJersey': f'img/jersey/{res["T1"][0]["ID"]}.svg' if f"{res['T1'][0]['ID']}.svg".lower() in images else 'img/jersey/team-1.svg'
                 },
                 'team2': {
                     'IDTeam': res['T2'][0]['ID'],
                     'NMTeam': res['T2'][0]['Nm'],
-                    'IMGJersey': f'img/jersey/{res["T2"][0]["Nm"].replace(" ","-").lower()}.svg' if f"{res['T2'][0]['Nm'].replace(' ', '-')}.svg".lower() in images else 'img/jersey/team-2.svg'
+                    'IMGJersey': f'img/jersey/{res["T2"][0]["ID"]}.svg' if f"{res['T2'][0]['ID']}.svg".lower() in images else 'img/jersey/team-2.svg'
                 }
             }
         }
