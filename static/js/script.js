@@ -273,6 +273,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
               } else if (link.id == "news-link") {
                 const container = document.getElementById("dinamic-content");
+                let currentNewsTeam = "team1"; // Variabel untuk menyimpan jenis pertandingan yang ditampilkan (fixtures atau results)
                 if (!container) {
                   console.error(
                     "Container element 'dinamic-content' not found!"
@@ -280,54 +281,99 @@ document.addEventListener("DOMContentLoaded", function () {
                   return;
                 }
                 container.innerHTML = "";
-                const news = data.data.News;
-                const baseURL = data.data.URL;
-                news.forEach((item) => {
-                  const contentContainer = document.createElement("div");
-                  contentContainer.classList.add("py-2");
-                  const imageUrl = `${baseURL}/${item.cover}`;
-                  const newsUrl = `${baseURL}news/${item.slug}`;
-                  contentContainer.innerHTML = `
-                        <div class="news">
-                          <div class="card bg-black mb-3" id="cardNEws">
-                              <div class="row g-0">
-                                  <div class="col-md-4">
-                                    <a class="title" href="${newsUrl}" target="_blank">
-                                      <img src=" ${
-                                        imageUrl ||
-                                        "https://placehold.co/600x400"
-                                      }" class="img-fluid rounded-start"alt="${
-                    item.title
-                  }" />
-                                    </a>    
-                                    </div>
-                                  <div class="col-md-8">
-                                      <div class="card-body">
-                                          <h5 class="card-title">
-                                            <a class="title" href="${newsUrl}" target="_blank">
-                                              ${item.title}
-                                            </a>
-                                          </h5>
-                                          <p class="card-text">${
-                                            item.description
-                                          }</p>
-                                          <p class="card-text text-end"><small class="">${timeAgo(
-                                            item.updated_at
-                                          )}</small></p>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div> 
-                      </div>
-                    `;
+                const buttonFilter = document.createElement("div");
+                buttonFilter.innerHTML = `
+                <button class="button-matchesDetailTeam active" id="btnTeam1">
+                  ${data.data.News[0]["name-team"]}
+                </button>
+                <button class="button-matchesDetailTeam" id="btnTeam2">${data.data.News[1]["name-team"]}</button>`;
+                container.appendChild(buttonFilter);
+                const boxNews = document.createElement("div");
+                boxNews.id = "boxNews";
+                container.appendChild(boxNews);
+                // Event listener untuk tombol Fixtures dan Results
+                document
+                  .getElementById("btnTeam1")
+                  .addEventListener("click", () => {
+                    currentNewsTeam = "team1";
+                    renderNews();
+                  });
 
-                  contentContainer
-                    .querySelector(".card")
-                    .addEventListener("click", () => {
-                      window.open(newsUrl, "_blank"); // Membuka link di tab baru
-                    });
-                  container.appendChild(contentContainer);
-                });
+                document
+                  .getElementById("btnTeam2")
+                  .addEventListener("click", () => {
+                    currentNewsTeam = "team2";
+                    renderNews();
+                  });
+                renderNews();
+                // Fungsi untuk menandai tombol aktif (Fixtures/Results)
+                function setActiveButton(type) {
+                  const fixturesButton = document.getElementById("btnTeam1");
+                  const resultsButton = document.getElementById("btnTeam2");
+
+                  if (currentNewsTeam === "team1") {
+                    fixturesButton.classList.add("active");
+                    resultsButton.classList.remove("active");
+                  } else {
+                    fixturesButton.classList.remove("active");
+                    resultsButton.classList.add("active");
+                  }
+                }
+                function renderNews() {
+                  setActiveButton(currentNewsTeam);
+                  boxNews.innerHTML = "";
+                  let news = data.data.News[0]["news-team"];
+                  const baseURL = data.data.URL;
+                  if (currentNewsTeam === "team1") {
+                    news = data.data.News[1]["news-team"];
+                  }
+                  news.forEach((item) => {
+                    const contentContainer = document.createElement("div");
+                    contentContainer.classList.add("py-2");
+                    const imageUrl = `${baseURL}/${item.cover}`;
+                    const newsUrl = `${baseURL}news/${item.slug}`;
+                    contentContainer.innerHTML = `
+                          <div class="news">
+                            <div class="card bg-black mb-3" id="cardNEws">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                      <a class="title" href="${newsUrl}" target="_blank">
+                                        <img src=" ${
+                                          imageUrl ||
+                                          "https://placehold.co/600x400"
+                                        }" class="img-fluid rounded-start"alt="${
+                      item.title
+                    }" />
+                                      </a>    
+                                      </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                              <a class="title" href="${newsUrl}" target="_blank">
+                                                ${item.title}
+                                              </a>
+                                            </h5>
+                                            <p class="card-text">${
+                                              item.description
+                                            }</p>
+                                            <p class="card-text text-end"><small class="">${timeAgo(
+                                              item.updated_at
+                                            )}</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                      `;
+
+                    contentContainer
+                      .querySelector(".card")
+                      .addEventListener("click", () => {
+                        window.open(newsUrl, "_blank"); // Membuka link di tab baru
+                      });
+                    boxNews.appendChild(contentContainer);
+                  });
+                }
               } else if (link.id == "info-link") {
                 console.log(data);
                 const container = document.getElementById("dinamic-content");

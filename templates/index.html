@@ -3,31 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ganti Nama Gambar</title>
+    <title>Rename File</title>
   </head>
   <body>
-    <h1>Daftar Gambar</h1>
+    <h1>Daftar Gambar Jersey</h1>
 
-    <div style="display: flex; flex-wrap: wrap">
-      {% for image in images %}
-      <div style="margin: 10px">
-        <img
-          src="{{ url_for('static', filename='img/jersey/' + image) }}"
-          width="150"
-          height="150"
+    {% for file in files %}
+    <div>
+      <img src="static/img/jersey/{{file}}" alt="{{ file }}" width="200" />
+      <p>Nama Awal: {{ file.split('.')[0].replace('-', ' ') }}</p>
+
+      <form method="POST">
+        <input type="hidden" name="file_name" value="{{ file }}" />
+        <input
+          type="text"
+          name="nama_akhir"
+          placeholder="Masukkan nama akhir"
+          required
         />
-        <p>{{ image }}</p>
-        <form action="{{ url_for('rename_image') }}" method="POST">
-          <input type="hidden" name="old_filename" value="{{ image }}" />
-          <input
-            type="text"
-            name="new_filename"
-            placeholder="Masukkan nama baru"
-          />
-          <button type="submit">OK</button>
-        </form>
-      </div>
-      {% endfor %}
+        <button type="submit">Ok</button>
+      </form>
     </div>
+    <hr />
+    {% endfor %}
   </body>
 </html>
