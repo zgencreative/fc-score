@@ -494,18 +494,16 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
 
                   `;
-              
-                } 
-                else if (link.id == "summary-link") {
-                  const container = document.getElementById("dinamic-content");
-                  if (!container) {
-                    console.error(
-                      "Container element 'dinamic-content' not found!"
-                    );
-                    return;
-                  }
-                  container.innerHTML = "";
-                  container.innerHTML = `
+              } else if (link.id == "summary-link") {
+                const container = document.getElementById("dinamic-content");
+                if (!container) {
+                  console.error(
+                    "Container element 'dinamic-content' not found!"
+                  );
+                  return;
+                }
+                container.innerHTML = "";
+                container.innerHTML = `
                      <div class="info">
                       <div class="card bg-black border-2 border-secondary-subtle">
                         <div class="card-body">
@@ -515,8 +513,7 @@ document.addEventListener("DOMContentLoaded", function () {
                       </div>
                     </div>
                   `;
-                }
-                else {
+              } else {
                 console.error("Container element not found!");
               }
             })

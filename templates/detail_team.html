@@ -85,7 +85,7 @@
 
           ];
 
-          
+
 
           // Iterasi setiap link dan tambahkan event listener
           links.forEach((link) => {
@@ -706,6 +706,14 @@
                 cardForm.appendChild(infoForm2);
 
                 listForm.appendChild(cardForm);
+                // Tambahkan event listener untuk mengarahkan ke URL
+                cardForm.addEventListener("click", () => {
+                  let urlcomp = comp.urlComp.replace('.','/');
+                  window.location.href = `/match/${urlcomp}/${match.IDMatch}`; // Gunakan data.url sebagai target URL
+                });
+
+                // Opsional: Tambahkan gaya kursor agar pengguna tahu card dapat diklik
+                cardForm.style.cursor = "pointer";
               });
 
               stageDiv.appendChild(listForm);
@@ -918,11 +926,11 @@
             const diffInSeconds = Math.floor((now - pastDate) / 1000);
 
             const intervals = {
-                year: 31536000,  
-                month: 2592000,  
-                week: 604800,    
-                day: 86400,      
-                hour: 3600,      
+                year: 31536000,
+                month: 2592000,
+                week: 604800,
+                day: 86400,
+                hour: 3600,
                 minute: 60,
                 second: 1
             };
@@ -933,11 +941,8 @@
                     return `${count} ${key}${count !== 1 ? 's' : ''} ago`;
                 }
             }
-            return "Just now"; 
+            return "Just now";
         }
-
-
-
   </script>
 
   <script>
