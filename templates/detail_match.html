@@ -246,15 +246,23 @@
             </span>
             <span>{{ ns.scores[0] }} - {{ ns.scores[1] }}</span>
           </div>
-          {% endfor %} {% endif %}
+          {% endfor %} {% else %}
+          <div class="info">
+            <div class="card bg-black border-2 border-secondary-subtle">
+              <div class="card-body">
+                <h4 class="text-center fw-semibold">No Data</h4>
+              </div>
+            </div>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
+    {% block extra_js%}
+    <script>
+      var currentPage = "{{ page_name }}";
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% endblock %} {% endblock %}
   </div>
-  {% block extra_js%}
-  <script>
-    var currentPage = "{{ page_name }}";
-  </script>
-  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  {% endblock %} {% endblock %}
 </div>

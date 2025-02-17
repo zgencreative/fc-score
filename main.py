@@ -363,9 +363,10 @@ def get_detail_match(idMatch):
         summary_response.raise_for_status()
         summary_data = summary_response.json()
 
-        has_score = ['FT', 'AP', 'AET', 'Aband.', 'AW']
+        # has_score = ['FT', 'AP', 'AET', 'Aband.', 'AW']
+        not_started = ['NS', 'Canc.', 'Postp.']
 
-        if match_data['Eps'] in has_score and 'Incs' in summary_data:
+        if match_data['Eps'] not in not_started and 'Incs' in summary_data:
             # Ubah keys menjadi integer
             keys = list(map(int, summary_data['Incs'].keys()))
             max_key = max(keys)  # Ambil key terbesar

@@ -101,26 +101,35 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((data) => {
               const container = document.getElementById("dinamic-content");
               container.innerHTML = "";
+              container.innerHTML = `<div class="info">
+                      <div class="card bg-black border-2 border-secondary-subtle">
+                        <div class="card-body">
+                          <h4 class="text-center fw-semibold">
+                            No Data
+                          </h4>
+                      </div>
+                    </div>`;
               if (link.id == "stats-link") {
                 const match = data.data[0];
+                if (match) {
+                  container.innerHTML = "";
+                  // Looping untuk menghitung persentase dan menampilkan hasil
+                  for (const key in match.sum_stat[0]) {
+                    const value0 = match.sum_stat[0][key] || 0;
+                    const value1 = match.sum_stat[1][key] || 0;
+                    const total = value0 + value1;
 
-                // Looping untuk menghitung persentase dan menampilkan hasil
-                for (const key in match.sum_stat[0]) {
-                  const value0 = match.sum_stat[0][key] || 0;
-                  const value1 = match.sum_stat[1][key] || 0;
-                  const total = value0 + value1;
+                    if (total > 0) {
+                      const value0Percent = Math.round((value0 / total) * 100);
+                      const value1Percent = Math.round((value1 / total) * 100);
+                      const remaining0 = 100 - value0Percent;
+                      const remaining1 = 100 - value1Percent;
 
-                  if (total > 0) {
-                    const value0Percent = Math.round((value0 / total) * 100);
-                    const value1Percent = Math.round((value1 / total) * 100);
-                    const remaining0 = 100 - value0Percent;
-                    const remaining1 = 100 - value1Percent;
+                      // Buat elemen wrapper untuk setiap statistik
+                      const statWrapper = document.createElement("div");
 
-                    // Buat elemen wrapper untuk setiap statistik
-                    const statWrapper = document.createElement("div");
-
-                    // Bagian atas
-                    statWrapper.innerHTML += `
+                      // Bagian atas
+                      statWrapper.innerHTML += `
                       <div class="d-flex justify-content-between py-2">
                         <span class="text-light">${value0}</span>
                         <span class="stat-label">${keyTitles[key] || key}</span>
@@ -139,69 +148,77 @@ document.addEventListener("DOMContentLoaded", function () {
                       </div>
                     `;
 
-                    // Tambahkan wrapper ke container
-                    container.appendChild(statWrapper);
+                      // Tambahkan wrapper ke container
+                      container.appendChild(statWrapper);
+                    }
                   }
                 }
               } else if (link.id == "lineups-link") {
-                const positionsTeam1 = {
-                  1: { x: [47], y: "5%" },
-                  2: { x: [26, 66], y: "17%" },
-                  3: { x: [16, 47, 76], y: "25%" },
-                  4: { x: [11, 31, 61, 81], y: "35%" },
-                  5: { x: [8, 26, 47, 68, 86], y: "42%" },
-                };
-                const positionsTeam2 = {
-                  1: { x: [47], y: "91%" },
-                  2: { x: [26, 66], y: "79%" },
-                  3: { x: [16, 47, 76], y: "71%" },
-                  4: { x: [11, 31, 61, 81], y: "61%" },
-                  5: { x: [8, 26, 47, 68, 86], y: "54%" },
-                };
-                const team1 = data.data.Team1;
-                const team2 = data.data.Team2;
-                const name_team1 =
-                  document.getElementsByClassName("team-nameMatch")[0]
-                    .innerText;
-                const name_team2 =
-                  document.getElementsByClassName("team-nameMatch")[1]
-                    .innerText;
-                const field_container = document.createElement("div");
-                field_container.classList.add("field-container");
-                field_container.innerHTML = `
-                <img
-                  src="/static/img/lapangan_posisi.png"
-                  alt="Soccer Field"
-                  style="opacity: 0.6;"
-                  class="field-image"
-                />
-                <div class="name-team" style="top: 1%; left: 6%">
-                  <b>${name_team1}</b> ${team1.Fo.join("-")}
-                </div>
-                <div class="name-team" style="top: 96%; left: 6%">
-                  <b>${name_team2}</b> ${team2.Fo.join("-")}
-                </div>
-                `;
-                container.appendChild(field_container);
-                createPlayerElements(team1, positionsTeam1, "team1");
-                createPlayerElements(team2, positionsTeam2, "team2");
-                createSubs(team1, team2);
-                createSubsPlayer(team1, team2);
-                createIS(team1, team2);
-                createCoach(team1, team2);
+                let dataLine = data.data[0];
+                if (dataLine) {
+                  container.innerHTML = "";
+                  const positionsTeam1 = {
+                    1: { x: [47], y: "5%" },
+                    2: { x: [26, 66], y: "17%" },
+                    3: { x: [16, 47, 76], y: "25%" },
+                    4: { x: [11, 31, 61, 81], y: "35%" },
+                    5: { x: [8, 26, 47, 68, 86], y: "42%" },
+                  };
+                  const positionsTeam2 = {
+                    1: { x: [47], y: "91%" },
+                    2: { x: [26, 66], y: "79%" },
+                    3: { x: [16, 47, 76], y: "71%" },
+                    4: { x: [11, 31, 61, 81], y: "61%" },
+                    5: { x: [8, 26, 47, 68, 86], y: "54%" },
+                  };
+                  const team1 = data.data.Team1;
+                  const team2 = data.data.Team2;
+                  const name_team1 =
+                    document.getElementsByClassName("team-nameMatch")[0]
+                      .innerText;
+                  const name_team2 =
+                    document.getElementsByClassName("team-nameMatch")[1]
+                      .innerText;
+                  const field_container = document.createElement("div");
+                  field_container.classList.add("field-container");
+                  field_container.innerHTML = `
+                  <img
+                    src="/static/img/lapangan_posisi.png"
+                    alt="Soccer Field"
+                    style="opacity: 0.6;"
+                    class="field-image"
+                  />
+                  <div class="name-team" style="top: 1%; left: 6%">
+                    <b>${name_team1}</b> ${team1.Fo.join("-")}
+                  </div>
+                  <div class="name-team" style="top: 96%; left: 6%">
+                    <b>${name_team2}</b> ${team2.Fo.join("-")}
+                  </div>
+                  `;
+                  container.appendChild(field_container);
+                  createPlayerElements(team1, positionsTeam1, "team1");
+                  createPlayerElements(team2, positionsTeam2, "team2");
+                  createSubs(team1, team2);
+                  createSubsPlayer(team1, team2);
+                  createIS(team1, team2);
+                  createCoach(team1, team2);
+                }
               } else if (link.id == "table-link") {
-                const name_team1 =
-                  document.getElementsByClassName("team-nameMatch")[0]
-                    .innerText;
-                const name_team2 =
-                  document.getElementsByClassName("team-nameMatch")[1]
-                    .innerText;
-                const tableRank = data.data.LeagueTable;
-                const tableContainer = document.createElement("div");
-                tableContainer.style.margin = "12px 0 12px";
+                let dataTable = data.data;
+                if (dataTable) {
+                  container.innerHTML = "";
+                  const name_team1 =
+                    document.getElementsByClassName("team-nameMatch")[0]
+                      .innerText;
+                  const name_team2 =
+                    document.getElementsByClassName("team-nameMatch")[1]
+                      .innerText;
+                  const tableRank = data.data.LeagueTable;
+                  const tableContainer = document.createElement("div");
+                  tableContainer.style.margin = "12px 0 12px";
 
-                // Menambahkan tabel dengan struktur HTML
-                tableContainer.innerHTML = `
+                  // Menambahkan tabel dengan struktur HTML
+                  tableContainer.innerHTML = `
                   <table>
                     <thead>
                       <tr>
@@ -221,34 +238,34 @@ document.addEventListener("DOMContentLoaded", function () {
                   </table>
                 `;
 
-                // Menambahkan tableContainer ke dalam container utama
-                container.appendChild(tableContainer);
+                  // Menambahkan tableContainer ke dalam container utama
+                  container.appendChild(tableContainer);
 
-                // Menyiapkan tbody untuk menambahkan data tim
-                const rankTable = document.getElementById("rankTable");
+                  // Menyiapkan tbody untuk menambahkan data tim
+                  const rankTable = document.getElementById("rankTable");
 
-                // Menggunakan loop untuk menambahkan data ke dalam table
-                tableRank.forEach((team) => {
-                  // Membuat baris baru (tr) untuk setiap tim
-                  const row = document.createElement("tr");
-                  row.classList.add("bg-dark-1");
+                  // Menggunakan loop untuk menambahkan data ke dalam table
+                  tableRank.forEach((team) => {
+                    // Membuat baris baru (tr) untuk setiap tim
+                    const row = document.createElement("tr");
+                    row.classList.add("bg-dark-1");
 
-                  if (
-                    team.teamNM === name_team1 ||
-                    team.teamNM === name_team2
-                  ) {
-                    row.classList.add("highlighted");
-                  } else {
-                    row.classList.remove("bg-dark-1");
-                  }
-                  // if (team.teamNM != name_team1 && team.teamNM != name_team2) {
-                  //   row.classList.remove("bg-black");
-                  // }
+                    if (
+                      team.teamNM === name_team1 ||
+                      team.teamNM === name_team2
+                    ) {
+                      row.classList.add("highlighted");
+                    } else {
+                      row.classList.remove("bg-dark-1");
+                    }
+                    // if (team.teamNM != name_team1 && team.teamNM != name_team2) {
+                    //   row.classList.remove("bg-black");
+                    // }
 
-                  row.style.fontSize = "14px";
+                    row.style.fontSize = "14px";
 
-                  // Menambahkan data ke dalam setiap sel (td)
-                  row.innerHTML = `
+                    // Menambahkan data ke dalam setiap sel (td)
+                    row.innerHTML = `
                     <td style="font-weight: 500; width: 5%; color: white">${team.rank}</td>
                     <td style="width: 40%; color: white">
                       <img
@@ -269,71 +286,75 @@ document.addEventListener("DOMContentLoaded", function () {
                     <td class="col-pts" style="width: 7.5%; color: white">${team.pts}</td>
                   `;
 
-                  // Menambahkan baris baru ke dalam tbody
-                  rankTable.appendChild(row);
-                });
-              } else if (link.id == "news-link") {
-                const container = document.getElementById("dinamic-content");
-                let currentNewsTeam = "team1"; // Variabel untuk menyimpan jenis pertandingan yang ditampilkan (fixtures atau results)
-                if (!container) {
-                  console.error(
-                    "Container element 'dinamic-content' not found!"
-                  );
-                  return;
+                    // Menambahkan baris baru ke dalam tbody
+                    rankTable.appendChild(row);
+                  });
                 }
-                container.innerHTML = "";
-                const buttonFilter = document.createElement("div");
-                buttonFilter.innerHTML = `
+              } else if (link.id == "news-link") {
+                let dataNews = data.data.News;
+                if (dataNews) {
+                  container.innerHTML = "";
+                  const container = document.getElementById("dinamic-content");
+                  let currentNewsTeam = "team1"; // Variabel untuk menyimpan jenis pertandingan yang ditampilkan (fixtures atau results)
+                  if (!container) {
+                    console.error(
+                      "Container element 'dinamic-content' not found!"
+                    );
+                    return;
+                  }
+                  container.innerHTML = "";
+                  const buttonFilter = document.createElement("div");
+                  buttonFilter.innerHTML = `
                 <button class="button-matchesDetailTeam active" id="btnTeam1">
                   ${data.data.News[0]["name-team"]}
                 </button>
                 <button class="button-matchesDetailTeam" id="btnTeam2">${data.data.News[1]["name-team"]}</button>`;
-                container.appendChild(buttonFilter);
-                const boxNews = document.createElement("div");
-                boxNews.id = "boxNews";
-                container.appendChild(boxNews);
-                // Event listener untuk tombol Fixtures dan Results
-                document
-                  .getElementById("btnTeam1")
-                  .addEventListener("click", () => {
-                    currentNewsTeam = "team1";
-                    renderNews();
-                  });
+                  container.appendChild(buttonFilter);
+                  const boxNews = document.createElement("div");
+                  boxNews.id = "boxNews";
+                  container.appendChild(boxNews);
+                  // Event listener untuk tombol Fixtures dan Results
+                  document
+                    .getElementById("btnTeam1")
+                    .addEventListener("click", () => {
+                      currentNewsTeam = "team1";
+                      renderNews();
+                    });
 
-                document
-                  .getElementById("btnTeam2")
-                  .addEventListener("click", () => {
-                    currentNewsTeam = "team2";
-                    renderNews();
-                  });
-                renderNews();
-                // Fungsi untuk menandai tombol aktif (Fixtures/Results)
-                function setActiveButton(type) {
-                  const fixturesButton = document.getElementById("btnTeam1");
-                  const resultsButton = document.getElementById("btnTeam2");
+                  document
+                    .getElementById("btnTeam2")
+                    .addEventListener("click", () => {
+                      currentNewsTeam = "team2";
+                      renderNews();
+                    });
+                  renderNews();
+                  // Fungsi untuk menandai tombol aktif (Fixtures/Results)
+                  function setActiveButton(type) {
+                    const fixturesButton = document.getElementById("btnTeam1");
+                    const resultsButton = document.getElementById("btnTeam2");
 
-                  if (currentNewsTeam === "team1") {
-                    fixturesButton.classList.add("active");
-                    resultsButton.classList.remove("active");
-                  } else {
-                    fixturesButton.classList.remove("active");
-                    resultsButton.classList.add("active");
+                    if (currentNewsTeam === "team1") {
+                      fixturesButton.classList.add("active");
+                      resultsButton.classList.remove("active");
+                    } else {
+                      fixturesButton.classList.remove("active");
+                      resultsButton.classList.add("active");
+                    }
                   }
-                }
-                function renderNews() {
-                  setActiveButton(currentNewsTeam);
-                  boxNews.innerHTML = "";
-                  let news = data.data.News[0]["news-team"];
-                  const baseURL = data.data.URL;
-                  if (currentNewsTeam === "team1") {
-                    news = data.data.News[1]["news-team"];
-                  }
-                  news.forEach((item) => {
-                    const contentContainer = document.createElement("div");
-                    contentContainer.classList.add("py-2");
-                    const imageUrl = `${baseURL}/${item.cover}`;
-                    const newsUrl = `${baseURL}news/${item.slug}`;
-                    contentContainer.innerHTML = `
+                  function renderNews() {
+                    setActiveButton(currentNewsTeam);
+                    boxNews.innerHTML = "";
+                    let news = data.data.News[0]["news-team"];
+                    const baseURL = data.data.URL;
+                    if (currentNewsTeam === "team1") {
+                      news = data.data.News[1]["news-team"];
+                    }
+                    news.forEach((item) => {
+                      const contentContainer = document.createElement("div");
+                      contentContainer.classList.add("py-2");
+                      const imageUrl = `${baseURL}/${item.cover}`;
+                      const newsUrl = `${baseURL}news/${item.slug}`;
+                      contentContainer.innerHTML = `
                           <div class="news">
                             <div class="card bg-black mb-3" id="cardNEws">
                                 <div class="row g-0">
@@ -343,8 +364,8 @@ document.addEventListener("DOMContentLoaded", function () {
                                           imageUrl ||
                                           "https://placehold.co/600x400"
                                         }" class="img-fluid rounded-start"alt="${
-                      item.title
-                    }" />
+                        item.title
+                      }" />
                                       </a>    
                                       </div>
                                     <div class="col-md-8">
@@ -367,13 +388,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         </div>
                       `;
 
-                    contentContainer
-                      .querySelector(".card")
-                      .addEventListener("click", () => {
-                        window.open(newsUrl, "_blank"); // Membuka link di tab baru
-                      });
-                    boxNews.appendChild(contentContainer);
-                  });
+                      contentContainer
+                        .querySelector(".card")
+                        .addEventListener("click", () => {
+                          window.open(newsUrl, "_blank"); // Membuka link di tab baru
+                        });
+                      boxNews.appendChild(contentContainer);
+                    });
+                  }
                 }
               } else if (link.id == "info-link") {
                 // console.log(data);
@@ -493,25 +515,6 @@ document.addEventListener("DOMContentLoaded", function () {
                       </div>
                     </div>
 
-                  `;
-              } else if (link.id == "summary-link") {
-                const container = document.getElementById("dinamic-content");
-                if (!container) {
-                  console.error(
-                    "Container element 'dinamic-content' not found!"
-                  );
-                  return;
-                }
-                container.innerHTML = "";
-                container.innerHTML = `
-                     <div class="info">
-                      <div class="card bg-black border-2 border-secondary-subtle">
-                        <div class="card-body">
-                          <h4 class="text-center fw-semibold">
-                            No Data
-                          </h4>
-                      </div>
-                    </div>
                   `;
               } else {
                 console.error("Container element not found!");
