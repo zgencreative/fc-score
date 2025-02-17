@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
           summary_link.classList.remove("active");
           links.forEach((otherLink) => {
             const otherElement = document.getElementById(otherLink.id);
+
             if (otherElement && otherElement.classList.contains("active")) {
               otherElement.classList.remove("active");
             }
@@ -375,7 +376,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   });
                 }
               } else if (link.id == "info-link") {
-                console.log(data);
+                // console.log(data);
                 const container = document.getElementById("dinamic-content");
                 if (!container) {
                   console.error(
@@ -385,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 container.innerHTML = "";
                 const info = data.data;
-                console.log(info);
+                // console.log(info);
                 var stadium = info["stadium"];
                 if (!stadium) {
                   stadium = "-";
@@ -405,9 +406,9 @@ document.addEventListener("DOMContentLoaded", function () {
                   view = view.toLocaleString("id-ID");
                 }
                 let centerStyle = `
-                <div class="col-md-4">
-                  <div class="d-flex flex-column align-items-center">
-                    <div class="p-2 text-secondary">
+                <div class="col-4 col-md-4">
+                  <div class="pt-2 d-flex flex-column align-items-center">
+                    <div class="p-2 px-0 text-secondary" style="font-size: 11px;">
                       Select your team
                     </div>
                     <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
@@ -420,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         `;
                 if (info.score1 !== "") {
                   centerStyle = `
-                    <div class="col-md-4">
+                    <div class="col-4 col-md-4">
                       <div class="progress-container">
                         <div class="progress-labels">
                             <div class="progress-label">25%</div>
@@ -439,40 +440,38 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
                   `;
                 }
-                container.innerHTML = `<div class="info">
-                    <h6>
-                      Match Info
-                    </h6>
+                container.innerHTML = `
+                <div class="info">
+                  <h6>
+                    Match Info
+                  </h6>
                     <div class="card bg-black border-2 border-secondary-subtle">
                       <div class="card-body">
-                        <div class="d-flex flex-row justify-content-center flex-wrap ">
-                          <div class="d-flex flex-row gap-3">
-                            <div class="p-2 gap-2 align-items-center">
-                              <i class="fa-regular fa-calendar-days fa-xl"></i>
-                              ${time}
-                            </div>
-                            <div class="p-2 gap-2 align-items-center">
-                              <i class="fa-solid fa-monument fa-xl"></i> 
-                              ${stadium}
-                            </div>
-                            <div class="p-2 gap-2 align-items-center">
-                              <i class="fa-solid fa-users"></i>
-                              ${view}
-                            </div>
+                        <div class="d-flex flex-row justify-content-center flex-wrap">
+                          <div class="p-2 gap-2 align-items-center">
+                            <i class="fa-regular fa-calendar-days fa-xl"></i>
+                            ${time}
+                          </div>
+                          <div class="p-2 gap-2 align-items-center">
+                            <i class="fa-solid fa-monument fa-xl"></i> 
+                            ${stadium}
+                          </div>
+                          <div class="p-2 gap-2 align-items-center">
+                            <i class="fa-solid fa-users"></i>
+                            ${view}
                           </div>
                         </div>
                       </div>
-                      
                     </div>
                   </div>
                     <div class="win">
                       <h6 class="fw-bold mb-4">
                         WHO WILL WIN?
                       </h6>
-                      <div class="row">
-                        <div class="col-md-4">
+                      <div class="row cols3">
+                        <div class="col-4 col-md-4 p-0 p-md-2">
                           <div class="d-flex flex-column align-items-center">
-                            <div class="p-2 team-name text-uppercase fw-semibold">
+                            <div class="p-md-2 px-0 py-2  team-name text-uppercase fw-semibold">
                               ${info["match"]["team1"]["NMTeam"]}
                             </div>
                             <div class="p-2 bg-black border border- border-secondary rounded-3">
@@ -481,7 +480,7 @@ document.addEventListener("DOMContentLoaded", function () {
                           </div>
                         </div>
                         ${centerStyle}
-                        <div class="col-md-4">
+                        <div class="col-4 col-md-4 p-0 p-md-2">
                           <div class="d-flex flex-column align-items-center">
                             <div class="p-2 team-name text-uppercase fw-semibold">
                               ${info["match"]["team2"]["NMTeam"]}
@@ -495,7 +494,29 @@ document.addEventListener("DOMContentLoaded", function () {
                     </div>
 
                   `;
-              } else {
+              
+                } 
+                else if (link.id == "summary-link") {
+                  const container = document.getElementById("dinamic-content");
+                  if (!container) {
+                    console.error(
+                      "Container element 'dinamic-content' not found!"
+                    );
+                    return;
+                  }
+                  container.innerHTML = "";
+                  container.innerHTML = `
+                     <div class="info">
+                      <div class="card bg-black border-2 border-secondary-subtle">
+                        <div class="card-body">
+                          <h4 class="text-center fw-semibold">
+                            No Data
+                          </h4>
+                      </div>
+                    </div>
+                  `;
+                }
+                else {
                 console.error("Container element not found!");
               }
             })
