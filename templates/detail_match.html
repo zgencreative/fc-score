@@ -119,9 +119,6 @@
 
         <!-- Dynamic Content Section -->
         <div class="container mt-4" id="dinamic-content">
-         
-          
-        
           {# Inisialisasi untuk menyimpan skor setiap babak #} {% if
           data['data']['timeline']|length != 0 %} {% for half, events in
           data['data']['timeline'].items() %} {% set ns = namespace(scores=[0,
@@ -165,7 +162,7 @@
                 {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'pen-no-goal' %}
                 <img
-                  src="{{ url_for('static', filename='img/no_goal.png') }}"
+                  src="{{ url_for('static', filename='img/pen-no-goal.png') }}"
                 />
                 {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'pen-goal' %}
@@ -189,6 +186,21 @@
                   src="{{ url_for('static', filename='img/yellow_card.png') }}"
                 />
                 {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'red-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/red-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'yellow-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/yellow-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'no-goal-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/no-goal-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'red card' %}
                 <img
                   src="{{ url_for('static', filename='img/red_card.png') }}"
@@ -201,7 +213,7 @@
                 {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'pen-no-goal' %}
                 <img
-                  src="{{ url_for('static', filename='img/no_goal.png') }}"
+                  src="{{ url_for('static', filename='img/pen-no-goal.png') }}"
                 />
                 {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'pen-goal' %}

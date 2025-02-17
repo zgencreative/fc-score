@@ -388,21 +388,26 @@ def get_detail_match(idMatch):
                     # Proses pemain dalam incident
                     if 'Incs' in incident and incident['Incs']:
                         for idx, player_incident in enumerate(incident['Incs']):
-                            player_entry = {
-                                'status': 'goal' if idx == 0 else ('assist' if 'Sc' in player_incident else 'foul'),
-                                'info': {
+                            info = ''
+                            if 'IR' in incident and 'changed_to_red' in incident['IR']:
+                                info = 'red-var'
+                            elif 'IR' in incident and 'changed_to_yellow' in incident['IR']:
+                                info = 'yellow-var'
+                            else:
+                                info = {
                                     63: 'assists',
-                                    # Menangani IR jika IT adalah 62
-                                    62: player_incident.get('IR', 'unknown'),
-                                    38: 'pen-no-goal',
+                                    62: incident.get('IR', 'unknown'),
                                     40: 'pen-no-goal',
                                     41: 'pen-goal',
+                                    38: 'pen-no-goal',
                                     43: 'yellow card',
                                     44: 'yellow-red card',
                                     45: 'red card',
                                     39: 'penalty'
-                                    # Default ke 'goal' jika IT tidak ditemukan
-                                }.get(player_incident['IT'], 'goal'),
+                                }.get(incident.get('IT', 0), 'goal')
+                            player_entry = {
+                                'status': 'goal' if idx == 0 else ('assist' if 'Sc' in player_incident else 'foul'),
+                                'info': info,
                                 'IDPlayer': player_incident['ID'],
                                 'fn': player_incident.get('Fn', ''),
                                 'ln': player_incident.get('Ln', ''),
@@ -410,18 +415,28 @@ def get_detail_match(idMatch):
                             }
                             timeline_entry['player'].append(player_entry)
                     else:
-                        timeline_entry['player'].append({
-                            'status': 'goal' if 'Sc' in incident else 'foul',
-                            'info': {
+                        info = ''
+                        if 'IR' in incident and 'changed_to_red' in incident['IR']:
+                            info = 'red-var'
+                        elif 'IR' in incident and 'changed_to_yellow' in incident['IR']:
+                            info = 'yellow-var'
+                        elif 'IR' in incident and 'disallowed_offside' in incident['IR']:
+                            info = 'no-goal-var'
+                        else:
+                            info = {
                                 63: 'assists',
                                 62: incident.get('IR', 'unknown'),
                                 40: 'pen-no-goal',
                                 41: 'pen-goal',
+                                38: 'pen-no-goal',
                                 43: 'yellow card',
                                 44: 'yellow-red card',
                                 45: 'red card',
                                 39: 'penalty'
-                            }.get(incident.get('IT', 0), 'goal'),
+                            }.get(incident.get('IT', 0), 'goal')
+                        timeline_entry['player'].append({
+                            'status': 'goal' if 'Sc' in incident else 'foul',
+                            'info': info,
                             'IDPlayer': incident.get('ID', ''),
                             'fn': incident.get('Fn', ''),
                             'ln': incident.get('Ln', ''),
