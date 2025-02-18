@@ -294,7 +294,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 let dataNews = data.data.News;
                 if (dataNews) {
                   container.innerHTML = "";
-                  const container = document.getElementById("dinamic-content");
                   let currentNewsTeam = "team1"; // Variabel untuk menyimpan jenis pertandingan yang ditampilkan (fixtures atau results)
                   if (!container) {
                     console.error(
