@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   field_container.classList.add("field-container");
                   field_container.innerHTML = `
                   <img
-                    src="/static/img/lapangan_posisi.png"
+                    src="/static/img/lapangan_posisi.webp"
                     alt="Soccer Field"
                     style="opacity: 0.6;"
                     class="field-image"
@@ -364,7 +364,7 @@ document.addEventListener("DOMContentLoaded", function () {
                                           "https://placehold.co/600x400"
                                         }" class="img-fluid rounded-start"alt="${
                         item.title
-                      }" />
+                      }" loading="lazy" />
                                       </a>    
                                       </div>
                                     <div class="col-md-8">

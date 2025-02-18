@@ -450,7 +450,6 @@ def get_detail_match(idMatch):
                     datas['timeline'][key].append(timeline_entry)
 
         response['data'] = datas
-        print(datas)
         return response
 
     except requests.exceptions.RequestException as e:
