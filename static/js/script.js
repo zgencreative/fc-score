@@ -154,8 +154,8 @@ document.addEventListener("DOMContentLoaded", function () {
                   }
                 }
               } else if (link.id == "lineups-link") {
-                let dataLine = data.data[0];
-                if (dataLine) {
+                let dataLine = data.data;
+                if (dataLine.MatchID) {
                   container.innerHTML = "";
                   const positionsTeam1 = {
                     1: { x: [47], y: "5%" },
@@ -1322,7 +1322,6 @@ function createIS(team1Data, team2Data) {
 
     // Hanya tambahkan div jika ada data substitusi
     if (team1Sub || team2Sub) {
-      console.log(team1Sub, team2Sub);
       const subElement = document.createElement("div");
       subElement.classList.add(
         "substitution",
@@ -2644,7 +2643,7 @@ function generateCalendar(dateParam = null) {
       fetchSortedData(formattedDate);
 
       // Display selected date in the console
-      console.log(`Selected date: ${date.toDateString()}`);
+      // console.log(`Selected date: ${date.toDateString()}`);
     });
 
     // Append the card to the grid

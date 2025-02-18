@@ -150,6 +150,21 @@
                   src="{{ url_for('static', filename='img/yellow_card.png') }}"
                 />
                 {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'red-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/red-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'yellow-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/yellow-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
+                event['player'][0]['info'] == 'no-goal-var' %}
+                <img
+                  src="{{ url_for('static', filename='img/no-goal-var.png') }}"
+                />
+                {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'red card' %}
                 <img
                   src="{{ url_for('static', filename='img/red_card.png') }}"
@@ -166,7 +181,9 @@
                 />
                 {% elif 'info' in event['player'][0] and
                 event['player'][0]['info'] == 'pen-goal' %}
-                <img src="{{ url_for('static', filename='img/goal.png') }}" />
+                <img
+                  src="{{ url_for('static', filename='img/pen-goal.png') }}"
+                />
                 {% else %}
                 <span class="px-2 py-1 border rounded">VAR</span>
                 {% endif %} {% endif %}
@@ -228,9 +245,11 @@
                 'goal' and event['player']|length > 1 %}({{
                 event['player'][1]['pn'] }}){%endif%}</small
               >
-              {% if half != '4' %}
+              {% if half != '4' %} {% if event['minex'] != 0 %}
+              <span>{{ event['min'] }}+{{ event['minex']}}'</span>
+              {% else %}
               <span>{{ event['min'] }}'</span>
-              {% endif %} {% endif %}
+              {% endif %} {% endif %} {% endif %}
             </div>
           </div>
           {% endfor %} {# Simpan skor akhir babak #}

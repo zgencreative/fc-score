@@ -400,6 +400,7 @@ def get_detail_match(idMatch):
                                     62: incident.get('IR', 'unknown'),
                                     40: 'pen-no-goal',
                                     41: 'pen-goal',
+                                    37: 'pen-goal',
                                     38: 'pen-no-goal',
                                     43: 'yellow card',
                                     44: 'yellow-red card',
@@ -429,6 +430,7 @@ def get_detail_match(idMatch):
                                 62: incident.get('IR', 'unknown'),
                                 40: 'pen-no-goal',
                                 41: 'pen-goal',
+                                37: 'pen-goal',
                                 38: 'pen-no-goal',
                                 43: 'yellow card',
                                 44: 'yellow-red card',
@@ -448,6 +450,7 @@ def get_detail_match(idMatch):
                     datas['timeline'][key].append(timeline_entry)
 
         response['data'] = datas
+        print(datas)
         return response
 
     except requests.exceptions.RequestException as e:
