@@ -3,11 +3,13 @@ import requests
 import datetime
 from flask_cors import CORS
 import os
+from zoneinfo import ZoneInfo
 
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/img/jersey'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'mscore-private-key'
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # BACKEND
@@ -346,12 +348,12 @@ def get_detail_match(idMatch):
             'Team1': {
                 'NMTeam': match_data['T1'][0]['Nm'],
                 'IDTeam': match_data['T1'][0]['ID'],
-                'IMGTeam': img_team + match_data['T1'][0].get('Img', '')
+                'IMGTeam': img_team + match_data['T1'][0].get('Img', '') if 'Img' in match_data['T1'][0] else '/static/img/default_team.png'
             },
             'Team2': {
                 'NMTeam': match_data['T2'][0]['Nm'],
                 'IDTeam': match_data['T2'][0]['ID'],
-                'IMGTeam': img_team + match_data['T2'][0].get('Img', '')
+                'IMGTeam': img_team + match_data['T2'][0].get('Img', '') if 'Img' in match_data['T2'][0] else '/static/img/default_team.png'
             },
             'Status_Match': match_data['Eps'],
             'time_start': match_data['Esd'],
@@ -832,8 +834,8 @@ def detailComp(urlComp):
 @app.route('/api/football/detailTeam/<string:idTeam>/', methods=['GET'])
 def detailTeam(idTeam):
     # URL API
-    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/details?locale=en&MD=1"
-    url_next = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/nextevent"
+    url = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/details?locale=ID&MD=1"
+    url_next = f"https://prod-cdn-team-api.lsmedia1.com/v1/api/app/team/{idTeam}/nextevent?locale=ID&MD=1"
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
 
     try:
@@ -851,7 +853,7 @@ def detailTeam(idTeam):
         data = {
             'NMTeam': res['Nm'],
             'IDTeam': res['ID'],
-            'IMGTeam': img_team + res['Img'],
+            'IMGTeam': img_team + res['Img'] if 'Img' in res else '/static/img/default_team.png',
             'Abr': res['Abr'],
             'CoNm': res['CoNm'],
             'CoId': res['CoId'],
@@ -883,13 +885,13 @@ def detailTeam(idTeam):
                     'Team1': {
                         'NMTeam': event['T1'][0]['Nm'],
                         'IDTeam': event['T1'][0]['ID'],
-                        'IMGTeam': img_team + event['T1'][0]['Img'],
+                        'IMGTeam': img_team + event['T1'][0].get('Img', '') if 'Img' in event['T1'][0] else '/static/img/default_team.png',
                         'Abr': event['T1'][0]['Abr']
                     },
                     'Team2': {
                         'NMTeam': event['T2'][0]['Nm'],
                         'IDTeam': event['T2'][0]['ID'],
-                        'IMGTeam': img_team + event['T2'][0]['Img'],
+                        'IMGTeam': img_team + event['T2'][0].get('Img', '') if 'Img' in event['T2'][0] else '/static/img/default_team.png',
                         'Abr': event['T2'][0]['Abr']
                     }
                 }
@@ -922,13 +924,24 @@ def detailTeam(idTeam):
         ]
 
         # Populate NextEvent details
+        # Timestamp yang diberikan (format: YYYYMMDDHHMMSS)
+        timestamp_str = str(res_next['Event']['Esd'])
+
+        # Mengonversi timestamp ke objek datetime
+        timestamp = datetime.datetime.strptime(timestamp_str, '%Y%m%d%H%M%S')
+
+        # Menambahkan zona waktu UTC+7 (Asia/Bangkok)
+        timestamp_utc7 = timestamp.replace(tzinfo=ZoneInfo("UTC")).astimezone(ZoneInfo("Asia/Bangkok"))
+
+        # Format hasil dalam bentuk yang lebih mudah dibaca
+        formatted_time = timestamp_utc7.strftime('%Y%m%d%H%M%S')
         data['NextEvent'] = {
             'matchID': res_next['Event']['Eid'],
-            'time_start': res_next['Event']['Esd'],
+            'time_start': formatted_time,
             'team1': {
                 'teamNM': team1['Nm'],
                 'teamID': team1['ID'],
-                'teamIMG': img_team + team1['Img'],
+                'teamIMG': img_team + team1['Img'] if 'Img' in team1 else '/static/img/default_team.png',
                 'CoNm': team1['CoNm'],
                 'CoId': team1['CoId'],
                 'lastMt': team1_last_matches
@@ -936,11 +949,12 @@ def detailTeam(idTeam):
             'team2': {
                 'teamNM': team2['Nm'],
                 'teamID': team2['ID'],
-                'teamIMG': img_team + team2['Img'],
+                'teamIMG': img_team + team2['Img'] if 'Img' in team2 else '/static/img/default_team.png',
                 'CoNm': team2['CoNm'],
                 'CoId': team2['CoId'],
                 'lastMt': team2_last_matches
-            }
+            },
+            'urlComp': f"{res_next['Event']['Stg']['Ccd']}.{res_next['Event']['Stg']['Scd']}"
         }
 
         # Return the response as JSON
@@ -1232,11 +1246,24 @@ def detailInfo(id):
     url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{id}?locale=ID"
     res = requests.get(url).json()
     images = os.listdir(app.config['UPLOAD_FOLDER'])
+    # Timestamp yang diberikan (format: YYYYMMDDHHMMSS)
+    timestamp_str = str(res['Esd'])
+
+    # Mengonversi timestamp ke objek datetime
+    timestamp = datetime.datetime.strptime(timestamp_str, '%Y%m%d%H%M%S')
+
+    # Menambahkan zona waktu UTC+7 (Asia/Bangkok)
+    timestamp_utc7 = timestamp.replace(tzinfo=ZoneInfo("UTC")).astimezone(ZoneInfo("Asia/Bangkok"))
+
+    # Format hasil dalam bentuk yang lebih mudah dibaca
+    formatted_time = timestamp_utc7.strftime('%Y%m%d%H%M%S')
+    urlVote = f"https://mansionsportsfc.com/api/total-vote?key=JDJhJDEyJFVLNUJ3d2c1MnFCaktnU0w0dzJMNU9GWEJQT0FaSTcwa0ZZUWpIbXF0YVRNMEU3aHZwQkF1&id_match={id}"
+    ress = requests.get(urlVote).json()
     data = {
         'code': 200,
         'message': 'success',
         'data': {
-            'time_start': res['Esd'],
+            'time_start': formatted_time,
             'stadium': res['Venue']['Vnm'] if 'Venue' in res and 'Vnm' in res['Venue'] else '',
             'views': res['Venue']['Vsp'] if 'Venue' in res and 'Vsp' in res['Venue'] else '',
             'score1': res['Tr1'] if 'Tr1' in res else '',
@@ -1253,10 +1280,22 @@ def detailInfo(id):
                     'NMTeam': res['T2'][0]['Nm'],
                     'IMGJersey': f'img/jersey/{res["T2"][0]["ID"]}.svg' if f"{res['T2'][0]['ID']}.svg".lower() in images else 'img/jersey/team-2.svg'
                 }
+            },
+            'vote': {
+                'team1': [ress['match']['team1']['total_votes'], hitung_persen(ress['match']['team1']['total_votes'], ress['match']['total_vote'])] if 'match' in ress else [0,0],
+                'team2': [ress['match']['team2']['total_votes'], hitung_persen(ress['match']['team2']['total_votes'], ress['match']['total_vote'])] if 'match' in ress else [0,0],
+                'draw': [ress['match']['draw'], hitung_persen(ress['match']['draw'], ress['match']['total_vote'])] if 'match' in ress else [0,0],
+                'total_vote': ress['match']['total_vote'] if 'match' in ress else 0,
             }
         }
     }
     return data
+
+def hitung_persen(bagian, total):
+    if total == 0 or bagian == 0:
+        return 0.0  # Jika bagian atau total 0, kembalikan 0%
+    persentase = (bagian / total) * 100
+    return round(persentase, 2)  # Membatasi hasil hingga 2 angka di belakang koma
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -1269,13 +1308,62 @@ def login():
     else:
         session["id"] = res['user']['id']
         session["user"] = res['user']['name']  # Menyimpan user ke dalam session
-        return jsonify({"success": True, "message": "Login berhasil!", "redirect": "/"})
+        return jsonify({"success": True, "message": "Login berhasil!"})
 
 @app.route('/logout')
 def logout():
     session.pop("user", None)
     session.pop("id", None)
-    return redirect(url_for('home'))
+    
+    # Mendapatkan referer dari header request
+    referer = request.headers.get('Referer')
+    
+    # Jika ada referer, arahkan ke URL tersebut, jika tidak, arahkan ke halaman home
+    if referer:
+        return redirect(referer)
+
+@app.route('/api/sendVote/', methods=['POST'])
+def sendvote():
+    session_id = ''
+    if not session:
+        return jsonify({'code': '200', 'msg': "Anda belum login!"})
+    session_id = session['id']
+    idteam = request.get_json()['id']
+    idmatch = request.get_json()['match']
+    url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/scoreboard/soccer/{idmatch}?locale=ID"
+    res = requests.get(url).json()
+    if 'Tr1' in res:
+        return jsonify({'code': '409', 'message': "Voting gagal pertandingan sudah berjalan/selesai."})
+    voteUrl = "https://mansionsportsfc.com/api/vote-score"
+    # Timestamp yang diberikan (format: YYYYMMDDHHMMSS)
+    timestamp_str = str(res['Esd'])
+
+    # Mengonversi timestamp ke objek datetime
+    timestamp = datetime.datetime.strptime(timestamp_str, '%Y%m%d%H%M%S')
+
+    # Menambahkan zona waktu UTC+7 (Asia/Bangkok)
+    timestamp_utc7 = timestamp.replace(tzinfo=ZoneInfo("UTC")).astimezone(ZoneInfo("Asia/Bangkok"))
+
+    # Format hasil dalam bentuk yang lebih mudah dibaca
+    formatted_time = timestamp_utc7.strftime('%Y%m%d%H%M%S')
+    vote = 'w'
+    if idteam == "":
+        vote = 'd'
+    data = {
+        "key":"JDJhJDEyJFVLNUJ3d2c1MnFCaktnU0w0dzJMNU9GWEJQT0FaSTcwa0ZZUWpIbXF0YVRNMEU3aHZwQkF1",
+        "user_id": session_id,
+        "id_match": idmatch,
+        "id_team": idteam,
+        "vote": vote,
+        "id_team1": res['T1'][0]['ID'],
+        "id_team2": res['T2'][0]['ID'],
+        "score_team1": "",
+        "score_team2": "",
+        "time_start": formatted_time
+    }
+    ress = requests.post(voteUrl, data=data)
+    return jsonify(ress.json())
+
 # FRONTEND
 
 
@@ -1288,7 +1376,18 @@ def home():
 @app.route('/match/<string:country>/<string:comp>/<string:idMatch>/', methods=['GET'])
 def detailMatch(idMatch, country, comp):
     data = get_detail_match(idMatch)
-    data['data']['time_start'] = convert_time(data['data']['time_start'])
+    # Timestamp yang diberikan (format: YYYYMMDDHHMMSS)
+    timestamp_str = str(data['data']['time_start'])
+
+    # Mengonversi timestamp ke objek datetime
+    timestamp = datetime.datetime.strptime(timestamp_str, '%Y%m%d%H%M%S')
+
+    # Menambahkan zona waktu UTC+7 (Asia/Bangkok)
+    timestamp_utc7 = timestamp.replace(tzinfo=ZoneInfo("UTC")).astimezone(ZoneInfo("Asia/Bangkok"))
+
+    # Format hasil dalam bentuk yang lebih mudah dibaca
+    formatted_time = timestamp_utc7.strftime('%Y%m%d%H%M%S')
+    data['data']['time_start'] = convert_time(formatted_time)
     host = request.host
     return render_template('detail_match.html', data=data, host=host, page_name="match")
 

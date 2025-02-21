@@ -51,6 +51,8 @@
   {% block extra_js%}
   <script>
         document.addEventListener("DOMContentLoaded", function () {
+          const loading = document.getElementById("loading-container");
+          const overlay = document.getElementById("overlay");
           const dataTeam = {{ data|tojson }};
           matches(dataTeam);
           const currentPath = window.location.pathname; // Contoh: "/match/1251295"
@@ -100,6 +102,8 @@
             // Tambahkan event listener ke elemen
             element.addEventListener("click", function (event) {
               event.preventDefault(); // Cegah tindakan default (misalnya, navigasi <a>)
+              loading.style.display = "block";
+              overlay.style.display = "block";
 
               // Hapus class active dari semua elemen lainnya
               element.classList.remove("active");
@@ -127,6 +131,8 @@
                 .then((data) => {
                   const container = document.getElementById("dinamic-content");
                   container.innerHTML = "";
+                  loading.style.display = "none";
+                  overlay.style.display = "none";
                   if (link.id == "matches-link") {
                     matches(data);
                   } else if (link.id == "table-link"){
@@ -463,7 +469,7 @@
           nextMatch.classList.add("next-match");
           nextMatch.innerHTML = `
             <div class="title-detail">NEXT MATCH</div>
-            <div class="background-container">
+            <div class="background-container" id="next-match">
               <div class="match-details">
                 <div class="match-info-detail">
                   <div class="match-date">${words[0]}</div>
@@ -498,6 +504,12 @@
             </div>
           `;
           container.appendChild(nextMatch);
+          console.log(data.data);
+          let cardNext = document.getElementById("next-match");
+          cardNext.addEventListener("click", () => {
+            let urlcomp = data.data.NextEvent.urlComp.replace('.','/');
+            window.location.href = `/match/${urlcomp}/${data.data.NextEvent.matchID}`; // Gunakan data.url sebagai target URL
+          });
 
           // Mengambil elemen untuk team 1
           const team1 = document.getElementById("team1-info");

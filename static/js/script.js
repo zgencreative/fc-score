@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   if (typeof currentPage !== "undefined") {
     reloadInitialView();
+    const loading = document.getElementById("loading-container");
+    const overlay = document.getElementById("overlay");
 
     if (currentPage === "home") {
       generateCalendar();
@@ -8,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     } else if (currentPage === "match") {
       // Ambil path dari URL
       const currentPath = window.location.pathname; // Contoh: "/match/1251295"
+      console.log(currentPath);
       const segments = currentPath.split("/"); // ["", "match", "1251295"]
       const idTable = `${segments[2]}.${segments[3]}`;
       const id = segments[segments.length - 2]; // Ambil elemen terakhir sebagai ID ("1251295")
@@ -73,6 +76,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // Tambahkan event listener ke elemen
         element.addEventListener("click", function (event) {
           event.preventDefault(); // Cegah tindakan default (misalnya, navigasi <a>)
+          loading.style.display = "block";
+          overlay.style.display = "block";
 
           // Hapus class active dari semua elemen lainnya
           summary_link.classList.remove("active");
@@ -99,6 +104,8 @@ document.addEventListener("DOMContentLoaded", function () {
               return response.json();
             })
             .then((data) => {
+              loading.style.display = "none";
+              overlay.style.display = "none";
               const container = document.getElementById("dinamic-content");
               container.innerHTML = "";
               container.innerHTML = `<div class="info">
@@ -397,14 +404,6 @@ document.addEventListener("DOMContentLoaded", function () {
                   }
                 }
               } else if (link.id == "info-link") {
-                // console.log(data);
-                const container = document.getElementById("dinamic-content");
-                if (!container) {
-                  console.error(
-                    "Container element 'dinamic-content' not found!"
-                  );
-                  return;
-                }
                 container.innerHTML = "";
                 const info = data.data;
                 // console.log(info);
@@ -426,13 +425,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                   view = view.toLocaleString("id-ID");
                 }
+                console.log(info);
                 let centerStyle = `
                 <div class="col-4 col-md-4">
                   <div class="pt-2 d-flex flex-column align-items-center">
                     <div class="p-2 px-0 text-secondary" style="font-size: 11px;">
                       Select your team
                     </div>
-                    <div class="p-2 bg-black border border- border-secondary rounded-3 draw">
+                    <div class="p-2 bg-black border border- border-secondary rounded-3 draw" id="clickDiv" data-id="" data-match="${info["match"]["idMatch"]}">
                       <h6 class="fw-semibold">
                         Draw
                       </h6>
@@ -445,18 +445,18 @@ document.addEventListener("DOMContentLoaded", function () {
                     <div class="col-4 col-md-4">
                       <div class="progress-container">
                         <div class="progress-labels">
-                            <div class="progress-label">25%</div>
-                            <div class="progress-label">50%</div>
-                            <div class="progress-label">25%</div>
+                            <div class="progress-label">${info.vote.team1[1]}%</div>
+                            <div class="progress-label">${info.vote.draw[1]}%</div>
+                            <div class="progress-label">${info.vote.team2[1]}%</div>
                         </div>
-                        <div class="progress bg-transparent" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                            <div class="progress-bar bg-orange" style="width: 25%"></div>
-                            <div class="progress-bar bg-secondary" style="width: 50%"></div>
-                            <div class="progress-bar bg-danger" style="width: 25%"></div>
+                        <div class="progress bg-transparent border" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-orange" style="width: ${info.vote.team1[1]}%"></div>
+                            <div class="progress-bar bg-secondary" style="width: ${info.vote.draw[1]}%"></div>
+                            <div class="progress-bar bg-danger" style="width: ${info.vote.team2[1]}%"></div>
                         </div>
                       </div>
                       <div class="votes text-center ">
-                        1231 votes
+                        ${info.vote.total_vote} votes
                       </div>
                     </div>
                   `;
@@ -495,7 +495,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="p-md-2 px-0 py-2  team-name text-uppercase fw-semibold">
                               ${info["match"]["team1"]["NMTeam"]}
                             </div>
-                            <div class="p-2 bg-black border border- border-secondary rounded-3">
+                            <div class="p-2 bg-black border border- border-secondary rounded-3" id="clickDiv" data-id="${info["match"]["team1"]["IDTeam"]}" data-match="${info["match"]["idMatch"]}">
                               <img class="" src="/static/${info["match"]["team1"]["IMGJersey"]}" width="50" alt="Default Team 1">
                             </div>
                           </div>
@@ -506,7 +506,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             <div class="p-2 team-name text-uppercase fw-semibold">
                               ${info["match"]["team2"]["NMTeam"]}
                             </div>
-                            <div class="p-2 bg-black border border- border-secondary rounded-3">
+                            <div class="p-2 bg-black border border- border-secondary rounded-3" id="clickDiv" data-id="${info["match"]["team2"]["IDTeam"]}" data-match="${info["match"]["idMatch"]}">
                               <img class="" src="/static/${info["match"]["team2"]["IMGJersey"]}" width="50" alt="Default Team 1">
                             </div>
                           </div>
@@ -518,6 +518,55 @@ document.addEventListener("DOMContentLoaded", function () {
               } else {
                 console.error("Container element not found!");
               }
+              document.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                const div = event.target.closest(".p-2.bg-black");
+
+                // Memastikan div ditemukan dan memiliki data-id
+                if (
+                  div &&
+                  div.hasAttribute("data-id") &&
+                  div.hasAttribute("data-match")
+                ) {
+                  const idTeam = div.getAttribute("data-id");
+                  const idMatch = div.getAttribute("data-match");
+                  // URL tujuan untuk request
+                  const url = "/api/sendVote/"; // Ganti dengan URL yang sesuai
+                  // Mengirimkan permintaan menggunakan fetch
+                  fetch(url, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ id: idTeam, match: idMatch }), // Kirimkan ID sebagai bagian dari request
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      if (data.status === 200) {
+                        loading.style.display = "none";
+                        overlay.style.display = "none";
+                        return Swal.fire({
+                          icon: "success",
+                          title: "Success Vote!",
+                        });
+                      } else {
+                        return Swal.fire({
+                          icon: "error",
+                          title: "Terjadi Kesalahan!",
+                          text: data.message,
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Terjadi kesalahan:", error);
+                      alert("Terjadi kesalahan saat mengirimkan request.");
+                    });
+
+                  // Lakukan aksi lain dengan ID jika diperlukan, misalnya mengirim request ke server
+                  // fetch(url, { method: 'POST', body: JSON.stringify({ id: id }) });
+                }
+              });
             })
             .catch((error) => {
               console.error(`Error fetching ${link.endpoint(id)}:`, error);
@@ -562,7 +611,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
           // Tambahkan class active ke elemen yang diklik
           element.classList.add("active");
-
           if (link.id == "overview-link") {
             overview(data.data);
           } else if (link.id == "matches-link") {
@@ -898,6 +946,11 @@ function overview(data) {
                 </div>
               </div>
             `;
+      matchCard.addEventListener("click", () => {
+        window.location.href = `/match/${data.urlComp}/${event.IDMatch}`; // Gunakan data.url sebagai target URL
+      });
+
+      matchCard.style.cursor = "pointer";
 
       // Append the match card to main section
       main2Section.appendChild(matchCard);
@@ -1621,8 +1674,6 @@ function createPlayerElements(teamData, positions, teamClass) {
 
       // Tambahkan elemen ke container
       fieldContainer.appendChild(playerDiv);
-    } else {
-      console.error("Nope");
     }
   });
   container.appendChild(fieldContainer);

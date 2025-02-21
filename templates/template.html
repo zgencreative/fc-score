@@ -266,6 +266,15 @@
         </div>
       </div>
     </div>
+    <!-- Overlay untuk latar belakang yang buram -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Container untuk menampilkan spinner -->
+    <div class="loading-container" id="loading-container">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <!-- Main content -->
     <section>{% block content %}{% endblock %}</section>
     <footer class="text-light py-4">
@@ -292,6 +301,10 @@
         event.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
+        const loading = document.getElementById("loading-container");
+        const overlay = document.getElementById("overlay");
+        loading.style.display = "block";
+        overlay.style.display = "block";
 
         try {
           const response = await fetch("/login", {
@@ -305,6 +318,8 @@
           const result = await response.json();
 
           if (result.success) {
+            loading.style.display = "none";
+            overlay.style.display = "none";
             Swal.fire({
               title: "Login Berhasil!",
               text: result.message || "Selamat datang kembali!",
@@ -312,11 +327,11 @@
             }).then(() => {
               closeModal();
               // Redirect if needed
-              if (result.redirect) {
-                window.location.href = result.redirect;
-              }
+              window.location.href = window.location.href;
             });
           } else {
+            loading.style.display = "none";
+            overlay.style.display = "none";
             Swal.fire({
               title: "Login Gagal!",
               text: result.message || "Email atau password salah!",
@@ -324,6 +339,8 @@
             });
           }
         } catch (error) {
+          loading.style.display = "none";
+          overlay.style.display = "none";
           Swal.fire({
             title: "Terjadi Kesalahan!",
             text: "Tidak dapat terhubung ke server.",

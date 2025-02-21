@@ -1115,11 +1115,11 @@ td {
   color: #ff5500;
 }
 
-.info{
+.info {
   margin-bottom: 3rem;
 }
 
-.info .card{
+.info .card {
   height: var(--bs-card-height);
   width: auto;
   background-color: var(--bs-card-bg);
@@ -1156,16 +1156,16 @@ td {
   transform: translateY(0);
 }
 
-.win .team-name{
+.win .team-name {
   font-size: 16px;
 }
 
-.win .draw{
+.win .draw {
   width: 68px;
   height: 68px;
 }
 
-.win .draw h6{
+.win .draw h6 {
   align-items: center;
   text-align: center;
   margin-top: 15px;
@@ -1179,7 +1179,7 @@ td {
 .progress-labels {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px; 
+  margin-bottom: 5px;
   font-weight: bold;
   text-align: center;
 }
@@ -1188,13 +1188,44 @@ td {
   text-align: center;
 }
 .progress {
-  height: 15px; 
+  height: 15px;
 }
 
-.bg-orange{
+.bg-orange {
   background-color: #ff5500;
 }
 
+#clickDiv {
+  cursor: pointer;
+}
+
+.next-match {
+  cursor: pointer;
+}
+
+/* Container untuk spinner yang melayang */
+.loading-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* Agar spinner tetap di atas */
+  display: none; /* Awalnya disembunyikan */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Overlay latar belakang */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparan */
+  z-index: 9998; /* Di belakang spinner */
+  display: none;
+}
 
 /* Mobile: Hanya TEAM, P, GD, dan PTS yang ditampilkan */
 @media screen and (max-width: 768px) {
