@@ -1326,7 +1326,7 @@ def logout():
 def sendvote():
     session_id = ''
     if not session:
-        return jsonify({'code': '200', 'msg': "Anda belum login!"})
+        return jsonify({'code': '200', 'message': "Anda belum login!"})
     session_id = session['id']
     idteam = request.get_json()['id']
     idmatch = request.get_json()['match']

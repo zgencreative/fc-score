@@ -425,7 +425,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                   view = view.toLocaleString("id-ID");
                 }
-                console.log(info);
                 let centerStyle = `
                 <div class="col-4 col-md-4">
                   <div class="pt-2 d-flex flex-column align-items-center">
@@ -519,7 +518,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("Container element not found!");
               }
               document.addEventListener("click", function (event) {
-                event.preventDefault();
+                //event.preventDefault();
 
                 const div = event.target.closest(".p-2.bg-black");
 
