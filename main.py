@@ -1327,17 +1327,29 @@ def logout():
 @app.route('/profile')
 def profile():
     token = session['token']
-    headers = {
-        'Authorization': token,
-        'Accept': 'application/json'
-    }
-    response = requests.get("http://192.168.1.50:8080/dashboard/profile", headers=headers)
-    # resp = make_response(redirect('http://192.168.1.50:8080/dashboard/profile'))
-    # resp.set_cookie('jwtToken', token, httponly=True, secure=True)
-    return redirect("http://192.168.1.50:8080/dashboard/profile")
+    if token:
+        print("Login Berhasil!")
+        print("Token JWT:", token)
+
+        # Simpan token dalam session (jika pakai requests.Session())
+        sess = requests.Session()
+        sess.headers.update({"Authorization": f"Bearer {token}"})
+
+        # Akses halaman web menggunakan JWT yang dikonversi ke session Laravel
+        web_response = sess.get("http://127.0.0.1:8000/dashboard/profile")
+
+        if web_response.status_code == 200:
+            print("Berhasil mengakses dashboard!")
+            return redirect("http://127.0.0.1:8000/dashboard/profile")
+        else:
+            print("Gagal mengakses dashboard:", web_response.status_code)
+
+    else:
+        print("Login Gagal!")
 
 @app.route('/api/sendVote/', methods=['POST'])
 def sendvote():
+    
     session_id = ''
     if not session:
         return jsonify({'code': '200', 'message': "Anda belum login!"})
