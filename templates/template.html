@@ -90,7 +90,10 @@
               <div class="d-flex flex-row gap-2">
                 
                 
-                {% if session.user %}
+                {% if session.id %}
+                <div class="my-3">
+                  <a href="/profile" class="btn btn-sm btn-signin">Profile</a>
+                </div>
                 <div class="my-3">
                   <a href="/logout" class="btn btn-sm btn-signup">Logout</a>
                 </div>
@@ -143,7 +146,8 @@
             <!-- Right Section -->
             <div class="d-lg-flex align-items-center d-none">
               <span class="text-light me-3">ENG</span>
-              {% if session.user %}
+              {% if session.id %}
+              <a href="/profile" class="btn btn-sm btn-signin">Profile</a>
               <a href="/logout" class="btn btn-sm btn-signup">Logout</a>
             {% else %}
             <button class="btn btn-sm btn-signin me-2" onclick="showModal()">
@@ -212,7 +216,8 @@
           <!-- Right Section -->
           <div class="d-flex align-items-center">
             <span class="text-light me-3">ENG</span>
-            {% if session.user %}
+            {% if session.id %}
+              <a href="/profile" class="btn btn-sm btn-signin">Profile</a>
             <a href="/logout" class="btn btn-sm btn-signup">Logout</a>
             {% else %}
             <button class="btn btn-sm btn-signin me-2" onclick="showModal()">

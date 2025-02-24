@@ -1,15 +1,16 @@
-from flask import Flask, render_template, jsonify, url_for, request, session, redirect
+from flask import Flask, render_template, jsonify, url_for, request, session, redirect, make_response
 import requests
 import datetime
 from flask_cors import CORS
 import os
 from zoneinfo import ZoneInfo
+import jwt
 
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/img/jersey'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = 'mscore-private-key'
+app.config['SECRET_KEY'] = 'yb6CwO63qdQ5Vn21a9QcoNdSPHcKq3tMM7DtoPyfIfpElQaG9QuAoTdUzuahM40W'
 CORS(app, resources={r"/*": {"origins": "*"}})
 
 # BACKEND
@@ -1302,17 +1303,18 @@ def login():
     usn = request.get_json()['email']
     passwd = request.get_json()['password']
     data = {'email':usn, 'password':passwd}
-    res = requests.post('https://mansionsportsfc.com/api/login', data=data).json()
+    res = requests.post('http://192.168.1.50:8080/api/login', data=data).json()
+    secret = app.config['SECRET_KEY']
+    decoded_token = jwt.decode(res['token'], secret, algorithms=["HS256"], leeway=60)
     if res['status'] == False:
         return jsonify({"success": False, "message": "Email atau password salah!"})
     else:
-        session["id"] = res['user']['id']
-        session["user"] = res['user']['name']  # Menyimpan user ke dalam session
+        session["id"] = decoded_token['sub']
+        session["token"] = res['token']
         return jsonify({"success": True, "message": "Login berhasil!"})
 
 @app.route('/logout')
 def logout():
-    session.pop("user", None)
     session.pop("id", None)
     
     # Mendapatkan referer dari header request
@@ -1321,6 +1323,18 @@ def logout():
     # Jika ada referer, arahkan ke URL tersebut, jika tidak, arahkan ke halaman home
     if referer:
         return redirect(referer)
+
+@app.route('/profile')
+def profile():
+    token = session['token']
+    headers = {
+        'Authorization': token,
+        'Accept': 'application/json'
+    }
+    response = requests.get("http://192.168.1.50:8080/dashboard/profile", headers=headers)
+    # resp = make_response(redirect('http://192.168.1.50:8080/dashboard/profile'))
+    # resp.set_cookie('jwtToken', token, httponly=True, secure=True)
+    return redirect("http://192.168.1.50:8080/dashboard/profile")
 
 @app.route('/api/sendVote/', methods=['POST'])
 def sendvote():

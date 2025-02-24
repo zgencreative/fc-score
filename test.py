@@ -1,9 +1,7 @@
-import requests
+import jwt
 
-url = "https://mansionsportsfc.com/api/login"
+secret = "yb6CwO63qdQ5Vn21a9QcoNdSPHcKq3tMM7DtoPyfIfpElQaG9QuAoTdUzuahM40W"
+token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTkyLjE2OC4xLjUwOjgwODAvYXBpL2xvZ2luIiwiaWF0IjoxNzQwMzcyNjI3LCJleHAiOjE3NDAzNzYyMjcsIm5iZiI6MTc0MDM3MjYyNywianRpIjoiaGh6N05QaFBrQkZENlJmcCIsInN1YiI6IjIyMTkiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.tOAohg7lsQepxEQn1aooxybZZpIDlbaL6MalczTnFUw"
 
-data = {'email':'user@mail.com',
-        'password':'1234567'}
-
-res = requests.post(url, data=data).json()
-print(res)
+decoded_token = jwt.decode(token, secret, algorithms=["HS256"])
+print(decoded_token)

@@ -1679,6 +1679,7 @@ function createPlayerElements(teamData, positions, teamClass) {
 }
 
 function toggleStar(container) {
+  event.stopPropagation();
   container.classList.toggle("active"); // Tambah/hapus class aktif
 }
 
