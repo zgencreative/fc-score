@@ -1316,6 +1316,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop("id", None)
+    session.pop("token", None)
     
     # Mendapatkan referer dari header request
     referer = request.headers.get('Referer')
@@ -1328,21 +1329,16 @@ def logout():
 def profile():
     token = session['token']
     if token:
-        print("Login Berhasil!")
-        print("Token JWT:", token)
+        response = make_response(redirect(f"http://192.168.1.50:8080/dashboard/profile?token={token}"))
+        # response.headers['Authorization'] = f'Bearer {token}'
+        # response.set_cookie('jwtToken', token, httponly=True, secure=False)
+        return response
 
-        # Simpan token dalam session (jika pakai requests.Session())
-        sess = requests.Session()
-        sess.headers.update({"Authorization": f"Bearer {token}"})
-
-        # Akses halaman web menggunakan JWT yang dikonversi ke session Laravel
-        web_response = sess.get("http://127.0.0.1:8000/dashboard/profile")
-
-        if web_response.status_code == 200:
-            print("Berhasil mengakses dashboard!")
-            return redirect("http://127.0.0.1:8000/dashboard/profile")
-        else:
-            print("Gagal mengakses dashboard:", web_response.status_code)
+        # if web_response.status_code == 200:
+        #     print("Berhasil mengakses dashboard!")
+        #     return redirect("http://192.168.1.50:8080/profile")
+        # else:
+        #     print("Gagal mengakses dashboard:", web_response.status_code)
 
     else:
         print("Login Gagal!")
