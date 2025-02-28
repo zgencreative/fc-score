@@ -6,25 +6,31 @@
     <title>Rename File</title>
   </head>
   <body>
-    <h1>Daftar Gambar Jersey</h1>
-
-    {% for file in files %}
-    <div>
-      <img src="static/img/jersey/{{file}}" alt="{{ file }}" width="200" />
-      <p>Nama Awal: {{ file.split('.')[0].replace('-', ' ') }}</p>
-
-      <form method="POST">
-        <input type="hidden" name="file_name" value="{{ file }}" />
-        <input
-          type="text"
-          name="nama_akhir"
-          placeholder="Masukkan nama akhir"
-          required
-        />
-        <button type="submit">Ok</button>
-      </form>
-    </div>
-    <hr />
-    {% endfor %}
+    {% if session.id %}
+    <p>Anda Sudah Login</p>
+    {% else %}
+    <p>Anda Belum Login</p>
+    <button id="btnLogin">LOGIN</button>
+    {% endif %}
+    <script>
+      // Menangkap klik event pada tombol
+      document
+        .getElementById("btnLogin")
+        .addEventListener("click", function () {
+          // Lakukan request ke /set-cookie saat tombol diklik
+          fetch("/set-cookie", {
+            method: "GET", // bisa juga 'POST' tergantung kebutuhan
+            credentials: "same-origin", // Untuk mengirimkan cookie yang ada saat ini (jika ada)
+          })
+            .then((response) => response.text()) // Mendapatkan response dalam bentuk teks
+            .then((data) => {
+              console.log(data); // Menampilkan hasil response ke console
+              alert(data); // Menampilkan hasil ke pengguna
+            })
+            .catch((error) => {
+              console.error("Error:", error); // Menangani jika terjadi error
+            });
+        });
+    </script>
   </body>
 </html>

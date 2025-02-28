@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, url_for, request, session, redirect, make_response
+from flask_session import Session
 import requests
 import datetime
 from flask_cors import CORS
@@ -11,13 +12,19 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/img/jersey'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'yb6CwO63qdQ5Vn21a9QcoNdSPHcKq3tMM7DtoPyfIfpElQaG9QuAoTdUzuahM40W'
-CORS(app, resources={r"/*": {"origins": "*"}})
+app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_PERMANENT"] = True
+app.config["PERMANENT_SESSION_LIFETIME"] = datetime.timedelta(minutes=30)  # Expiry 30 menit
+app.config["SESSION_FILE_DIR"] = "flask_sessions"
+CORS(app, origins=["https://mansionsportsfc.com/"])
+
+Session(app)
 
 # BACKEND
 
 
-@app.route('/api/football/detailCountry/<country>/')
-def detailCountry(country, methods=["GET"]):
+@app.route('/api/football/detailCountry/<country>/', methods=["GET"])
+def detailCountry(country):
     img_badge = 'https://static.lsmedia1.com/competition/high/'
     img_team = 'https://lsm-static-prod.lsmedia1.com/medium/'
     url = f"https://prod-cdn-public-api.lsmedia1.com/v1/api/app/category-s/soccer/{country}?locale=ID"
@@ -1303,35 +1310,75 @@ def login():
     usn = request.get_json()['email']
     passwd = request.get_json()['password']
     data = {'email':usn, 'password':passwd}
-    res = requests.post('http://192.168.1.50:8080/api/login', data=data).json()
+    res = requests.post('https://mansionsportsfc.com/api/login', data=data).json()
     secret = app.config['SECRET_KEY']
     decoded_token = jwt.decode(res['token'], secret, algorithms=["HS256"], leeway=60)
     if res['status'] == False:
         return jsonify({"success": False, "message": "Email atau password salah!"})
     else:
         session["id"] = decoded_token['sub']
-        session["token"] = res['token']
+        session_id = session.sid
+        url = "https://mansionsportsfc.com/api/sync-login"
+        datas = {"token": res['token'], "session": session_id}
+        ress = requests.post(url, data=datas).json()
+        session['token'] = ress['ses']
         return jsonify({"success": True, "message": "Login berhasil!"})
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    token = request.get_json()['token']
+    secret = app.config['SECRET_KEY']
+    decoded_token = jwt.decode(token, secret, algorithms=["HS256"], leeway=60)
+    session['id'] = decoded_token['sub']
+    session['token'] = token
+    session_id = session.sid
+    resp = {"status":200, "message":"Berhasil Login", "session":session_id}
+    return jsonify(resp)
 
 @app.route('/logout')
 def logout():
+    referer = request.headers.get('Referer')
+    cookie = request.cookies.get("_cokiee")
+    _token = request.cookies.get("_token")
+    secret = app.config['SECRET_KEY']
+    url = "https://mansionsportsfc.com/logout"
+    headers = {
+        "cookie":cookie
+    }
+    data = {"_token": _token}
+    res = requests.post(url, data=data, headers=headers)
+    session.clear()
     session.pop("id", None)
     session.pop("token", None)
-    
-    # Mendapatkan referer dari header request
-    referer = request.headers.get('Referer')
-    
-    # Jika ada referer, arahkan ke URL tersebut, jika tidak, arahkan ke halaman home
-    if referer:
-        return redirect(referer)
+    return redirect(referer)
+
+@app.route("/api/logout", methods=['POST'])
+def api_logout():
+    token = request.get_json()['token']
+    secret = app.config['SECRET_KEY']
+    decoded_token = jwt.decode(token, secret, algorithms=["HS256"], leeway=60)
+    # Cek apakah token ada dalam session
+    if session.get('id') == decoded_token['sub']:
+        session.clear()
+        session.pop("id", None)
+        session.pop("token", None)
+        
+        response = {"message": "Logout berhasil"}
+        return jsonify(response)
+
+@app.route("/api/getses", methods=['GET'])
+def api_getses():
+    user_ses = request.cookies.get("session")
+
+    return jsonify({"status": 200, "message": "berhasil.", "data": user_ses})
 
 @app.route('/profile')
 def profile():
     token = session['token']
     if token:
-        response = make_response(redirect(f"http://192.168.1.50:8080/dashboard/profile?token={token}"))
+        response = make_response(redirect(f"https://mansionsportsfc.com/profile?token={token}"))
         # response.headers['Authorization'] = f'Bearer {token}'
-        # response.set_cookie('jwtToken', token, httponly=True, secure=False)
+        response.set_cookie('jwtToken', token, httponly=True, secure=False)
         return response
 
         # if web_response.status_code == 200:
@@ -1389,10 +1436,44 @@ def sendvote():
 # FRONTEND
 
 
-@app.route('/', methods=["GET"])
+@app.route('/')
 def home():
+    token = request.args.get("token")  # Ambil token dari query parameter
+    # print(cokies)
+    # print(_token)
     host = request.host
-    return render_template('home.html', host=host, page_name="home")
+
+    if not token:
+        return render_template('home.html', host=host, page_name="home")
+    
+    try:
+        decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"], leeway=60)
+        print(decoded_token)
+        
+        # Buat respons untuk redirect ke home
+        resp = make_response(redirect('/'))
+        
+        # Set cookie
+        resp.set_cookie(
+            "session", 
+            decoded_token['ses']
+        )
+        resp.set_cookie(
+            "token", token
+        )
+        resp.set_cookie(
+            "_token", decoded_token['_token']
+        )
+        resp.set_cookie(
+            "_cokiee", decoded_token['cookie']
+        )
+        
+        return resp  # Cookie akan tersimpan sebelum redirect
+    
+    except jwt.ExpiredSignatureError:
+        return jsonify({"error": "Token telah kedaluwarsa"}), 401
+    except jwt.InvalidTokenError:
+        return jsonify({"error": "Token tidak valid"}), 401
 
 
 @app.route('/match/<string:country>/<string:comp>/<string:idMatch>/', methods=['GET'])
@@ -1456,4 +1537,4 @@ def detTeam(idTeam):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="192.168.1.38", port=5000, debug=True)
